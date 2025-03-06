@@ -12,14 +12,13 @@ public class CameraController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        //get input
+       
         float mouseX = Input.GetAxis("Mouse X") * sens * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * sens * Time.deltaTime;
 

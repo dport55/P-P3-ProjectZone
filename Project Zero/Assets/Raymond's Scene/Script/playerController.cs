@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
     [SerializeField] LayerMask ignoreLayer;
+    [SerializeField] Light flashlight;
 
     [Header("---- Stats ----")]
     [Range(3, 20)][SerializeField] int speed = 6;
@@ -12,8 +13,8 @@ public class PlayerController : MonoBehaviour
     [Range(5, 20)][SerializeField] float jumpSpeed = 10f;
     [Range(1, 3)][SerializeField] int jumpMax = 2;
     [Range(15, 45)][SerializeField] float gravity = 20f;
-    [SerializeField]float crouchHeight = 1f;  // Height when crouched
-    [SerializeField] float crouchSpeedMod = 0.5f; // Speed modifier when crouched
+    [SerializeField] float crouchHeight = 1f;
+    [SerializeField] float crouchSpeedMod = 0.5f;
 
     private bool isCrouching = false;
     private float originalHeight;
@@ -22,6 +23,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDir;
     private Vector3 playerVel;
     private bool isSprinting;
+
+
+    [SerializeField] Transform playerCamera;
+    [SerializeField] Transform playerModel;
+    [SerializeField] float crouchCameraOffset = 0.5f;
+    [SerializeField] float crouchScale = 0.7f;
 
     void Start()
     {
@@ -40,7 +47,7 @@ public class PlayerController : MonoBehaviour
         movement();
         sprint();
         crouch();
-
+        ToggleFlashlight();
     }
 
     void movement()
@@ -60,7 +67,6 @@ public class PlayerController : MonoBehaviour
                   (Input.GetAxis("Vertical") * transform.forward);
         Controller.Move(moveDir * speed * Time.deltaTime);
 
-        // Apply gravity
         playerVel.y -= gravity * Time.deltaTime;
         Controller.Move(playerVel * Time.deltaTime);
     }
@@ -94,11 +100,23 @@ public class PlayerController : MonoBehaviour
         {
             if (!isCrouching)
             {
-                // Reduce character height and adjust the center
+                // Reduce character height and adjust center
                 Controller.height = crouchHeight;
                 Controller.center = new Vector3(originalCenter.x, originalCenter.y - (originalHeight - crouchHeight) / 2, originalCenter.z);
                 speed = (int)(speed * crouchSpeedMod); // Reduce speed
                 isCrouching = true;
+
+                // Move camera down when crouching
+                if (playerCamera != null)
+                {
+                    playerCamera.localPosition -= new Vector3(0, crouchCameraOffset, 0);
+                }
+
+                // Shrink the player model
+                if (playerModel != null)
+                {
+                    playerModel.localScale = new Vector3(1, crouchScale, 1);
+                }
             }
             else
             {
@@ -108,6 +126,18 @@ public class PlayerController : MonoBehaviour
                     Controller.center = originalCenter;
                     speed = (int)(speed / crouchSpeedMod); // Restore speed
                     isCrouching = false;
+
+                    // Move camera back up when standing
+                    if (playerCamera != null)
+                    {
+                        playerCamera.localPosition += new Vector3(0, crouchCameraOffset, 0);
+                    }
+
+                    // Restore player model size
+                    if (playerModel != null)
+                    {
+                        playerModel.localScale = new Vector3(1, 1, 1);
+                    }
                 }
             }
         }
@@ -125,4 +155,14 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    void ToggleFlashlight()
+    {
+        if (Input.GetButtonDown("Flashlight")) 
+        {
+            if (flashlight != null)
+            {
+                flashlight.enabled = !flashlight.enabled; // Toggle the flashlight
+            }
+        }
+    }
 }
