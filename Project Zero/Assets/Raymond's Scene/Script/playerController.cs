@@ -5,7 +5,9 @@ public class PlayerController : MonoBehaviour
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
     [SerializeField] LayerMask ignoreLayer;
+    [SerializeField] LayerMask interactableLayer;
     [SerializeField] Light flashlight;
+    private SpacePod currentSpacePod;
 
     [Header("---- Stats ----")]
     [Range(3, 20)][SerializeField] int speed = 6;
@@ -15,7 +17,9 @@ public class PlayerController : MonoBehaviour
     [Range(15, 45)][SerializeField] float gravity = 20f;
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpeedMod = 0.5f;
+    [SerializeField] float interactRange = 2f;
 
+    private int originalSpeed;
     private bool isCrouching = false;
     private float originalHeight;
     private Vector3 originalCenter;
@@ -23,31 +27,33 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDir;
     private Vector3 playerVel;
     private bool isSprinting;
-
-
+    private int collectedParts = 0;
+    
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
-    [SerializeField] float crouchScale = 0.7f;
+    //[SerializeField] float crouchScale = 0.7f;
 
     void Start()
     {
-        if (Controller == null)
-        {
-            Debug.LogError("CharacterController not assigned in PlayerController.");
-        }
+        Cursor.lockState = CursorLockMode.Locked;
 
-        // Store original height and center
+        //store the players og speed
+        originalSpeed = speed;
+
+        //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
     }
 
     void Update()
     {
+
         movement();
         sprint();
         crouch();
         ToggleFlashlight();
+        Interact();
     }
 
     void movement()
@@ -100,57 +106,54 @@ public class PlayerController : MonoBehaviour
         {
             if (!isCrouching)
             {
-                // Reduce character height and adjust center
+                //Reduce height
                 Controller.height = crouchHeight;
-                Controller.center = new Vector3(originalCenter.x, originalCenter.y - (originalHeight - crouchHeight) / 2, originalCenter.z);
-                speed = (int)(speed * crouchSpeedMod); // Reduce speed
+
+                //Prevent ground clipping
+                Controller.Move(Vector3.down * 0.1f);
+
+                //Crouch speed
+                speed = (int)(originalSpeed * crouchSpeedMod);
+
                 isCrouching = true;
 
-                // Move camera down when crouching
+                //Move camera down
                 if (playerCamera != null)
                 {
                     playerCamera.localPosition -= new Vector3(0, crouchCameraOffset, 0);
                 }
-
-                // Shrink the player model
-                if (playerModel != null)
-                {
-                    playerModel.localScale = new Vector3(1, crouchScale, 1);
-                }
             }
             else
             {
-                if (CanStandUp()) // Prevent standing up if obstructed
+                if (CanStandUp()) //Prevent standing if blocked
                 {
                     Controller.height = originalHeight;
-                    Controller.center = originalCenter;
-                    speed = (int)(speed / crouchSpeedMod); // Restore speed
+                    Controller.Move(Vector3.up * 0.1f); //Avoid getting stuck
+
+                    //Restore original speed 
+                    speed = (int)originalSpeed;
+
                     isCrouching = false;
 
-                    // Move camera back up when standing
+                    //Move camera back up
                     if (playerCamera != null)
                     {
                         playerCamera.localPosition += new Vector3(0, crouchCameraOffset, 0);
-                    }
-
-                    // Restore player model size
-                    if (playerModel != null)
-                    {
-                        playerModel.localScale = new Vector3(1, 1, 1);
                     }
                 }
             }
         }
     }
 
+
     bool CanStandUp()
     {
         RaycastHit hit;
-        float headClearance = originalHeight - crouchHeight; // Space needed to stand
+        float headClearance = originalHeight - crouchHeight; 
 
         if (Physics.SphereCast(transform.position, Controller.radius, Vector3.up, out hit, headClearance))
         {
-            return false; // Something is blocking the player from standing
+            return false; //if Something is blocking the player from standing
         }
         return true;
     }
@@ -161,8 +164,46 @@ public class PlayerController : MonoBehaviour
         {
             if (flashlight != null)
             {
-                flashlight.enabled = !flashlight.enabled; // Toggle the flashlight
+                flashlight.enabled = !flashlight.enabled; //Toggle the flashlight
             }
+        }
+    }
+
+    void Interact()
+    {
+        if (Input.GetButtonDown("Interact"))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactRange, interactableLayer))
+            {
+                if (hit.collider.CompareTag("Parts"))
+                {
+                    CollectPart(hit.collider.gameObject);
+                }
+                else if (hit.collider.CompareTag("SpacePod"))
+                {
+                    InsertPart(hit.collider.GetComponent<SpacePod>());
+                }
+            }
+        }
+    }
+
+    void CollectPart(GameObject part)
+    {
+        collectedParts++;
+        Destroy(part);
+        Debug.Log($"Parts collected: {collectedParts}");
+    }
+
+    void InsertPart(SpacePod pod)
+    {
+        if (pod == null) return;
+
+        if (collectedParts > 0 && !pod.IsFixed())
+        {
+            pod.InsertPart();
+            collectedParts--;
+            Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
 }
