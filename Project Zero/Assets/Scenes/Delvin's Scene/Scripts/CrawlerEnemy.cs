@@ -2,79 +2,73 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class CrawlerEnemy : MonoBehaviour
-{ 
+public class CrawlerEnemy : MonoBehaviour, IDamage
+{
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
 
     [SerializeField] Transform headPos;
-    [SerializeField] int HP;
+    [SerializeField] float HP;
     [SerializeField] int animTransSpeed;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamPauseTime;
     [SerializeField] int roamDistance;
 
+    [SerializeField] GameObject attack;
+    [SerializeField] Transform attackPos;
+    [SerializeField] float attackRate;
+    PlayerController player;
 
-    [SerializeField] GameObject bullet;
-    [SerializeField] Transform shootPos;
-    [SerializeField] float shootRate;
-    public PlayerController player;
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] growl;
+    [Range(0, 1)][SerializeField] float audgrowlVol;
+
+    [SerializeField] Collider attackCol;
 
     Color colorOrig;
-
-    float shootTimer;
+    float attackTimer;
     float roamTimer;
     float angleToPlayer;
+    float growlTimer; // Added cooldown for growl sound
     float stoppingDisOrig;
-
     Vector3 playerDir;
     Vector3 startingPos;
-
     bool playerInRange;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         colorOrig = model.material.color;
-        //GameManager.instance.UpdateGameGoal(1);
         startingPos = transform.position;
         stoppingDisOrig = agent.stoppingDistance;
+        //agent.stoppingDistance = 1;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        attackTimer += Time.deltaTime;
+        roamTimer += Time.deltaTime;
+        growlTimer += Time.deltaTime; // Track growl cooldown
 
-        float agentSpeed = agent.velocity.normalized.magnitude;
-        float animCurSpeed = anim.GetFloat("speed");
-        anim.SetFloat("speed", Mathf.MoveTowards(animCurSpeed, agentSpeed, Time.deltaTime * animTransSpeed));
-
-        shootTimer += Time.deltaTime;
-
-        if (agent.remainingDistance < .01f)
+        if (playerInRange && player != null && CanSeePlayer())
         {
-            roamTimer += Time.deltaTime;
+            EngagePlayer();
         }
-
-
-        if (playerInRange && !CanSeePlayer())
-        {
-            CheckRoam();
-
-        }
-
-        else if (!playerInRange)
+        else
         {
             CheckRoam();
         }
 
+        if (agent.isOnNavMesh)
+        {
+            Debug.Log("Agent is on NavMesh. Current position: " + transform.position + ", Destination: " + agent.destination);
+        }
     }
 
     void CheckRoam()
     {
-        if (roamTimer > roamPauseTime && agent.remainingDistance < .01f || player.HP <= 0f)
+        if (roamTimer > roamPauseTime && agent.remainingDistance < 0.1f)
         {
             Roam();
         }
@@ -83,36 +77,32 @@ public class CrawlerEnemy : MonoBehaviour
     void Roam()
     {
         roamTimer = 0;
-        agent.stoppingDistance = 0;
-
-        Vector3 ranPos = Random.insideUnitSphere * roamDistance;
-        ranPos += startingPos;
-
-        NavMeshHit hit;
-        NavMesh.SamplePosition(ranPos, out hit, roamDistance, 1);
-        agent.SetDestination(hit.position);
-
-        Debug.Log(agent.remainingDistance);
+        Vector3 randomPos = Random.insideUnitSphere * roamDistance + startingPos;
+        if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, roamDistance, 1))
+        {
+            agent.SetDestination(hit.position);
+            anim.Play("crawl");
+        }
     }
 
     bool CanSeePlayer()
-    {
+    { 
+
         playerDir = player.transform.position - headPos.position;
         angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
         Debug.DrawRay(headPos.position, playerDir);
 
         RaycastHit hit;
-
         if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
             if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                agent.SetDestination(player.transform.position);
-
-                if (shootTimer >= shootRate)
+                // Prevent growl spam
+                if (growlTimer >= 2f) // 2-second cooldown
                 {
-                    Shoot();
+                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)], audgrowlVol);
+                    growlTimer = 0;
                 }
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
@@ -126,10 +116,46 @@ public class CrawlerEnemy : MonoBehaviour
         return false;
     }
 
+    void EngagePlayer()
+    {
+        if (player == null) return;
+
+        agent.SetDestination(player.transform.position);
+        float distanceToPlayer = agent.remainingDistance;
+
+        if (distanceToPlayer > 10)
+        {
+            anim.Play("crawl_fast");
+        }
+        else if (distanceToPlayer > 5 && distanceToPlayer <= 10)
+        {
+            anim.Play("pounce");
+        }
+        else if (distanceToPlayer <= 1)
+        {
+            anim.Play("attack");
+            Attack();
+        }
+        else
+        {
+            anim.Play("crawl_fast");
+        }
+    }
+
+    void Attack()
+    {
+        if (attackTimer >= attackRate)
+        {
+            attackTimer = 0;
+            Instantiate(attack, attackPos.position, transform.rotation);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            player = other.GetComponent<PlayerController>(); // Assign player when detected
             playerInRange = true;
         }
     }
@@ -139,30 +165,35 @@ public class CrawlerEnemy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            agent.stoppingDistance = 0;
         }
     }
-    void Movement()
-    {
 
+    public void SetTarget(Transform target)
+    {
+        if (target == null) return; // Prevent null reference errors
+
+        agent.SetDestination(target.position);
+        
+        anim.Play("crawl_fast");
+        playerInRange = true;
+
+        Debug.Log("Crawler: Target set to " + target.name);
     }
 
-    void FaceTarget()
-    {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
-    }
-
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         HP -= damage;
-
         StartCoroutine(FlashRed());
-        agent.SetDestination(player.transform.position);
+
+        attackOff();
+
+        if (player != null)
+        {
+            agent.SetDestination(player.transform.position);
+        }
 
         if (HP <= 0)
         {
-            //GameManager.instance.UpdateGameGoal(-1);
             Destroy(gameObject);
         }
     }
@@ -174,15 +205,24 @@ public class CrawlerEnemy : MonoBehaviour
         model.material.color = colorOrig;
     }
 
-    void Shoot()
+    public void attackOn()
     {
-        shootTimer = 0;
-
-        Instantiate(bullet, shootPos.position, transform.rotation);
-
-
+        attackCol.enabled = true;
     }
 
+    public void attackOff()
+    {
+        attackCol.enabled = false;
+    }
 
+    void FaceTarget()
+    {
+        if (player == null) return;
+
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        direction.y = 0; // Keep rotation on the horizontal plane
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
+    }
 }
-

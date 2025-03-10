@@ -8,124 +8,82 @@ public class BossEnemy : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
 
-    [SerializeField] Transform headPos;
+    [SerializeField] Transform[] roamPoints;
     [SerializeField] int HP;
-    [SerializeField] int animTransSpeed;
     [SerializeField] int faceTargetSpeed;
-    [SerializeField] int FOV;
-    [SerializeField] int roamPauseTime;
-    [SerializeField] int roamDistance;
+    [SerializeField] float stunDuration = 2f;
 
-
-    [SerializeField] GameObject bullet;
-    [SerializeField] Transform shootPos;
-    [SerializeField] float shootRate;
     public PlayerController player;
+    private int currentRoamIndex = 0;
+    private bool isStunned = false;
+    private bool playerInRange;
 
-    Color colorOrig;
-
-    float shootTimer;
-    float roamTimer;
-    float angleToPlayer;
-    float stoppingDisOrig;
-
-    Vector3 playerDir;
-    Vector3 startingPos;
-
-    bool playerInRange;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        colorOrig = model.material.color;
-        //GameManager.instance.UpdateGameGoal(1);
-        startingPos = transform.position;
-        stoppingDisOrig = agent.stoppingDistance;
+        RoamToNextPoint();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-        float agentSpeed = agent.velocity.normalized.magnitude;
-        float animCurSpeed = anim.GetFloat("Throw");
-        anim.SetFloat("Throw", Mathf.MoveTowards(animCurSpeed, agentSpeed, Time.deltaTime * animTransSpeed));
-
-        shootTimer += Time.deltaTime;
-
-        if (agent.remainingDistance < .01f)
+        if (!isStunned)
         {
-            roamTimer += Time.deltaTime;
-        }
-
-
-        if (playerInRange && !CanSeePlayer())
-        {
-            CheckRoam();
-
-        }
-
-        else if (!playerInRange)
-        {
-            CheckRoam();
-        }
-
-    }
-
-    void CheckRoam()
-    {
-        if (roamTimer > roamPauseTime && agent.remainingDistance < .01f || player.HP <= 0f)
-        {
-            Roam();
+            if (playerInRange && CanSeePlayer())
+            {
+                EngagePlayer();
+            }
+            else if (agent.remainingDistance < 0.5f)
+            {
+                RoamToNextPoint();
+            }
         }
     }
 
-    void Roam()
+    void RoamToNextPoint()
     {
-        roamTimer = 0;
-        agent.stoppingDistance = 0;
-
-        Vector3 ranPos = Random.insideUnitSphere * roamDistance;
-        ranPos += startingPos;
-
-        NavMeshHit hit;
-        NavMesh.SamplePosition(ranPos, out hit, roamDistance, 1);
-        agent.SetDestination(hit.position);
-
-        Debug.Log(agent.remainingDistance);
+        if (roamPoints.Length == 0) return;
+        agent.SetDestination(roamPoints[currentRoamIndex].position);
+        anim.Play("Walk3");
+        currentRoamIndex = (currentRoamIndex + 1) % roamPoints.Length;
     }
 
     bool CanSeePlayer()
     {
-        playerDir = player.transform.position - headPos.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+        FaceTarget();
+        Vector3 playerDir = (player.transform.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
-        Debug.DrawRay(headPos.position, playerDir);
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(headPos.position, playerDir, out hit))
+        if (angleToPlayer < 60f) // Only detect players within a 60-degree vision cone
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
             {
-                agent.SetDestination(player.transform.position);
-
-                if (shootTimer >= shootRate)
-                {
-                    Shoot();
-                }
-                if (agent.remainingDistance <= agent.stoppingDistance)
-                {
-                    FaceTarget();
-                }
-                agent.stoppingDistance = stoppingDisOrig;
-                return true;
+                return hit.collider.CompareTag("Player");
             }
         }
-        agent.stoppingDistance = 0;
         return false;
     }
 
+    void EngagePlayer()
+    {
+        agent.SetDestination(player.transform.position);
+        float distance = agent.remainingDistance;
+
+        if (distance <= 1)
+        {
+            anim.Play(Random.Range(0, 2) == 0 ? "attack2RLSpike" : "attack3");
+        }
+        else
+        {
+            anim.Play("Walk3");
+        }
+    }
+
+    public void Stun(float duration)
+    {
+        if (!isStunned)
+        {
+            StartCoroutine(StunRoutine(duration));
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -139,49 +97,28 @@ public class BossEnemy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            agent.stoppingDistance = 0;
         }
     }
-    void Movement()
+    IEnumerator StunRoutine(float duration)
     {
-
+        isStunned = true;
+        agent.isStopped = true;
+        anim.Play("Rage");
+        yield return new WaitForSeconds(duration);
+        agent.isStopped = false;
+        isStunned = false;
+        RoamToNextPoint();
     }
 
     void FaceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
+        if (player == null) return;
+
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        direction.y = 0; // Keep rotation on the horizontal plane
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
     }
-
-    public void TakeDamage(int damage)
-    {
-        HP -= damage;
-
-        StartCoroutine(FlashRed());
-        agent.SetDestination(player.transform.position);
-
-        if (HP <= 0)
-        {
-            //GameManager.instance.UpdateGameGoal(-1);
-            Destroy(gameObject);
-        }
-    }
-
-    IEnumerator FlashRed()
-    {
-        model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        model.material.color = colorOrig;
-    }
-
-    void Shoot()
-    {
-        shootTimer = 0;
-
-        Instantiate(bullet, shootPos.position, transform.rotation);
-
-
-    }
-
-
 }
+
