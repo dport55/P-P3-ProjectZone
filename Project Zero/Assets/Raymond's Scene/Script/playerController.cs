@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float crouchSpeedMod = 0.5f;
     [SerializeField] float interactRange = 2f;
 
+   
+
     private int originalSpeed;
     private bool isCrouching = false;
     private float originalHeight;
@@ -34,6 +36,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
+
+    [Header("Shooting Settings")]
+    [SerializeField] float shootDamage;
+    [SerializeField] float shootRate;
+    [SerializeField] int shootDist;
+
+    float shootTimer;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -48,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
         movement();
         sprint();
@@ -58,6 +69,7 @@ public class PlayerController : MonoBehaviour
 
     void movement()
     {
+       
         if (Controller.isGrounded)
         {
             jumpCount = 0;
@@ -75,6 +87,11 @@ public class PlayerController : MonoBehaviour
 
         playerVel.y -= gravity * Time.deltaTime;
         Controller.Move(playerVel * Time.deltaTime);
+
+        shootTimer += Time.deltaTime;
+        if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
+            shoot();
+        }
     }
 
     void sprint()
@@ -204,6 +221,22 @@ public class PlayerController : MonoBehaviour
             pod.InsertPart();
             collectedParts--;
             Debug.Log($"Inserted a part. Remaining: {collectedParts}");
+        }
+    }
+    void shoot()
+    {
+        shootTimer = 0;
+        RaycastHit hit;
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
+        {
+            Debug.Log(hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponentInParent<IDamage>();
+            if(dmg != null)
+            {
+                dmg.takeDamage(shootDamage);    
+            }
         }
     }
 }
