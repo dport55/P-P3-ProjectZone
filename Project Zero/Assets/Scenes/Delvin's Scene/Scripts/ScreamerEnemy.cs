@@ -12,13 +12,13 @@ public class ScreamerEnemy : MonoBehaviour
     public BossEnemy boss;
 
     bool hasScreamed = false;
-    PlayerController player;
+    PlayerController2 player;
 
     void OnTriggerEnter(Collider other)
     {
         if (!hasScreamed && other.CompareTag("Player"))
         {
-            player = other.GetComponent<PlayerController>();
+            player = other.GetComponent<PlayerController2>();
             StartCoroutine(Scream());
         }
     }

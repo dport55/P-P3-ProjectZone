@@ -15,7 +15,7 @@ public class BossEnemy : MonoBehaviour
     [SerializeField] int roamPauseTime; // Time in seconds to wait at each roam point before moving again
     [SerializeField] float roamTimer = 0f; // Timer to trigger the roaming
 
-    public PlayerController player;
+    public PlayerController2 player;
     private bool isStunned = false;
     private bool playerInRange;
     private bool isWaiting = false;

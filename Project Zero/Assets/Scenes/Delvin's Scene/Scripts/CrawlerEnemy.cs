@@ -19,7 +19,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] GameObject attack;
     [SerializeField] Transform attackPos;
     [SerializeField] float attackRate;
-    PlayerController player;
+    PlayerController2 player;
 
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
@@ -147,7 +147,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            player = other.GetComponent<PlayerController>(); // Assign player when detected
+            player = other.GetComponent<PlayerController2>(); // Assign player when detected
             playerInRange = true;
         }
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController2 : MonoBehaviour, IDamage
 {
     [Header("-----Components-----")]
     [SerializeField] CharacterController controller;

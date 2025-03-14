@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class DemoDamage : MonoBehaviour
+public class DemoDamage2 : MonoBehaviour
 
 {
     enum damageType { moving, stationary }
