@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamage
 {
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private SpacePod currentSpacePod;
 
     [Header("---- Stats ----")]
+    [SerializeField] float HP = 6;
     [Range(3, 20)][SerializeField] int speed = 6;
     [Range(2, 5)][SerializeField] int sprintMod = 2;
     [Range(5, 20)][SerializeField] float jumpSpeed = 10f;
@@ -235,8 +236,13 @@ public class PlayerController : MonoBehaviour
             IDamage dmg = hit.collider.GetComponentInParent<IDamage>();
             if(dmg != null)
             {
-                dmg.takeDamage(shootDamage);    
+                dmg.TakeDamage(shootDamage);    
             }
         }
+    }
+
+    public void TakeDamage(float damage) 
+    {
+        HP -= damage;
     }
 }
