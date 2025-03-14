@@ -25,7 +25,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] AudioClip[] growl;
     [Range(0, 1)][SerializeField] float audgrowlVol;
 
-    [SerializeField] Collider attackCol;
+    public Collider attackCol;
 
     Color colorOrig;
     float attackTimer;
@@ -36,13 +36,13 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     Vector3 playerDir;
     Vector3 startingPos;
     bool playerInRange;
+    bool isEngaged = false; // Flag to track if the enemy is engaged with the player
 
     void Start()
     {
         colorOrig = model.material.color;
         startingPos = transform.position;
         stoppingDisOrig = agent.stoppingDistance;
-        //agent.stoppingDistance = 1;
     }
 
     void Update()
@@ -53,16 +53,14 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
         if (playerInRange && player != null && CanSeePlayer())
         {
-            EngagePlayer();
+            EngagePlayer(); // Keep engaging if the player is in range
         }
         else
         {
-            CheckRoam();
-        }
-
-        if (agent.isOnNavMesh)
-        {
-            Debug.Log("Agent is on NavMesh. Current position: " + transform.position + ", Destination: " + agent.destination);
+            if (!isEngaged) // If not engaged, then roam
+            {
+                CheckRoam();
+            }
         }
     }
 
@@ -86,8 +84,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     }
 
     bool CanSeePlayer()
-    { 
-
+    {
         playerDir = player.transform.position - headPos.position;
         angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
@@ -120,6 +117,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (player == null) return;
 
+        isEngaged = true; // Set engaged flag
+
         agent.SetDestination(player.transform.position);
         float distanceToPlayer = agent.remainingDistance;
 
@@ -131,10 +130,10 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         {
             anim.Play("pounce");
         }
-        else if (distanceToPlayer <= 1)
+        else if (distanceToPlayer <= 3)
         {
             anim.Play("attack");
-            Attack();
+            
         }
         else
         {
@@ -142,14 +141,6 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         }
     }
 
-    void Attack()
-    {
-        if (attackTimer >= attackRate)
-        {
-            attackTimer = 0;
-            Instantiate(attack, attackPos.position, transform.rotation);
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -165,6 +156,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            isEngaged = false; // Reset engaged flag when the player exits
         }
     }
 
@@ -173,11 +165,10 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (target == null) return; // Prevent null reference errors
 
         agent.SetDestination(target.position);
-        
+
         anim.Play("crawl_fast");
         playerInRange = true;
-
-        Debug.Log("Crawler: Target set to " + target.name);
+        isEngaged = true; // Set engaged flag
     }
 
     public void TakeDamage(float damage)
@@ -185,7 +176,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         HP -= damage;
         StartCoroutine(FlashRed());
 
-        attackOff();
+        DisableCollider();
 
         if (player != null)
         {
@@ -205,12 +196,12 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         model.material.color = colorOrig;
     }
 
-    public void attackOn()
+    public void EnableCollider()
     {
         attackCol.enabled = true;
     }
 
-    public void attackOff()
+    public void DisableCollider()
     {
         attackCol.enabled = false;
     }

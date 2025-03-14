@@ -32,19 +32,12 @@ public class ScreamerEnemy : MonoBehaviour
     IEnumerator Scream()
     {
         hasScreamed = true;
-        anim.Play("Roar_Action"); // Play scream animation
-
-        if (screamSound.Length > 0)
-        {
-            aud.PlayOneShot(screamSound[Random.Range(0, screamSound.Length)], 1f);
-        }
-        else
-        {
-            Debug.LogWarning("ScreamerEnemy: No scream sounds assigned!");
-        }
-
+        anim.Play("Creep|Roar_Action"); // Play scream animation
+        oneScream(); // Play scream sound
+        yield return new WaitForSeconds(1.9f);
         AlertNearbyEnemies();
-        yield return new WaitForSeconds(3f);
+        anim.Play("Creep|JumpOut_Action");
+        Destroy(gameObject); // Destroy after screaming
     }
 
     void AlertNearbyEnemies()
@@ -60,4 +53,12 @@ public class ScreamerEnemy : MonoBehaviour
             }
         }
     }
+
+    public void oneScream()
+    {
+        aud.PlayOneShot(screamSound[Random.Range(0, screamSound.Length)], 2f);
+
+      
+    }
+
 }

@@ -8,42 +8,64 @@ public class BossEnemy : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
 
-    [SerializeField] Transform[] roamPoints;
+    [SerializeField] float roamRadius = 10f; // The radius within which the boss will roam
     [SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] float stunDuration = 2f;
+    [SerializeField] int roamPauseTime; // Time in seconds to wait at each roam point before moving again
+    [SerializeField] float roamTimer = 0f; // Timer to trigger the roaming
 
     public PlayerController player;
-    private int currentRoamIndex = 0;
     private bool isStunned = false;
     private bool playerInRange;
+    private bool isWaiting = false;
+
+    public Collider attackCol1;
+    public Collider attackCol2;
 
     void Start()
     {
-        RoamToNextPoint();
+        MoveToRandomRoamPoint();
     }
 
     void Update()
     {
-        if (!isStunned)
+        roamTimer += Time.deltaTime; // Increment the roam timer by the time elapsed since last frame
+
+        // Check if the timer has exceeded the roamPauseTime before moving to the next random position
+        if (roamTimer >= roamPauseTime && !isWaiting)
         {
-            if (playerInRange && CanSeePlayer())
-            {
-                EngagePlayer();
-            }
-            else if (agent.remainingDistance < 0.5f)
-            {
-                RoamToNextPoint();
-            }
+            StartCoroutine(WaitBeforeNextMove());
+        }
+
+        if (playerInRange && CanSeePlayer()) // Engage if player is in range
+        {
+            EngagePlayer();
         }
     }
 
-    void RoamToNextPoint()
+    IEnumerator WaitBeforeNextMove()
     {
-        if (roamPoints.Length == 0) return;
-        agent.SetDestination(roamPoints[currentRoamIndex].position);
-        anim.Play("Walk3");
-        currentRoamIndex = (currentRoamIndex + 1) % roamPoints.Length;
+        isWaiting = true;
+        anim.Play("idle3"); // Play idle animation while waiting
+        yield return new WaitForSeconds(roamPauseTime); // Wait for the specified roamPauseTime
+        isWaiting = false;
+        roamTimer = 0f; // Reset the timer after roaming
+        MoveToRandomRoamPoint(); // Move to the next random point after waiting
+    }
+
+    void MoveToRandomRoamPoint()
+    {
+        // Generate a random position within the roam radius
+        Vector3 randomPos = Random.insideUnitSphere * roamRadius;
+        randomPos += transform.position; // Offset by the current position to ensure it roams within the radius
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomPos, out hit, roamRadius, NavMesh.AllAreas)) // Find a valid NavMesh position
+        {
+            agent.SetDestination(hit.position); // Set the random position as the destination
+            anim.Play("walk3");
+        }
     }
 
     bool CanSeePlayer()
@@ -64,16 +86,21 @@ public class BossEnemy : MonoBehaviour
 
     void EngagePlayer()
     {
+        if (player == null) return;
+
         agent.SetDestination(player.transform.position);
         float distance = agent.remainingDistance;
 
-        if (distance <= 1)
+        if (distance > agent.stoppingDistance) // Keep walking towards player
         {
-            anim.Play(Random.Range(0, 2) == 0 ? "attack2RLSpike" : "attack3");
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("walk3"))
+            {
+                anim.Play("walk3");
+            }
         }
-        else
+        else // Attack if within range
         {
-            anim.Play("Walk3");
+            anim.Play("attack2RLSpike");
         }
     }
 
@@ -84,6 +111,7 @@ public class BossEnemy : MonoBehaviour
             StartCoroutine(StunRoutine(duration));
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -99,6 +127,7 @@ public class BossEnemy : MonoBehaviour
             playerInRange = false;
         }
     }
+
     IEnumerator StunRoutine(float duration)
     {
         isStunned = true;
@@ -107,7 +136,19 @@ public class BossEnemy : MonoBehaviour
         yield return new WaitForSeconds(duration);
         agent.isStopped = false;
         isStunned = false;
-        RoamToNextPoint();
+        MoveToRandomRoamPoint();
+    }
+
+    public void EnableCollider()
+    {
+        attackCol1.enabled = true;
+        attackCol2.enabled = true;
+    }
+
+    public void DisableCollider()
+    {
+        attackCol1.enabled = false;
+        attackCol2.enabled = false;
     }
 
     void FaceTarget()
@@ -121,4 +162,3 @@ public class BossEnemy : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
     }
 }
-
