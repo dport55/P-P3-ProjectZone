@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
         Controller.Move(playerVel * Time.deltaTime);
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
+        if (Input.GetButton("Fire1")&& shootTimer >= shootRate) {  
             shoot();
         }
     }
