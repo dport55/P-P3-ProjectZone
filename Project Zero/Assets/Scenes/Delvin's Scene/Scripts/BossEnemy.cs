@@ -161,4 +161,15 @@ public class BossEnemy : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
     }
+
+    public void SetTarget(Transform target)
+    {
+        if (target == null) return; // Prevent null reference errors
+
+        agent.SetDestination(target.position);
+
+        anim.Play("run2");
+        playerInRange = true;
+        //isEngaged = true; // Set engaged flag
+    }
 }

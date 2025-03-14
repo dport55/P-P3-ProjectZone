@@ -118,9 +118,10 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (player == null) return;
 
         isEngaged = true; // Set engaged flag
-
+        
         agent.SetDestination(player.transform.position);
         float distanceToPlayer = agent.remainingDistance;
+        FaceTarget();
 
         if (distanceToPlayer > 10)
         {
@@ -210,10 +211,18 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (player == null) return;
 
-        Vector3 direction = (player.transform.position - transform.position).normalized;
-        direction.y = 0; // Keep rotation on the horizontal plane
+        // Get direction from enemy to player
+        playerDir = player.transform.position - transform.position;
+        playerDir.y = 0; // Ensure no vertical rotation
 
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
+        // If the player is at the same position, don't rotate
+        if (playerDir.sqrMagnitude > 0.1f)
+        {
+            // Calculate the desired rotation towards the player
+            Quaternion targetRotation = Quaternion.LookRotation(playerDir);
+
+            // Smoothly rotate towards the player
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
+        }
     }
 }

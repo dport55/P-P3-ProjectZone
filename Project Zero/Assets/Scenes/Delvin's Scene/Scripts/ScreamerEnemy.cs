@@ -9,6 +9,8 @@ public class ScreamerEnemy : MonoBehaviour
     [SerializeField] float screamRadius = 15f;
     [SerializeField] LayerMask enemyLayer;
 
+    public BossEnemy boss;
+
     bool hasScreamed = false;
     PlayerController player;
 
@@ -50,15 +52,14 @@ public class ScreamerEnemy : MonoBehaviour
             if (enemy.TryGetComponent(out CrawlerEnemy crawler))
             {
                 crawler.SetTarget(player.transform);
+                //boss.SetTarget(player.transform);
             }
         }
     }
 
     public void oneScream()
     {
-        aud.PlayOneShot(screamSound[Random.Range(0, screamSound.Length)], 2f);
-
-      
+        aud.PlayOneShot(screamSound[Random.Range(0, screamSound.Length)], 2f); 
     }
 
 }
