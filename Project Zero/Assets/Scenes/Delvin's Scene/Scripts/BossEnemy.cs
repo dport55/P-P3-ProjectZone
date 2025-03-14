@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class BossEnemy : MonoBehaviour
+public class BossEnemy : MonoBehaviour,IDamage
 {
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
 
     [SerializeField] float roamRadius = 10f; // The radius within which the boss will roam
-    [SerializeField] int HP;
+    [SerializeField] float HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] float stunDuration = 2f;
     [SerializeField] int roamPauseTime; // Time in seconds to wait at each roam point before moving again
@@ -23,8 +23,11 @@ public class BossEnemy : MonoBehaviour
     public Collider attackCol1;
     public Collider attackCol2;
 
+    Color colorOrig;
+
     void Start()
     {
+        colorOrig = model.material.color;
         MoveToRandomRoamPoint();
     }
 
@@ -171,5 +174,25 @@ public class BossEnemy : MonoBehaviour
         anim.Play("run2");
         playerInRange = true;
         //isEngaged = true; // Set engaged flag
+    }
+
+    public void TakeDamage(float damage)
+    {
+        HP -= damage;
+
+        StartCoroutine(FlashRed());
+        agent.SetDestination(GameManager.instance.player.transform.position);
+
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator FlashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
     }
 }

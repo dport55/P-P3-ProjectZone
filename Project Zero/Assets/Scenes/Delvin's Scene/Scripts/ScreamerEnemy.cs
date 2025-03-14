@@ -8,14 +8,16 @@ public class ScreamerEnemy : MonoBehaviour
     [SerializeField] AudioClip[] screamSound;
     [SerializeField] float screamRadius = 15f;
     [SerializeField] LayerMask enemyLayer;
-
+    [SerializeField] float HP;
     public BossEnemy boss;
+
 
     bool hasScreamed = false;
     PlayerController2 player;
 
     void OnTriggerEnter(Collider other)
     {
+      
         if (!hasScreamed && other.CompareTag("Player"))
         {
             player = other.GetComponent<PlayerController2>();
