@@ -278,6 +278,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+        //if(gunModel.name == "Freeze Gun")
+        //{
+        //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
+        //}
+
+        //gunModel.transform.position = gunList[gunListPos].position;
+        //gunModel.transform.rotation = gunList[gunListPos].rotation;
     }
     //End
 }

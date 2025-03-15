@@ -11,6 +11,8 @@ public class Gunstats : ScriptableObject
     public float shootRate;
     public int AmmoCur, AmmoMax;
     public Vector3 muzzlePos;
+    //public Vector3 position;
+    //public Quaternion rotation;
     public ParticleSystem HitEffect;
     public AudioClip[] shootSound;
     public float shootVol;

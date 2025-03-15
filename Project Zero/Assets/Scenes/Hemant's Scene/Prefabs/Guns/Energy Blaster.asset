@@ -19,6 +19,8 @@ MonoBehaviour:
   AmmoCur: 40
   AmmoMax: 40
   muzzlePos: {x: 0, y: 0.1339, z: 0.721}
+  GunPos: {x: 0.743, y: -0.614, z: 0.777}
+  GunRot: {x: -0.043619387, y: 0, z: 0, w: 0.99904823}
   HitEffect: {fileID: 0}
   shootSound: []
   shootVol: 0
