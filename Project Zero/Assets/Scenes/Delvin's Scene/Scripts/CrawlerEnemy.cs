@@ -45,13 +45,22 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         stoppingDisOrig = agent.stoppingDistance;
     }
 
+
     void Update()
     {
+        if (player == null) return;
+
         attackTimer += Time.deltaTime;
         roamTimer += Time.deltaTime;
         growlTimer += Time.deltaTime; // Track growl cooldown
 
-        if (playerInRange && player != null && CanSeePlayer())
+        if (player.isHiding) // If the player is hiding, go back to roaming
+        {
+            /*if (!isEngaged)*/ CheckRoam(); // Only roam if not already engaged
+            return; // Skip the rest of the logic when the player is hiding
+        }
+
+        if (playerInRange && CanSeePlayer())
         {
             EngagePlayer(); // Keep engaging if the player is in range
         }
@@ -177,7 +186,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         HP -= damage;
         StartCoroutine(FlashRed());
 
-        DisableCollider();
+        //DisableCollider();
 
         if (player != null)
         {

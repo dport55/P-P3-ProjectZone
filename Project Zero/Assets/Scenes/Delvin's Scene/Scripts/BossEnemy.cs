@@ -31,11 +31,16 @@ public class BossEnemy : MonoBehaviour,IDamage
         MoveToRandomRoamPoint();
     }
 
-    void Update()
+      void Update()
     {
         roamTimer += Time.deltaTime; // Increment the roam timer by the time elapsed since last frame
 
-        // Check if the timer has exceeded the roamPauseTime before moving to the next random position
+        if (player.isHiding) // If the player is hiding, go back to roaming
+        {
+            if (!isWaiting) MoveToRandomRoamPoint(); // Roam if not waiting
+            return; // Skip the rest of the logic when the player is hiding
+        }
+
         if (roamTimer >= roamPauseTime && !isWaiting)
         {
             StartCoroutine(WaitBeforeNextMove());
