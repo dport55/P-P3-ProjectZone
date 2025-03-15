@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Freeze Gun
   m_EditorClassIdentifier: 
-  model: {fileID: 100002, guid: ee6dfe33129a0db4193f14207d5c8960, type: 3}
+  model: {fileID: 787057100562914357, guid: 371711cf542f6d84bafd6596c502935b, type: 3}
   shootDamage: 1
   shootDist: 1
   shootRate: 1
