@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
@@ -8,6 +9,22 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] LayerMask interactableLayer;
     [SerializeField] Light flashlight;
     private SpacePod currentSpacePod;
+
+    // Hemant's Adittion
+    [Header("---- Shooting Settings ----")]
+    [SerializeField] float shootDamage;
+    [SerializeField] float shootRate;
+    [SerializeField] int shootDist;
+
+    float shootTimer;
+
+    [Header("=====Guns=====")]
+    [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
+    [SerializeField] GameObject gunModel;
+    [SerializeField] Transform muzzleFlash;
+
+    int gunListPos;
+    //End
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 6;
@@ -19,8 +36,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpeedMod = 0.5f;
     [SerializeField] float interactRange = 2f;
-
-   
+       
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -38,12 +54,7 @@ public class PlayerController : MonoBehaviour, IDamage
     //[SerializeField] float crouchScale = 0.7f;
 
 
-    [Header("Shooting Settings")]
-    [SerializeField] float shootDamage;
-    [SerializeField] float shootRate;
-    [SerializeField] int shootDist;
-
-    float shootTimer;
+    
 
     void Start()
     {
@@ -59,7 +70,9 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Update()
     {
+        // Hemant's Adittion
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+        //End
 
         movement();
         sprint();
@@ -89,10 +102,13 @@ public class PlayerController : MonoBehaviour, IDamage
         playerVel.y -= gravity * Time.deltaTime;
         Controller.Move(playerVel * Time.deltaTime);
 
+        // Hemant's Adittion
+
         shootTimer += Time.deltaTime;
         if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
             shoot();
         }
+        //End
     }
 
     void sprint()
@@ -224,6 +240,7 @@ public class PlayerController : MonoBehaviour, IDamage
             Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
+    // Hemant's Adittion
     void shoot()
     {
         shootTimer = 0;
@@ -245,4 +262,22 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         HP -= damage;
     }
+
+    public void getgunstats(Gunstats gun)
+    {
+
+        gunList.Add(gun);
+        changeGun();
+    }
+
+    void changeGun()
+    {
+        shootDamage = gunList[gunListPos].shootDamage;
+        shootDist = gunList[gunListPos].shootDist;
+        shootRate = gunList[gunListPos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+    //End
 }
