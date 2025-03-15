@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
             shoot();
         }
+        SelectGun();
         //End
     }
 
@@ -285,6 +286,21 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         //gunModel.transform.position = gunList[gunListPos].position;
         //gunModel.transform.rotation = gunList[gunListPos].rotation;
+    }
+
+
+    void SelectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
+        {
+            gunListPos++;
+            changeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
+        {
+            gunListPos--;
+            changeGun();
+        }
     }
     //End
 }
