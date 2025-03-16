@@ -16,8 +16,6 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] int roamPauseTime;
     [SerializeField] int roamDistance;
 
-    [SerializeField] GameObject attack;
-    [SerializeField] Transform attackPos;
     [SerializeField] float attackRate;
     PlayerController2 player;
 
@@ -54,22 +52,25 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         roamTimer += Time.deltaTime;
         growlTimer += Time.deltaTime; // Track growl cooldown
 
-        if (player.isHiding) // If the player is hiding, go back to roaming
+        if (player.isHiding)
         {
-            /*if (!isEngaged)*/ CheckRoam(); // Only roam if not already engaged
-            return; // Skip the rest of the logic when the player is hiding
+            CheckRoam();
+            return;
         }
 
         if (playerInRange && CanSeePlayer())
         {
-            EngagePlayer(); // Keep engaging if the player is in range
+            EngagePlayer();
+            FaceTarget(); // Ensure rotation happens when engaging
         }
-        else
+
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (!isEngaged) // If not engaged, then roam
-            {
-                CheckRoam();
-            }
+            FaceTarget(); // Rotate even when stationary
+        }
+        else if (!isEngaged)
+        {
+            CheckRoam();
         }
     }
 
@@ -177,8 +178,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         agent.SetDestination(target.position);
 
         anim.Play("crawl_fast");
-        playerInRange = true;
-        isEngaged = true; // Set engaged flag
+     
     }
 
     public void TakeDamage(float damage)
@@ -220,18 +220,19 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (player == null) return;
 
-        // Get direction from enemy to player
-        playerDir = player.transform.position - transform.position;
-        playerDir.y = 0; // Ensure no vertical rotation
+        Vector3 direction = (player.transform.position - headPos.position).normalized;
+        direction.y = 0; // Keep rotation only on the Y-axis
 
-        // If the player is at the same position, don't rotate
-        if (playerDir.sqrMagnitude > 0.1f)
-        {
-            // Calculate the desired rotation towards the player
-            Quaternion targetRotation = Quaternion.LookRotation(playerDir);
+        if (direction == Vector3.zero) return;
 
-            // Smoothly rotate towards the player
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
-        }
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+
+        // 90-degree rotation offset
+        Quaternion correctedRotation = lookRotation * Quaternion.Euler(0, 95, 0);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, correctedRotation, Time.deltaTime * faceTargetSpeed);
+
+        Debug.Log("Rotating towards player with offset: " + transform.rotation.eulerAngles);
     }
+
 }

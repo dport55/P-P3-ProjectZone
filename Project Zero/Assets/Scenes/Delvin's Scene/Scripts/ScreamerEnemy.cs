@@ -53,7 +53,7 @@ public class ScreamerEnemy : MonoBehaviour
         {
             if (enemy.TryGetComponent(out CrawlerEnemy crawler))
             {
-                crawler.SetTarget(player.transform);
+                crawler.SetTarget(transform);
                 //boss.SetTarget(player.transform);
             }
         }
