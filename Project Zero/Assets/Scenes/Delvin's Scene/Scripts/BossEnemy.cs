@@ -2,18 +2,18 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class BossEnemy : MonoBehaviour,IDamage
+public class BossEnemy : MonoBehaviour, IDamage
 {
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
 
-    [SerializeField] float roamRadius = 10f; // The radius within which the boss will roam
+    [SerializeField] Transform[] spawnPoints; // Array of spawn points
     [SerializeField] float HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] float stunDuration = 2f;
-    [SerializeField] int roamPauseTime; // Time in seconds to wait at each roam point before moving again
-    [SerializeField] float roamTimer = 0f; // Timer to trigger the roaming
+    [SerializeField] int roamPauseTime;
+    [SerializeField] float roamTimer = 0f;
 
     public PlayerController2 player;
     private bool isStunned = false;
@@ -28,17 +28,17 @@ public class BossEnemy : MonoBehaviour,IDamage
     void Start()
     {
         colorOrig = model.material.color;
-        MoveToRandomRoamPoint();
+        MoveToRandomSpawnPoint();
     }
 
-      void Update()
+    void Update()
     {
-        roamTimer += Time.deltaTime; // Increment the roam timer by the time elapsed since last frame
+        roamTimer += Time.deltaTime;
 
-        if (player.isHiding) // If the player is hiding, go back to roaming
+        if (player.isHiding)
         {
-            if (!isWaiting) MoveToRandomRoamPoint(); // Roam if not waiting
-            return; // Skip the rest of the logic when the player is hiding
+            if (!isWaiting) MoveToRandomSpawnPoint();
+            return;
         }
 
         if (roamTimer >= roamPauseTime && !isWaiting)
@@ -46,7 +46,7 @@ public class BossEnemy : MonoBehaviour,IDamage
             StartCoroutine(WaitBeforeNextMove());
         }
 
-        if (playerInRange && CanSeePlayer()) // Engage if player is in range
+        if (playerInRange && CanSeePlayer())
         {
             EngagePlayer();
         }
@@ -55,25 +55,20 @@ public class BossEnemy : MonoBehaviour,IDamage
     IEnumerator WaitBeforeNextMove()
     {
         isWaiting = true;
-        anim.Play("idle3"); // Play idle animation while waiting
-        yield return new WaitForSeconds(roamPauseTime); // Wait for the specified roamPauseTime
+        anim.Play("idle3");
+        yield return new WaitForSeconds(roamPauseTime);
         isWaiting = false;
-        roamTimer = 0f; // Reset the timer after roaming
-        MoveToRandomRoamPoint(); // Move to the next random point after waiting
+        roamTimer = 0f;
+        MoveToRandomSpawnPoint();
     }
 
-    void MoveToRandomRoamPoint()
+    void MoveToRandomSpawnPoint()
     {
-        // Generate a random position within the roam radius
-        Vector3 randomPos = Random.insideUnitSphere * roamRadius;
-        randomPos += transform.position; // Offset by the current position to ensure it roams within the radius
+        if (spawnPoints.Length == 0) return;
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPos, out hit, roamRadius, NavMesh.AllAreas)) // Find a valid NavMesh position
-        {
-            agent.SetDestination(hit.position); // Set the random position as the destination
-            anim.Play("walk3");
-        }
+        Transform randomSpawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        agent.SetDestination(randomSpawn.position);
+        anim.Play("walk3");
     }
 
     bool CanSeePlayer()
@@ -82,7 +77,7 @@ public class BossEnemy : MonoBehaviour,IDamage
         Vector3 playerDir = (player.transform.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
-        if (angleToPlayer < 60f) // Only detect players within a 60-degree vision cone
+        if (angleToPlayer < 60f)
         {
             if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
             {
@@ -99,14 +94,14 @@ public class BossEnemy : MonoBehaviour,IDamage
         agent.SetDestination(player.transform.position);
         float distance = agent.remainingDistance;
 
-        if (distance > agent.stoppingDistance) // Keep walking towards player
+        if (distance > agent.stoppingDistance)
         {
             if (!anim.GetCurrentAnimatorStateInfo(0).IsName("walk3"))
             {
                 anim.Play("walk3");
             }
         }
-        else // Attack if within range
+        else
         {
             anim.Play("attack2RLSpike");
         }
@@ -144,7 +139,7 @@ public class BossEnemy : MonoBehaviour,IDamage
         yield return new WaitForSeconds(duration);
         agent.isStopped = false;
         isStunned = false;
-        MoveToRandomRoamPoint();
+        MoveToRandomSpawnPoint();
     }
 
     public void EnableCollider()
@@ -164,7 +159,7 @@ public class BossEnemy : MonoBehaviour,IDamage
         if (player == null) return;
 
         Vector3 direction = (player.transform.position - transform.position).normalized;
-        direction.y = 0; // Keep rotation on the horizontal plane
+        direction.y = 0;
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * faceTargetSpeed);
@@ -172,13 +167,11 @@ public class BossEnemy : MonoBehaviour,IDamage
 
     public void SetTarget(Transform target)
     {
-        if (target == null) return; // Prevent null reference errors
+        if (target == null) return;
 
         agent.SetDestination(target.position);
-
         anim.Play("run2");
         playerInRange = true;
-        //isEngaged = true; // Set engaged flag
     }
 
     public void TakeDamage(float damage)
