@@ -271,6 +271,7 @@ public class PlayerController2 : MonoBehaviour, IDamage
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
     [SerializeField] GameObject Camera;// UI Prompt for exiting
+ 
 
     [Header("-----Stats-----")]
     [Range(1, 10)] public float HP;
@@ -406,4 +407,7 @@ public class PlayerController2 : MonoBehaviour, IDamage
             exitPrompt.SetActive(false);
         }
     }
+
+
+    
 }
