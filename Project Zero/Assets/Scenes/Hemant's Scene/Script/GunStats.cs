@@ -1,4 +1,5 @@
 using Unity.Hierarchy;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,10 +11,12 @@ public class Gunstats : ScriptableObject
     public int shootDist;
     public float shootRate;
     public int AmmoCur, AmmoMax;
-    public Vector3 muzzlePos;
+    public Transform muzzlePos;
     //public Vector3 position;
     //public Quaternion rotation;
     public ParticleSystem HitEffect;
+    [SerializeField] public GameObject ShootEffect;
     public AudioClip[] shootSound;
     public float shootVol;
 }
+    

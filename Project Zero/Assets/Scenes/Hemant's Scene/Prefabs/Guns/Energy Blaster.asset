@@ -16,11 +16,10 @@ MonoBehaviour:
   shootDamage: 10
   shootDist: 25
   shootRate: 0.25
-  AmmoCur: 40
+  AmmoCur: 39
   AmmoMax: 40
-  muzzlePos: {x: 0, y: 0.1339, z: 0.721}
-  GunPos: {x: 0.743, y: -0.614, z: 0.777}
-  GunRot: {x: -0.043619387, y: 0, z: 0, w: 0.99904823}
-  HitEffect: {fileID: 0}
+  muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
+  HitEffect: {fileID: 9061690515067196915, guid: b2190f40fd1a5914ca2582d3bd9c6e83, type: 3}
+  ShootEffect: {fileID: 6001475885077082213, guid: 17fca3204bceccd4bb6d6e19c7059e57, type: 3}
   shootSound: []
   shootVol: 0

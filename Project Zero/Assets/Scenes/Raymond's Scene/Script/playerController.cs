@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -242,22 +243,63 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
     // Hemant's Adittion
+
     void shoot()
     {
         shootTimer = 0;
+        gunList[gunListPos].AmmoCur--;
+
+        // Activate the muzzle flash and randomize rotation
+        muzzleFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+        muzzleFlash.gameObject.SetActive(true);
+
+        // Use the muzzle flash’s world position directly
+        Vector3 muzzlePos = muzzleFlash.position;
+
         RaycastHit hit;
 
+        // Raycast from camera to detect hit point
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
         {
-            Debug.Log(hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponentInParent<IDamage>();
-            if(dmg != null)
+            // Apply damage if the hit object has an IDamage component
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage);    
+                dmg.TakeDamage(shootDamage);
             }
+
+            // Instantiate the hit effect at the point of impact
+            Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+
+            // Instantiate the laser effect from muzzle to hit point
+            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
+
+            // Make the laser point toward the hit
+            laserBeam.transform.LookAt(hit.point);
+            float distance = Vector3.Distance(muzzlePos, hit.point);
+            laserBeam.transform.localScale = new Vector3(1, 1, distance);
+
+            // Destroy the laser after a short delay
+            Destroy(laserBeam,0.05f);
         }
+
+        // Start coroutine to turn off muzzle flash after a short delay
+        StartCoroutine(DisableMuzzleFlash());
     }
+
+    // Coroutine to disable muzzle flash after 0.05 seconds
+    IEnumerator DisableMuzzleFlash()
+    {
+        yield return new WaitForSeconds(0.05f);
+        muzzleFlash.gameObject.SetActive(false);
+    }
+
+
+
+
+
+
+
 
     public void TakeDamage(float damage) 
     {
