@@ -41,7 +41,7 @@ public class BossEnemy : MonoBehaviour, IDamage
             return;
         }
 
-        if (roamTimer >= roamPauseTime && !isWaiting)
+        if (!isWaiting && agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             StartCoroutine(WaitBeforeNextMove());
         }
@@ -64,7 +64,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void MoveToRandomSpawnPoint()
     {
-        if (spawnPoints.Length == 0) return;
+        if (spawnPoints.Length == 0 || isWaiting) return;
 
         Transform randomSpawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
         agent.SetDestination(randomSpawn.position);
@@ -186,6 +186,7 @@ public class BossEnemy : MonoBehaviour, IDamage
             Destroy(gameObject);
         }
     }
+
 
     IEnumerator FlashRed()
     {
