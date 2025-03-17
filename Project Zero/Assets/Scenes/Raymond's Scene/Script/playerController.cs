@@ -67,15 +67,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //[SerializeField] float crouchScale = 0.7f;
 
     float HPOrig;
+    float O2Orig;
 
     
 
     void Start()
     {
         HPOrig = HP;
+        O2Orig = Oxygen;
         //store the players og speed
-        originalSpeed = speed;  
-
+        originalSpeed = speed;
+        UpdatePlayerUI();
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
@@ -294,7 +296,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage);
+                dmg.TakeDamage(shootDamage,5f,0);
             }
 
             // Instantiate the hit effect at the point of impact
@@ -337,24 +339,26 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Laser.gameObject.SetActive(false);
         
     }
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, float Freeze, float O2)
     {
         HP -= amount;
+        Oxygen -= O2;
         StartCoroutine(flashDamageScreen());
-        //UpdatePlayerUI();
+        UpdatePlayerUI();
         //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
 
 
-        //if (HP <= 0)
-        //{
-        //    GameManager.instance.youLose();
+        if (HP <= 0)
+        {
+            GameManager.instance.youLose();
 
-        //}
+        }
     }
 
     void UpdatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
     }
 
     public void getgunstats(Gunstats gun)

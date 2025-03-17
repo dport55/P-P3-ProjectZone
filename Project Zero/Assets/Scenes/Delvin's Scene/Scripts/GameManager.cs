@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     //public CameraSwitcher cameraSwitcher;
     public StaticEnemy staticEnemy;
     public Image playerHPBar;
+    public Image playerO2Bar;
     public bool isPaused;
     int goalCount;
 
