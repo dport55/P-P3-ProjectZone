@@ -116,7 +116,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void movement()
     {
-       
+        if (isHiding)
+        {
+            moveDir = Vector3.zero; // Prevent movement
+            playerVel = Vector3.zero; // Prevent any velocity changes
+            return;
+        }
+
         if (Controller.isGrounded)
         {
             jumpCount = 0;
