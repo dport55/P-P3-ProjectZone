@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform muzzleFlash;
+    [SerializeField] Transform Laser, RedSphere,BlueSphere;
 
     int gunListPos;
     //End
@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private bool isSprinting;
     private int collectedParts = 0;
     
+
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -62,11 +63,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
-        originalSpeed = speed;
+        originalSpeed = speed;  
 
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
+        RedSphere.gameObject.SetActive(false);
+        BlueSphere.gameObject.SetActive(false);
+
     }
 
     void Update()
@@ -247,14 +251,19 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     void shoot()
     {
         shootTimer = 0;
-        gunList[gunListPos].AmmoCur--;
+        if (gunList.Count > 0)
+        {
+            gunList[gunListPos].AmmoCur--;
+        }
 
-        // Activate the muzzle flash and randomize rotation
-        muzzleFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-        muzzleFlash.gameObject.SetActive(true);
+        // Start coroutine to turn off muzzle flash after a short delay
+       
+        //// Activate the muzzle flash and randomize rotation
+        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+        //Laser.gameObject.SetActive(true);
 
         // Use the muzzle flash’s world position directly
-        Vector3 muzzlePos = muzzleFlash.position;
+        Vector3 muzzlePos = Laser.position;
 
         RaycastHit hit;
 
@@ -273,34 +282,41 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
             // Instantiate the laser effect from muzzle to hit point
             GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
-
+            
             // Make the laser point toward the hit
             laserBeam.transform.LookAt(hit.point);
             float distance = Vector3.Distance(muzzlePos, hit.point);
+            if(distance < 100)
+                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].Name));
             laserBeam.transform.localScale = new Vector3(1, 1, distance);
 
             // Destroy the laser after a short delay
             Destroy(laserBeam,0.05f);
         }
 
-        // Start coroutine to turn off muzzle flash after a short delay
-        StartCoroutine(DisableMuzzleFlash());
+       
     }
 
     // Coroutine to disable muzzle flash after 0.05 seconds
-    IEnumerator DisableMuzzleFlash()
+    IEnumerator DisableMuzzleFlash(string _name)
     {
-        yield return new WaitForSeconds(0.05f);
-        muzzleFlash.gameObject.SetActive(false);
+        if(_name == "Freeze Gun")
+        {
+            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            BlueSphere.gameObject.SetActive(false);
+        }
+        if (_name == "Energy Blaster")
+        {
+            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            RedSphere.gameObject.SetActive(false);
+        }
+        //Laser.gameObject.SetActive(false);
+        
     }
-
-
-
-
-
-
-
-
     public void TakeDamage(float damage) 
     {
         HP -= damage;
