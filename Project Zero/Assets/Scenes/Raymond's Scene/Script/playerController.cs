@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
+    [SerializeField] float freezeTime;
 
     float shootTimer;
 
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 6;
+    
+    [SerializeField] float Oxygen;
     [Range(3, 20)][SerializeField] int speed = 6;
     [Range(2, 5)][SerializeField] int sprintMod = 2;
     [Range(5, 20)][SerializeField] float jumpSpeed = 10f;
@@ -64,22 +67,25 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
+    float HPOrig;
+    float O2Orig;
 
     
 
     void Start()
     {
-
+        HPOrig = HP;
+        O2Orig = Oxygen;
         //store the players og speed
-        originalSpeed = speed;  
-
+        originalSpeed = speed;
+        UpdatePlayerUI();
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
         RedSphere.gameObject.SetActive(false);
         BlueSphere.gameObject.SetActive(false);
         isHiding = false;
-        
+   
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
 
@@ -87,9 +93,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        // Hemant's Adittion
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
-        //End
+        //// Hemant's Adittion
+        //Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+        ////End
 
         movement();
         sprint();
@@ -100,6 +106,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
         {
             EnterHidingSpot();
+          
         }
         else if (isHiding && Input.GetKeyDown(KeyCode.E))
         {
@@ -114,20 +121,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             jumpCount = 0;
             playerVel.y = -1f;
-
-            if (Input.GetButtonDown("Jump") && !isCrouching)
-            {
-                jump();
-            }
         }
 
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
                   (Input.GetAxis("Vertical") * transform.forward);
         Controller.Move(moveDir * speed * Time.deltaTime);
 
-        playerVel.y -= gravity * Time.deltaTime;
+        jump();
         Controller.Move(playerVel * Time.deltaTime);
-
+        playerVel.y -= gravity * Time.deltaTime;
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
@@ -154,7 +156,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void jump()
     {
-        if (jumpCount < jumpMax)
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
             playerVel.y = jumpSpeed;
@@ -295,11 +297,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage);
+                dmg.TakeDamage(shootDamage,freezeTime,0);
             }
 
             // Instantiate the hit effect at the point of impact
-            Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+            ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+            Destroy(hiteffect.gameObject,0.05F);
 
             // Instantiate the laser effect from muzzle to hit point
             GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
@@ -313,6 +316,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
             // Destroy the laser after a short delay
             Destroy(laserBeam,0.05f);
+            
         }
 
        
@@ -338,19 +342,26 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Laser.gameObject.SetActive(false);
         
     }
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, float Freeze, float O2)
     {
         HP -= amount;
+        Oxygen -= O2;
         StartCoroutine(flashDamageScreen());
-        //UpdatePlayerUI();
+        UpdatePlayerUI();
         //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
 
 
-        //if (HP <= 0)
-        //{
-        //    GameManager.instance.youLose();
+        if (HP <= 0)
+        {
+            GameManager.instance.youLose();
 
-        //}
+        }
+    }
+
+    void UpdatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
     }
 
     public void getgunstats(Gunstats gun)
@@ -365,6 +376,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
+        freezeTime = gunList[gunListPos].freezeTime;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
@@ -423,6 +435,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         isHiding = false;
         exitPrompt.SetActive(false);
+        Cam.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)

@@ -20,10 +20,6 @@ public class HidingCameraSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.instance.playerScript == null) return;
-
-    
-
         if (GameManager.instance.playerScript.isHiding)
         {
            
@@ -90,6 +86,10 @@ public class HidingCameraSwitcher : MonoBehaviour
         foreach (var cam in hidingCameras)
         {
             cam.gameObject.SetActive(false);
+            Cam3.SetActive(false);
+            Cam2.SetActive(false);
+            Cam1.SetActive(false);
+            CamMain.SetActive(false);
         }
         mainCamera.gameObject.SetActive(true);
         currentCameraIndex = 0;

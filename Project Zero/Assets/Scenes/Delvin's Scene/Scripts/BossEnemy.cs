@@ -14,6 +14,8 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] float stunDuration = 2f;
     [SerializeField] int roamPauseTime;
     [SerializeField] float roamTimer = 0f;
+    [SerializeField] ParticleSystem Frozeen;
+    public Transform Spot;
 
     private bool isStunned = false;
     private bool playerInRange;
@@ -40,12 +42,12 @@ public class BossEnemy : MonoBehaviour, IDamage
             return;
         }
 
-        if (!isWaiting && agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+        if (!isWaiting && agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending && !isStunned)
         {
             StartCoroutine(WaitBeforeNextMove());
         }
 
-        if (playerInRange && CanSeePlayer())
+        if (playerInRange && CanSeePlayer() && !isStunned)
         {
             EngagePlayer();
         }
@@ -63,7 +65,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void MoveToRandomSpawnPoint()
     {
-        if (spawnPoints.Length == 0 || isWaiting) return;
+        if (spawnPoints.Length == 0 || isWaiting && !isStunned) return;
 
         Transform randomSpawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
         agent.SetDestination(randomSpawn.position);
@@ -72,46 +74,52 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     bool CanSeePlayer()
     {
-        FaceTarget();
-        Vector3 playerDir = (GameManager.instance.playerScript.transform.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
-
-        if (angleToPlayer < 60f)
+        if (!isStunned)
         {
-            if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
+            FaceTarget();
+            Vector3 playerDir = (GameManager.instance.playerScript.transform.position - transform.position).normalized;
+            float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
+
+            if (angleToPlayer < 60f)
             {
-                return hit.collider.CompareTag("Player");
+                if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
+                {
+                    return hit.collider.CompareTag("Player");
+                }
             }
         }
-        return false;
+            return false;
+        
     }
 
     void EngagePlayer()
     {
         if (GameManager.instance.playerScript == null) return;
+        if (!isStunned) 
+        { 
+           agent.SetDestination(GameManager.instance.playerScript.transform.position);
+           float distance = agent.remainingDistance;
 
-        agent.SetDestination(GameManager.instance.playerScript.transform.position);
-        float distance = agent.remainingDistance;
-
-        if (distance > agent.stoppingDistance)
-        {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("walk3"))
+        
+            if (distance > agent.stoppingDistance)
             {
-                anim.Play("walk3");
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("walk3"))
+                {
+                    anim.Play("walk3");
+                }
             }
-        }
-        else
-        {
-            anim.Play("attack2RLSpike");
-        }
+            else
+            {
+                anim.Play("attack2RLSpike");
+            }
+        } 
     }
 
     public void Stun(float duration)
     {
-        if (!isStunned)
-        {
+        
             StartCoroutine(StunRoutine(duration));
-        }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -132,11 +140,14 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     IEnumerator StunRoutine(float duration)
     {
-       
-        agent.isStopped = true;
-        anim.Play("Rage");
-        yield return new WaitForSeconds(duration);
-        agent.isStopped = false;
+        agent.isStopped = true; // Stop movement
+        isStunned = true;
+        anim.Play("rage"); // Play the rage animation
+        StartCoroutine(FlashBlue()); // Start flashing effect
+
+        yield return new WaitForSeconds(duration); // Wait for stun duration
+
+        agent.isStopped = false; // Resume movement
         isStunned = false;
         MoveToRandomSpawnPoint();
     }
@@ -173,11 +184,19 @@ public class BossEnemy : MonoBehaviour, IDamage
         playerInRange = true;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, float Freeze, float O2)
     {
-        HP -= damage;
+        if (Freeze > 0)
+        {
+            Stun(Freeze);
+            isStunned = true;
 
-        StartCoroutine(FlashRed());
+        }
+        else if (damage > 1)
+        {
+            HP -= damage;
+            StartCoroutine(FlashRed());
+        }
         agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0)
@@ -186,11 +205,21 @@ public class BossEnemy : MonoBehaviour, IDamage
         }
     }
 
-
+   
     IEnumerator FlashRed()
     {
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
+    }
+
+    IEnumerator FlashBlue()
+    {
+        model.material.color = Color.blue;
+        ParticleSystem effect = Instantiate(Frozeen, Spot);
+        Destroy(effect.gameObject, 5f);
+        yield return new WaitForSeconds(5f);
+        model.material.color = colorOrig;
+        Frozeen.Stop();
     }
 }
