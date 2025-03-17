@@ -231,7 +231,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
         transform.rotation = Quaternion.Slerp(transform.rotation, correctedRotation, Time.deltaTime * faceTargetSpeed);
 
-        Debug.Log("Rotating towards player with offset: " + transform.rotation.eulerAngles);
+        //Debug.Log("Rotating towards player with offset: " + transform.rotation.eulerAngles);
     }
 
 }

@@ -64,11 +64,6 @@ public class ScreamerEnemy : MonoBehaviour
                 boss.SetTarget(GameManager.instance.playerScript.transform); // Alert boss
                 alerted = true;
             }
-
-            if (alerted)
-            {
-                Debug.Log($"{enemy.name} has been alerted by {gameObject.name}!");
-            }
         }
     }
 

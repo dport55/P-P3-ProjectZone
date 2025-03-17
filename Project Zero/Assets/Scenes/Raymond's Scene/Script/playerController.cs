@@ -254,7 +254,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         collectedParts++;
         Destroy(part);
-        Debug.Log($"Parts collected: {collectedParts}");
+        //Debug.Log($"Parts collected: {collectedParts}");
     }
 
     void InsertPart(SpacePod pod)
@@ -265,7 +265,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             pod.InsertPart();
             collectedParts--;
-            Debug.Log($"Inserted a part. Remaining: {collectedParts}");
+            //Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
     // Hemant's Adittion
