@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose;
+    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial;
     public bool isPaused;
     public GameObject player;
     public PlayerController playerScript;
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //TutorialShow();
+
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");
@@ -67,6 +69,22 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void TutorialShow()
+    {
+        statePause();
+        menuActive.SetActive(false);
+        menuActive = menuTutorial;
+        menuActive.SetActive(true);
+    }
+
+    public void pauseShow()
+    {
+        statePause();
+        menuActive.SetActive(false);
+        menuActive = menuPause;
+        menuActive.SetActive(true);
     }
 
     public void stateUnpause()
