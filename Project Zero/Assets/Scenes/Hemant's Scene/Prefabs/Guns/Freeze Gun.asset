@@ -19,7 +19,7 @@ MonoBehaviour:
   AmmoCur: 1111
   AmmoMax: 1111
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
-  HitEffect: {fileID: 6523699520211762466, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
-  ShootEffect: {fileID: 9001918136846572088, guid: ca223235513e6cc4c9ca23b9ea5206fe, type: 3}
+  HitEffect: {fileID: 848933242839161176, guid: 0a13663f2fda8814d9a9b8b1fb4ddfdb, type: 3}
+  ShootEffect: {fileID: 4555727430815729326, guid: ca223235513e6cc4c9ca23b9ea5206fe, type: 3}
   shootSound: []
   shootVol: 0

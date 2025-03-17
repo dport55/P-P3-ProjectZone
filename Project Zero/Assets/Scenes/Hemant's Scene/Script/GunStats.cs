@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 [CreateAssetMenu]
 public class Gunstats : ScriptableObject
 {
+    public string Name;
     public GameObject model;
     public int shootDamage;
     public int shootDist;
