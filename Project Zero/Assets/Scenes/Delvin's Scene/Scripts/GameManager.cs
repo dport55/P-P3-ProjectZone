@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
-
+    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public ScreamerEnemy screamerEnemy;
     //public CameraSwitcher cameraSwitcher;
     public StaticEnemy staticEnemy;
-   [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial;
     public Image playerHPBar;
     public bool isPaused;
     int goalCount;
@@ -62,6 +61,7 @@ public class GameManager : MonoBehaviour
     public void statePause()
     {
         isPaused = !isPaused;
+        retical.SetActive(false);
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
