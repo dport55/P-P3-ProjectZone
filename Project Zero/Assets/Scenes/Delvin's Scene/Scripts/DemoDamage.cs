@@ -40,7 +40,7 @@ public class DemoDamage2 : MonoBehaviour
 
         if (dmg != null)
         {
-            dmg.TakeDamage(damageAmount);
+            dmg.TakeDamage(damageAmount,0f, .5f);
         }
 
         if (type == damageType.moving)
@@ -70,7 +70,7 @@ public class DemoDamage2 : MonoBehaviour
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.TakeDamage(damageAmount);
+        d.TakeDamage(damageAmount, 0f, .5f);
         yield return new WaitForSeconds(2);
         isDamaging = false;
 

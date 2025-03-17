@@ -173,10 +173,14 @@ public class BossEnemy : MonoBehaviour, IDamage
         playerInRange = true;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, float Freeze, float O2)
     {
-        HP -= damage;
+        if (Freeze > 0)
+        {
+            Stun(Freeze);
+        }
 
+        HP -= damage;
         StartCoroutine(FlashRed());
         agent.SetDestination(GameManager.instance.player.transform.position);
 
@@ -186,10 +190,17 @@ public class BossEnemy : MonoBehaviour, IDamage
         }
     }
 
-
+   
     IEnumerator FlashRed()
     {
         model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
+    }
+
+    IEnumerator FlashBlue()
+    {
+        model.material.color = Color.blue;
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
     }
