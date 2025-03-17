@@ -6,27 +6,25 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial;
+    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, MovePrompt;
+    public Image playerHPBar;
     public bool isPaused;
     public GameObject player;
     public PlayerController playerScript;
- 
 
+    int HPOrig;
     int goalCount;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         instance = this;
-        //player = GameObject.FindWithTag("Player");
-        //playerScript = player.GetComponent<PlayerController>();
    
     }
 
     private void Start()
     {
-        //TutorialShow();
-
+        moveShow();
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");
@@ -77,6 +75,16 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = menuTutorial;
         menuActive.SetActive(true);
+    }
+
+    public void moveShow()
+    {
+        menuActive = MovePrompt;
+        menuActive.SetActive(true);
+        if (Input.GetButtonDown("Horizontal") || (Input.GetButtonDown("Vertical")))
+        {
+            menuActive.SetActive(false);
+        }
     }
 
     public void pauseShow()
