@@ -174,6 +174,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (target == null) return; // Prevent null reference errors
 
+        FaceTarget();
+
         agent.SetDestination(target.position);
 
         anim.Play("crawl_fast");

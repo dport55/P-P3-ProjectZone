@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
-    [SerializeField] float freezeTime;
+    [SerializeField] public float freezeTime;
 
     float shootTimer;
 
@@ -351,7 +351,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
 
 
-        if (HP <= 0)
+        if (HP <= 0 || Oxygen <= 0)
         {
             GameManager.instance.youLose();
 
@@ -421,6 +421,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         isHiding = true;
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(true);
+       
         Cam.SetActive(true);
     }
 
@@ -440,8 +441,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void OnTriggerEnter(Collider other)
     {
+       
+
         if (other.CompareTag("HidingSpot"))
         {
+            GameManager.instance.retical.SetActive(false);
             canHide = true;
             hideSpotInside = other.transform.Find("InsideSpot"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot"); // Get outside position
@@ -450,6 +454,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
        else if (other.CompareTag("HidingSpot2"))
         {
+            GameManager.instance.retical.SetActive(false);
             canHide = true;
             hideSpotInside = other.transform.Find("InsideSpo2t"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
@@ -457,6 +462,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         else if (other.CompareTag("HidingSpot3"))
         {
+            GameManager.instance.retical.SetActive(false);
             canHide = true;
             hideSpotInside = other.transform.Find("InsideSpot3"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
@@ -464,6 +470,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
        else if (other.CompareTag("HidingSpot1"))
         {
+            GameManager.instance.retical.SetActive(false);
             canHide = true;
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
@@ -473,26 +480,31 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void OnTriggerExit(Collider other)
     {
+        
         if (other.CompareTag("HidingSpot"))
         {
+            GameManager.instance.retical.SetActive(true);
             canHide = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
         else if (other.CompareTag("HidingSpot1"))
         {
+            GameManager.instance.retical.SetActive(true);
             canHide = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
        else if (other.CompareTag("HidingSpot2"))
         {
+            GameManager.instance.retical.SetActive(true);
             canHide = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
         else if (other.CompareTag("HidingSpot3"))
         {
+            GameManager.instance.retical.SetActive(true);
             canHide = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);

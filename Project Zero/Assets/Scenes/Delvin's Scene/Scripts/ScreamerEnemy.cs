@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ScreamerEnemy : MonoBehaviour
+public class ScreamerEnemy : MonoBehaviour,IDamage
 {
     [SerializeField] Animator anim;
     [SerializeField] AudioSource aud;
@@ -72,4 +72,14 @@ public class ScreamerEnemy : MonoBehaviour
         aud.PlayOneShot(screamSound[Random.Range(0, screamSound.Length)], 2f); 
     }
 
+    public void TakeDamage(float damage, float Freeze, float O2)
+    {
+        
+       
+        HP -= damage;
+        StartCoroutine(Scream());
+        AlertNearbyEnemies();
+
+       
+    }
 }

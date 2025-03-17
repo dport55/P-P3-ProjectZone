@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
