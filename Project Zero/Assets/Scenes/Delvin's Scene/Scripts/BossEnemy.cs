@@ -15,7 +15,6 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] int roamPauseTime;
     [SerializeField] float roamTimer = 0f;
 
-    public PlayerController2 player;
     private bool isStunned = false;
     private bool playerInRange;
     private bool isWaiting = false;
@@ -35,7 +34,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     {
         roamTimer += Time.deltaTime;
 
-        if (player.isHiding)
+        if (GameManager.instance.playerScript.isHiding)
         {
             if (!isWaiting) MoveToRandomSpawnPoint();
             return;
@@ -74,7 +73,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     bool CanSeePlayer()
     {
         FaceTarget();
-        Vector3 playerDir = (player.transform.position - transform.position).normalized;
+        Vector3 playerDir = (GameManager.instance.playerScript.transform.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
         if (angleToPlayer < 60f)
@@ -89,9 +88,9 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void EngagePlayer()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
-        agent.SetDestination(player.transform.position);
+        agent.SetDestination(GameManager.instance.playerScript.transform.position);
         float distance = agent.remainingDistance;
 
         if (distance > agent.stoppingDistance)
@@ -133,7 +132,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     IEnumerator StunRoutine(float duration)
     {
-        isStunned = true;
+       
         agent.isStopped = true;
         anim.Play("Rage");
         yield return new WaitForSeconds(duration);
@@ -156,9 +155,9 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void FaceTarget()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
-        Vector3 direction = (player.transform.position - transform.position).normalized;
+        Vector3 direction = (GameManager.instance.playerScript.transform.position - transform.position).normalized;
         direction.y = 0;
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);

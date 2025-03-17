@@ -11,23 +11,20 @@ public class HidingCameraSwitcher : MonoBehaviour
     [SerializeField] GameObject Cam3;
     [SerializeField] GameObject CamMain;
 
-    private PlayerController2 player; // Reference to PlayerController2
 
     void Start()
     {
-        player = FindObjectOfType<PlayerController2>();
-
         // Ensure main camera starts active
         SwitchToMainCamera();
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
     
 
-        if (player.isHiding)
+        if (GameManager.instance.playerScript.isHiding)
         {
            
 

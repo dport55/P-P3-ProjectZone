@@ -49,8 +49,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private Vector3 playerVel;
     private bool isSprinting;
     private int collectedParts = 0;
-    
-
+    //Delvin's Additions
+    public GameObject playerDamageScreen;
+    public bool isHiding = false;
+    private Transform hideSpotInside; // Position inside the hiding place
+    private Transform hideSpotOutside; // Position outside the hiding place
+    private bool canHide = false; // Player is near a hiding spot
+                                  //End of Delvin's Additions
+    [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
+    [SerializeField] GameObject exitPrompt;
+    [SerializeField] GameObject Cam;// UI Prompt for exiting
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -61,7 +69,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Start()
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
         originalSpeed = speed;  
@@ -71,6 +78,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         originalCenter = Controller.center;
         RedSphere.gameObject.SetActive(false);
         BlueSphere.gameObject.SetActive(false);
+        isHiding = false;
+        
+        hidePrompt.SetActive(false);
+        exitPrompt.SetActive(false);
 
     }
 
@@ -85,6 +96,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         crouch();
         ToggleFlashlight();
         Interact();
+
+        if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
+        {
+            EnterHidingSpot();
+        }
+        else if (isHiding && Input.GetKeyDown(KeyCode.E))
+        {
+            ExitHidingSpot();
+        }
     }
 
     void movement()
@@ -233,7 +253,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         collectedParts++;
         Destroy(part);
-        Debug.Log($"Parts collected: {collectedParts}");
+        //Debug.Log($"Parts collected: {collectedParts}");
     }
 
     void InsertPart(SpacePod pod)
@@ -244,7 +264,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             pod.InsertPart();
             collectedParts--;
-            Debug.Log($"Inserted a part. Remaining: {collectedParts}");
+            //Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
     // Hemant's Adittion
@@ -318,9 +338,19 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Laser.gameObject.SetActive(false);
         
     }
-    public void TakeDamage(float damage) 
+    public void TakeDamage(float amount)
     {
-        HP -= damage;
+        HP -= amount;
+        StartCoroutine(flashDamageScreen());
+        //UpdatePlayerUI();
+        //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+
+
+        //if (HP <= 0)
+        //{
+        //    GameManager.instance.youLose();
+
+        //}
     }
 
     public void getgunstats(Gunstats gun)
@@ -363,4 +393,97 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     }
 
     //End
+
+    //Delvin's Additions
+
+    IEnumerator flashDamageScreen()
+    {
+        playerDamageScreen.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        playerDamageScreen.SetActive(false);
+    }
+
+    void EnterHidingSpot()
+    {
+        transform.position = hideSpotInside.position; // Move player inside
+        isHiding = true;
+        hidePrompt.SetActive(false);
+        exitPrompt.SetActive(true);
+        Cam.SetActive(true);
+    }
+
+    void ExitHidingSpot()
+    {
+        if (hideSpotOutside != null)
+        {
+            Controller.enabled = false; // Disable CharacterController
+            transform.position = hideSpotOutside.position; // Move player outside
+            Controller.enabled = true; // Re-enable CharacterController
+        }
+
+        isHiding = false;
+        exitPrompt.SetActive(false);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("HidingSpot"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+
+       else if (other.CompareTag("HidingSpot2"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpo2t"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+        else if (other.CompareTag("HidingSpot3"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot3"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+       else if (other.CompareTag("HidingSpot1"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("HidingSpot"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+        else if (other.CompareTag("HidingSpot1"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+       else if (other.CompareTag("HidingSpot2"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+        else if (other.CompareTag("HidingSpot3"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+    }
+    //End od Delvin's Additions
 }
