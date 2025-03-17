@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             // Make the laser point toward the hit
             laserBeam.transform.LookAt(hit.point);
             float distance = Vector3.Distance(muzzlePos, hit.point);
-           
+            if(distance < 100)
                 StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].Name));
             laserBeam.transform.localScale = new Vector3(1, 1, distance);
 
