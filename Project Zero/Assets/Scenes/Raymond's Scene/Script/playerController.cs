@@ -114,16 +114,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             jumpCount = 0;
             playerVel.y = -1f;
-
-            if (Input.GetButtonDown("Jump") && !isCrouching)
-            {
-                jump();
-            }
         }
 
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
                   (Input.GetAxis("Vertical") * transform.forward);
         Controller.Move(moveDir * speed * Time.deltaTime);
+        jump();
 
         playerVel.y -= gravity * Time.deltaTime;
         Controller.Move(playerVel * Time.deltaTime);
@@ -154,10 +150,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void jump()
     {
-        if (jumpCount < jumpMax)
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
             playerVel.y = jumpSpeed;
+            //audSource.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
         }
     }
 
