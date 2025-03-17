@@ -300,7 +300,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
 
             // Instantiate the hit effect at the point of impact
-            Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+            ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+            Destroy(hiteffect.gameObject,0.05F);
 
             // Instantiate the laser effect from muzzle to hit point
             GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
@@ -314,6 +315,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
             // Destroy the laser after a short delay
             Destroy(laserBeam,0.05f);
+            
         }
 
        
