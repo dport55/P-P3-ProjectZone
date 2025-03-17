@@ -17,7 +17,7 @@ MonoBehaviour:
   shootDamage: 0
   shootDist: 100
   shootRate: 0.5
-  AmmoCur: 1104
+  AmmoCur: 1107
   AmmoMax: 1111
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
   freezeTime: 5

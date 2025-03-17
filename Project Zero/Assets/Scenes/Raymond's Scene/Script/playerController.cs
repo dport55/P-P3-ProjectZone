@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
+    [SerializeField] float freezeTime;
 
     float shootTimer;
 
@@ -296,7 +297,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage,5f,0);
+                dmg.TakeDamage(shootDamage,freezeTime,0);
             }
 
             // Instantiate the hit effect at the point of impact
@@ -375,6 +376,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
+        freezeTime = gunList[gunListPos].freezeTime;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;

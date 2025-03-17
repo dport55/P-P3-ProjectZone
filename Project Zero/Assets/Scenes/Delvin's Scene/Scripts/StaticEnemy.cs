@@ -41,7 +41,7 @@ public class StaticEnemy : MonoBehaviour
 
         if (dmg != null)
         {
-            dmg.TakeDamage(0f, 0f, O2Damage);
+            dmg.TakeDamage(damageAmount, 0f, O2Damage);
 
         }
 
@@ -72,7 +72,7 @@ public class StaticEnemy : MonoBehaviour
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.TakeDamage(0f, 0f, O2Damage);
+        d.TakeDamage(damageAmount, 0f, O2Damage);
         yield return new WaitForSeconds(2);
         isDamaging = false;
 
