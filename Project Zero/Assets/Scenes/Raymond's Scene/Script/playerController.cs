@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 6;
+    
     [SerializeField] float Oxygen;
     [Range(3, 20)][SerializeField] int speed = 6;
     [Range(2, 5)][SerializeField] int sprintMod = 2;
@@ -65,12 +66,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
+    float HPOrig;
 
     
 
     void Start()
     {
-
+        HPOrig = HP;
         //store the players og speed
         originalSpeed = speed;  
 
@@ -353,6 +355,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //    GameManager.instance.youLose();
 
         //}
+    }
+
+    void UpdatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
     public void getgunstats(Gunstats gun)

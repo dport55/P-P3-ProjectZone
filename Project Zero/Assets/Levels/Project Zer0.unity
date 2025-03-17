@@ -261,6 +261,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
   m_PrefabInstance: {fileID: 1380746335}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &166721656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8846122809201572329, guid: 4e3ec6a5f7b46564d9ac9f05b6cc8062, type: 3}
+  m_PrefabInstance: {fileID: 1141734153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &289150225 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1612229603387756149, guid: 11a98302d97688b429b7caf7cf8cf813, type: 3}
@@ -283,12 +288,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: OutsideSpot2
       objectReference: {fileID: 0}
+    - target: {fileID: 574848459075860175, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: OutsideSpot2
+      objectReference: {fileID: 0}
     - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
       value: InsideSpot2
       objectReference: {fileID: 0}
+    - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: InsideSpot2
+      objectReference: {fileID: 0}
     - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
+      value: HidingSpot2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
       value: HidingSpot2
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
@@ -659,7 +676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7594826398677509765, guid: c610303dc37ec744380483b0d59eccc8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1014,12 +1031,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: OutsideSpot3
       objectReference: {fileID: 0}
+    - target: {fileID: 574848459075860175, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: OutsideSpot3
+      objectReference: {fileID: 0}
     - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
       value: InsideSpot3
       objectReference: {fileID: 0}
+    - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: InsideSpot3
+      objectReference: {fileID: 0}
     - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
+      value: HidingSpot3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
       value: HidingSpot3
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
@@ -1628,7 +1657,7 @@ PrefabInstance:
     - target: {fileID: 7016955223105097752, guid: 0bfbf20fbc14bc0439a16fea07045433, type: 3}
       propertyPath: CamMain
       value: 
-      objectReference: {fileID: 154837871}
+      objectReference: {fileID: 166721656}
     - target: {fileID: 7016955223105097752, guid: 0bfbf20fbc14bc0439a16fea07045433, type: 3}
       propertyPath: mainCamera
       value: 
@@ -1803,9 +1832,6 @@ PrefabInstance:
       insertIndex: 0
       addedObject: {fileID: 1983077089}
     - targetCorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 289150226}
-    - targetCorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1370188725}
     - targetCorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
@@ -1826,6 +1852,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
       insertIndex: -1
       addedObject: {fileID: 800707481}
+    - targetCorrespondingSourceObject: {fileID: 6130606055133135825, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 289150226}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41c80e57395c41c4189799445b5ad086, type: 3}
 --- !u!1001 &1450768387
@@ -1963,15 +1992,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.7
+      value: -78.03
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.54
+      value: 5.57
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -26.41
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2079,12 +2108,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: OutsideSpot1
       objectReference: {fileID: 0}
+    - target: {fileID: 574848459075860175, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: OutsideSpot1
+      objectReference: {fileID: 0}
     - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
-      value: InsideSpot2
+      value: InsideSpot1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230306701278734262, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
+      value: InsideSpot1
       objectReference: {fileID: 0}
     - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
       propertyPath: m_Name
+      value: HidingSpot1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6044692776126598986, guid: a251c6828e652da439ceb1736c77a820, type: 3}
+      propertyPath: m_TagString
       value: HidingSpot1
       objectReference: {fileID: 0}
     - target: {fileID: 6229787027210259204, guid: a251c6828e652da439ceb1736c77a820, type: 3}
@@ -2409,6 +2450,13 @@ MonoBehaviour:
   crawlerEnemy: {fileID: 535267830}
   screamerEnemy: {fileID: 748772865}
   staticEnemy: {fileID: 0}
+  menuActive: {fileID: 0}
+  menuPause: {fileID: 0}
+  menuWin: {fileID: 0}
+  menuLose: {fileID: 0}
+  menuTutorial: {fileID: 0}
+  playerHPBar: {fileID: 0}
+  isPaused: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
