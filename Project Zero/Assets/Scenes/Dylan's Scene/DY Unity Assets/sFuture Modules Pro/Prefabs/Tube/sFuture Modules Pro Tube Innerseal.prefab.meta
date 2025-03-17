@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8c1cf82f47b08b446bf123e9577b043b
+timeCreated: 1515415729
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 104018
+  packageName: sFuture Modules PRO Space and Ground
+  packageVersion: 1.1
+  assetPath: Assets/sFuture Modules Pro/Prefabs/Tube/sFuture Modules Pro Tube Innerseal.prefab
+  uploadId: 222846

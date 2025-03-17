@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 93bd8090956ef3945a5104c53a6f4e21
+timeCreated: 1515415714
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 104018
+  packageName: sFuture Modules PRO Space and Ground
+  packageVersion: 1.1
+  assetPath: Assets/sFuture Modules Pro/Prefabs/Tube/sFuture Modules Pro Tube support
+    ground.prefab
+  uploadId: 222846

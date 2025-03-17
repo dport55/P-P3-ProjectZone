@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1f49f13023b8cda499bfdff33f02fc17
+timeCreated: 1509538827
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 104018
+  packageName: sFuture Modules PRO Space and Ground
+  packageVersion: 1.1
+  assetPath: Assets/sFuture Modules Pro/Prefabs/Core/sFuture Modules Pro Broder.prefab
+  uploadId: 222846

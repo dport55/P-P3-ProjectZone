@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 62e2ba0a95b2e9346b80228ad6b1cefa
+timeCreated: 1515415735
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 104018
+  packageName: sFuture Modules PRO Space and Ground
+  packageVersion: 1.1
+  assetPath: Assets/sFuture Modules Pro/Prefabs/Tube/sFuture Modules Pro Tube 90.prefab
+  uploadId: 222846
