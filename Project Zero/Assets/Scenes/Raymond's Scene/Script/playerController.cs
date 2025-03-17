@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 6;
+    
+    [SerializeField] float Oxygen;
     [Range(3, 20)][SerializeField] int speed = 6;
     [Range(2, 5)][SerializeField] int sprintMod = 2;
     [Range(5, 20)][SerializeField] float jumpSpeed = 10f;
@@ -64,12 +66,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
+    float HPOrig;
 
     
 
     void Start()
     {
-
+        HPOrig = HP;
         //store the players og speed
         originalSpeed = speed;  
 
@@ -79,7 +82,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         RedSphere.gameObject.SetActive(false);
         BlueSphere.gameObject.SetActive(false);
         isHiding = false;
-        
+   
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
 
@@ -87,9 +90,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        // Hemant's Adittion
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
-        //End
+        //// Hemant's Adittion
+        //Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+        ////End
 
         movement();
         sprint();
@@ -100,6 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
         {
             EnterHidingSpot();
+          
         }
         else if (isHiding && Input.GetKeyDown(KeyCode.E))
         {
@@ -350,6 +354,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //}
     }
 
+    void UpdatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+
     public void getgunstats(Gunstats gun)
     {
 
@@ -420,6 +429,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         isHiding = false;
         exitPrompt.SetActive(false);
+        Cam.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)
