@@ -118,20 +118,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             jumpCount = 0;
             playerVel.y = -1f;
-
-            if (Input.GetButtonDown("Jump") && !isCrouching)
-            {
-                jump();
-            }
         }
 
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
                   (Input.GetAxis("Vertical") * transform.forward);
         Controller.Move(moveDir * speed * Time.deltaTime);
 
-        playerVel.y -= gravity * Time.deltaTime;
+        jump();
         Controller.Move(playerVel * Time.deltaTime);
-
+        playerVel.y -= gravity * Time.deltaTime;
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
@@ -158,7 +153,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void jump()
     {
-        if (jumpCount < jumpMax)
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
             playerVel.y = jumpSpeed;
