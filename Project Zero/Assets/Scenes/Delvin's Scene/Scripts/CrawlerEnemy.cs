@@ -180,14 +180,11 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
      
     }
 
-    public void TakeDamage(float damage, float freeze, float O2)
+    public void TakeDamage(float damage)
     {
-    
-        HP -= damage;   
-      
+        HP -= damage;
         StartCoroutine(FlashRed());
-        
-       
+
         //DisableCollider();
 
         if (GameManager.instance.playerScript != null)

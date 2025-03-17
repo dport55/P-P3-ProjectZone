@@ -9,7 +9,6 @@ public class StaticEnemy : MonoBehaviour
     [SerializeField] Rigidbody rb;
 
     [SerializeField] float damageAmount;
-    [SerializeField] float O2Damage;
     [SerializeField] int speed;
     [SerializeField] int destroyTime;
 
@@ -41,7 +40,7 @@ public class StaticEnemy : MonoBehaviour
 
         if (dmg != null)
         {
-            dmg.TakeDamage(damageAmount, 0f, O2Damage);
+            dmg.TakeDamage(damageAmount);
 
         }
 
@@ -72,7 +71,7 @@ public class StaticEnemy : MonoBehaviour
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.TakeDamage(damageAmount, 0f, O2Damage);
+        d.TakeDamage(damageAmount);
         yield return new WaitForSeconds(2);
         isDamaging = false;
 
