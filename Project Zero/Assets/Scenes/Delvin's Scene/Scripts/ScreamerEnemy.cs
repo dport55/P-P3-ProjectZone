@@ -51,10 +51,23 @@ public class ScreamerEnemy : MonoBehaviour
         Collider[] enemies = Physics.OverlapSphere(transform.position, screamRadius, enemyLayer);
         foreach (Collider enemy in enemies)
         {
+            bool alerted = false;
+
             if (enemy.TryGetComponent(out CrawlerEnemy crawler))
             {
-                crawler.SetTarget(transform);
-                //boss.SetTarget(player.transform);
+                crawler.SetTarget(transform); // Alert crawler
+                alerted = true;
+            }
+
+            if (enemy.TryGetComponent(out BossEnemy boss))
+            {
+                boss.SetTarget(player.transform); // Alert boss
+                alerted = true;
+            }
+
+            if (alerted)
+            {
+                Debug.Log($"{enemy.name} has been alerted by {gameObject.name}!");
             }
         }
     }

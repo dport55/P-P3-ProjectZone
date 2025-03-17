@@ -269,7 +269,9 @@ public class PlayerController2 : MonoBehaviour, IDamage
     [SerializeField] LayerMask ignoreLayer;
     [SerializeField] AudioSource aud;
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
-    [SerializeField] GameObject exitPrompt; // UI Prompt for exiting
+    [SerializeField] GameObject exitPrompt;
+    [SerializeField] GameObject Camera;// UI Prompt for exiting
+ 
 
     [Header("-----Stats-----")]
     [Range(1, 10)] public float HP;
@@ -369,6 +371,7 @@ public class PlayerController2 : MonoBehaviour, IDamage
         isHiding = true;
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(true);
+        Camera.SetActive(true);
     }
 
     void ExitHidingSpot()
@@ -404,4 +407,7 @@ public class PlayerController2 : MonoBehaviour, IDamage
             exitPrompt.SetActive(false);
         }
     }
+
+
+    
 }

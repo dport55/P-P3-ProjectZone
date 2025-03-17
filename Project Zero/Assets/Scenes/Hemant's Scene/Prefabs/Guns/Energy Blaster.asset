@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Energy Blaster
   m_EditorClassIdentifier: 
+  RedSphere: 1
   model: {fileID: 5362808307749203380, guid: 460b09b3999f980448b54c53b41f5873, type: 3}
   shootDamage: 10
   shootDist: 25
   shootRate: 0.25
-  AmmoCur: 40
+  AmmoCur: -2
   AmmoMax: 40
-  muzzlePos: {x: 0, y: 0.1339, z: 0.721}
-  GunPos: {x: 0.743, y: -0.614, z: 0.777}
-  GunRot: {x: -0.043619387, y: 0, z: 0, w: 0.99904823}
-  HitEffect: {fileID: 0}
+  muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
+  HitEffect: {fileID: 9061690515067196915, guid: b2190f40fd1a5914ca2582d3bd9c6e83, type: 3}
+  ShootEffect: {fileID: 6001475885077082213, guid: ec324d7acdbe5de4dac0c07c4c61a24c, type: 3}
   shootSound: []
   shootVol: 0

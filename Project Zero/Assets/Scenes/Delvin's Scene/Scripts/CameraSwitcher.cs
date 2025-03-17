@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HidingCameraSwitcher : MonoBehaviour
@@ -5,6 +6,10 @@ public class HidingCameraSwitcher : MonoBehaviour
     [SerializeField] Camera mainCamera;
     [SerializeField] Camera[] hidingCameras;
     private int currentCameraIndex = 0;
+    [SerializeField] GameObject Cam1;
+    [SerializeField] GameObject Cam2;
+    [SerializeField] GameObject Cam3;
+    [SerializeField] GameObject CamMain;
 
     private PlayerController2 player; // Reference to PlayerController2
 
@@ -20,15 +25,50 @@ public class HidingCameraSwitcher : MonoBehaviour
     {
         if (player == null) return;
 
+    
+
         if (player.isHiding)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchCamera(1);
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchCamera(2);
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchCamera(3);
+           
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                SwitchCamera(1);
+                Cam1.SetActive(true);
+                Cam2.SetActive(false);
+                Cam3.SetActive(false);
+                CamMain.SetActive(false);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SwitchCamera(2);
+                Cam2.SetActive(true);
+                Cam1.SetActive(false);
+                Cam3.SetActive(false);
+                CamMain.SetActive(false);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                SwitchToMainCamera();
+                CamMain.SetActive(true);
+                Cam2.SetActive(false);
+                Cam1.SetActive(false);
+                Cam3.SetActive(false);
+                
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) 
+            {
+                SwitchCamera(3);
+                Cam3.SetActive(true);
+                Cam2.SetActive(false);
+                Cam1.SetActive(false);
+                CamMain.SetActive(false);
+
+            }
         }
         else
         {
             SwitchToMainCamera();
+            
         }
     }
 
@@ -56,5 +96,6 @@ public class HidingCameraSwitcher : MonoBehaviour
         }
         mainCamera.gameObject.SetActive(true);
         currentCameraIndex = 0;
+       
     }
 }

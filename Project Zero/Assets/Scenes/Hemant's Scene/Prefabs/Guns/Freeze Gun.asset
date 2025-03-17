@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Freeze Gun
   m_EditorClassIdentifier: 
+  RedSphere: 0
   model: {fileID: 787057100562914357, guid: 371711cf542f6d84bafd6596c502935b, type: 3}
-  shootDamage: 1
-  shootDist: 1
-  shootRate: 1
-  AmmoCur: 1111
+  shootDamage: 0
+  shootDist: 100
+  shootRate: 0.5
+  AmmoCur: 1068
   AmmoMax: 1111
-  muzzlePos: {x: 0.169, y: 0.0316, z: 0}
-  HitEffect: {fileID: 0}
+  muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
+  HitEffect: {fileID: 848933242839161176, guid: 0a13663f2fda8814d9a9b8b1fb4ddfdb, type: 3}
+  ShootEffect: {fileID: 4555727430815729326, guid: ca223235513e6cc4c9ca23b9ea5206fe, type: 3}
   shootSound: []
   shootVol: 0

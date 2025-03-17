@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -21,7 +23,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform muzzleFlash;
+    [SerializeField] Transform Laser, RedSphere,BlueSphere;
 
     int gunListPos;
     //End
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private bool isSprinting;
     private int collectedParts = 0;
     
+
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -58,14 +61,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
-        originalSpeed = speed;
+        originalSpeed = speed;  
 
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
+        RedSphere.gameObject.SetActive(false);
+        BlueSphere.gameObject.SetActive(false);
+
     }
 
     void Update()
@@ -242,23 +248,76 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
     // Hemant's Adittion
+
     void shoot()
     {
         shootTimer = 0;
+        if (gunList.Count > 0)
+        {
+            gunList[gunListPos].AmmoCur--;
+        }
+
+        // Start coroutine to turn off muzzle flash after a short delay
+       
+        //// Activate the muzzle flash and randomize rotation
+        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+        //Laser.gameObject.SetActive(true);
+
+        // Use the muzzle flash’s world position directly
+        Vector3 muzzlePos = Laser.position;
+
         RaycastHit hit;
 
+        // Raycast from camera to detect hit point
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
         {
-            Debug.Log(hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponentInParent<IDamage>();
-            if(dmg != null)
+            // Apply damage if the hit object has an IDamage component
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage);    
+                dmg.TakeDamage(shootDamage);
             }
+
+            // Instantiate the hit effect at the point of impact
+            Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+
+            // Instantiate the laser effect from muzzle to hit point
+            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
+            
+            // Make the laser point toward the hit
+            laserBeam.transform.LookAt(hit.point);
+            float distance = Vector3.Distance(muzzlePos, hit.point);
+           
+                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
+            laserBeam.transform.localScale = new Vector3(1, 1, distance);
+
+            // Destroy the laser after a short delay
+            Destroy(laserBeam,0.05f);
         }
+
+       
     }
 
+    // Coroutine to disable muzzle flash after 0.05 seconds
+    IEnumerator DisableMuzzleFlash(bool _Sphere)
+    {
+        if(!_Sphere)
+        {
+            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            BlueSphere.gameObject.SetActive(false);
+        }
+        if (_Sphere)
+        {
+            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            RedSphere.gameObject.SetActive(false);
+        }
+        //Laser.gameObject.SetActive(false);
+        
+    }
     public void TakeDamage(float damage) 
     {
         HP -= damage;
