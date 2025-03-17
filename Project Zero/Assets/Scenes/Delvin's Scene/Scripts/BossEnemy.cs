@@ -132,7 +132,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     IEnumerator StunRoutine(float duration)
     {
-        isStunned = true;
+       
         agent.isStopped = true;
         anim.Play("Rage");
         yield return new WaitForSeconds(duration);

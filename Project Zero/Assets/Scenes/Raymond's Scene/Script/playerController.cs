@@ -69,7 +69,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Start()
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
         originalSpeed = speed;  
