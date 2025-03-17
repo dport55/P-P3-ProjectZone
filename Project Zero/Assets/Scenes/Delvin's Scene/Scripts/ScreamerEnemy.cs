@@ -13,14 +13,14 @@ public class ScreamerEnemy : MonoBehaviour
 
 
     bool hasScreamed = false;
-    PlayerController2 player;
+   
 
     void OnTriggerEnter(Collider other)
     {
       
         if (!hasScreamed && other.CompareTag("Player"))
         {
-            player = other.GetComponent<PlayerController2>();
+            GameManager.instance.playerScript = other.GetComponent<PlayerController>();
             StartCoroutine(Scream());
         }
     }
@@ -46,7 +46,7 @@ public class ScreamerEnemy : MonoBehaviour
 
     void AlertNearbyEnemies()
     {
-        if (player == null) return; // Prevents null reference error
+        if (GameManager.instance.playerScript == null) return; // Prevents null reference error
 
         Collider[] enemies = Physics.OverlapSphere(transform.position, screamRadius, enemyLayer);
         foreach (Collider enemy in enemies)
@@ -61,7 +61,7 @@ public class ScreamerEnemy : MonoBehaviour
 
             if (enemy.TryGetComponent(out BossEnemy boss))
             {
-                boss.SetTarget(player.transform); // Alert boss
+                boss.SetTarget(GameManager.instance.playerScript.transform); // Alert boss
                 alerted = true;
             }
 

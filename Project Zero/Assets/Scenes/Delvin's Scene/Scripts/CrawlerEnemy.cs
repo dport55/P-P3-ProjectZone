@@ -17,7 +17,6 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] int roamDistance;
 
     [SerializeField] float attackRate;
-    PlayerController2 player;
 
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
@@ -46,13 +45,13 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void Update()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
         attackTimer += Time.deltaTime;
         roamTimer += Time.deltaTime;
         growlTimer += Time.deltaTime; // Track growl cooldown
 
-        if (player.isHiding)
+        if (GameManager.instance.playerScript.isHiding)
         {
             CheckRoam();
             return;
@@ -95,7 +94,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     bool CanSeePlayer()
     {
-        playerDir = player.transform.position - headPos.position;
+        playerDir = GameManager.instance.playerScript.transform.position - headPos.position;
         angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
         Debug.DrawRay(headPos.position, playerDir);
@@ -125,11 +124,11 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void EngagePlayer()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
         isEngaged = true; // Set engaged flag
         
-        agent.SetDestination(player.transform.position);
+        agent.SetDestination(GameManager.instance.playerScript.transform.position);
         float distanceToPlayer = agent.remainingDistance;
         FaceTarget();
 
@@ -157,7 +156,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            player = other.GetComponent<PlayerController2>(); // Assign player when detected
+            GameManager.instance.playerScript = other.GetComponent<PlayerController>(); // Assign player when detected
             playerInRange = true;
         }
     }
@@ -188,9 +187,9 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
         //DisableCollider();
 
-        if (player != null)
+        if (GameManager.instance.playerScript != null)
         {
-            agent.SetDestination(player.transform.position);
+            agent.SetDestination(GameManager.instance.playerScript.transform.position);
         }
 
         if (HP <= 0)
@@ -218,9 +217,9 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void FaceTarget()
     {
-        if (player == null) return;
+        if (GameManager.instance.playerScript == null) return;
 
-        Vector3 direction = (player.transform.position - headPos.position).normalized;
+        Vector3 direction = (GameManager.instance.playerScript.transform.position - headPos.position).normalized;
         direction.y = 0; // Keep rotation only on the Y-axis
 
         if (direction == Vector3.zero) return;

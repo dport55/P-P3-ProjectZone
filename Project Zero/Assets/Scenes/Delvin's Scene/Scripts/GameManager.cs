@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
+    public BossEnemy bossEnemy;
+    public CrawlerEnemy crawlerEnemy;
+    public ScreamerEnemy screamerEnemy;
+    //public CameraSwitcher cameraSwitcher;
+    public StaticEnemy staticEnemy;
  
 
     int goalCount;
