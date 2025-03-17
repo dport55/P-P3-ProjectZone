@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
         originalSpeed = speed;  
@@ -287,7 +288,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             laserBeam.transform.LookAt(hit.point);
             float distance = Vector3.Distance(muzzlePos, hit.point);
            
-                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].Name));
+                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
             laserBeam.transform.localScale = new Vector3(1, 1, distance);
 
             // Destroy the laser after a short delay
@@ -298,16 +299,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     }
 
     // Coroutine to disable muzzle flash after 0.05 seconds
-    IEnumerator DisableMuzzleFlash(string _name)
+    IEnumerator DisableMuzzleFlash(bool _Sphere)
     {
-        if(_name == "Freeze Gun")
+        if(!_Sphere)
         {
             BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
             BlueSphere.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
             BlueSphere.gameObject.SetActive(false);
         }
-        if (_name == "Energy Blaster")
+        if (_Sphere)
         {
             RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
             RedSphere.gameObject.SetActive(true);
