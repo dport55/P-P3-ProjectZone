@@ -75,7 +75,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void CheckRoam()
     {
-        if (roamTimer > roamPauseTime && agent.remainingDistance < 0.1f)
+        if (roamTimer > roamPauseTime && agent.remainingDistance < .01f || GameManager.instance.playerScript.HP <= 0f)
         {
             Roam();
         }
@@ -156,8 +156,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.instance.playerScript = other.GetComponent<PlayerController>(); // Assign player when detected
             playerInRange = true;
+          
         }
     }
 

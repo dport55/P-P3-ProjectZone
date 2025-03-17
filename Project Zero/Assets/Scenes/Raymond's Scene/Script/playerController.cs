@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //End
 
     [Header("---- Stats ----")]
-    [SerializeField] float HP = 6;
+   public float HP = 6;
     
     [SerializeField] float Oxygen;
     [Range(3, 20)][SerializeField] int speed = 6;
