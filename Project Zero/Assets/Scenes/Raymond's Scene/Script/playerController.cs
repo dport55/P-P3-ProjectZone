@@ -1,6 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
@@ -8,6 +11,22 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] LayerMask interactableLayer;
     [SerializeField] Light flashlight;
     private SpacePod currentSpacePod;
+
+    // Hemant's Adittion
+    [Header("---- Shooting Settings ----")]
+    [SerializeField] float shootDamage;
+    [SerializeField] float shootRate;
+    [SerializeField] int shootDist;
+
+    float shootTimer;
+
+    [Header("=====Guns=====")]
+    [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
+    [SerializeField] GameObject gunModel;
+    [SerializeField] Transform Laser, RedSphere,BlueSphere;
+
+    int gunListPos;
+    //End
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 6;
@@ -19,8 +38,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpeedMod = 0.5f;
     [SerializeField] float interactRange = 2f;
-
-   
+       
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -31,41 +49,62 @@ public class PlayerController : MonoBehaviour, IDamage
     private Vector3 playerVel;
     private bool isSprinting;
     private int collectedParts = 0;
-    
+    //Delvin's Additions
+    public GameObject playerDamageScreen;
+    public bool isHiding = false;
+    private Transform hideSpotInside; // Position inside the hiding place
+    private Transform hideSpotOutside; // Position outside the hiding place
+    private bool canHide = false; // Player is near a hiding spot
+                                  //End of Delvin's Additions
+    [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
+    [SerializeField] GameObject exitPrompt;
+    [SerializeField] GameObject Cam;// UI Prompt for exiting
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
 
-    [Header("Shooting Settings")]
-    [SerializeField] float shootDamage;
-    [SerializeField] float shootRate;
-    [SerializeField] int shootDist;
-
-    float shootTimer;
+    
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
 
         //store the players og speed
-        originalSpeed = speed;
+        originalSpeed = speed;  
 
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
+        RedSphere.gameObject.SetActive(false);
+        BlueSphere.gameObject.SetActive(false);
+        isHiding = false;
+        
+        hidePrompt.SetActive(false);
+        exitPrompt.SetActive(false);
+
     }
 
     void Update()
     {
+        // Hemant's Adittion
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+        //End
 
         movement();
         sprint();
         crouch();
         ToggleFlashlight();
         Interact();
+
+        if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
+        {
+            EnterHidingSpot();
+        }
+        else if (isHiding && Input.GetKeyDown(KeyCode.E))
+        {
+            ExitHidingSpot();
+        }
     }
 
     void movement()
@@ -89,10 +128,14 @@ public class PlayerController : MonoBehaviour, IDamage
         playerVel.y -= gravity * Time.deltaTime;
         Controller.Move(playerVel * Time.deltaTime);
 
+        // Hemant's Adittion
+
         shootTimer += Time.deltaTime;
         if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
             shoot();
         }
+        SelectGun();
+        //End
     }
 
     void sprint()
@@ -210,7 +253,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         collectedParts++;
         Destroy(part);
-        Debug.Log($"Parts collected: {collectedParts}");
+        //Debug.Log($"Parts collected: {collectedParts}");
     }
 
     void InsertPart(SpacePod pod)
@@ -221,28 +264,226 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             pod.InsertPart();
             collectedParts--;
-            Debug.Log($"Inserted a part. Remaining: {collectedParts}");
+            //Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
+    // Hemant's Adittion
+
     void shoot()
     {
         shootTimer = 0;
+        if (gunList.Count > 0)
+        {
+            gunList[gunListPos].AmmoCur--;
+        }
+
+        // Start coroutine to turn off muzzle flash after a short delay
+       
+        //// Activate the muzzle flash and randomize rotation
+        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+        //Laser.gameObject.SetActive(true);
+
+        // Use the muzzle flash’s world position directly
+        Vector3 muzzlePos = Laser.position;
+
         RaycastHit hit;
 
+        // Raycast from camera to detect hit point
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
         {
-            Debug.Log(hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponentInParent<IDamage>();
-            if(dmg != null)
+            // Apply damage if the hit object has an IDamage component
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage);    
+                dmg.TakeDamage(shootDamage);
             }
+
+            // Instantiate the hit effect at the point of impact
+            Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+
+            // Instantiate the laser effect from muzzle to hit point
+            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
+            
+            // Make the laser point toward the hit
+            laserBeam.transform.LookAt(hit.point);
+            float distance = Vector3.Distance(muzzlePos, hit.point);
+           
+                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
+            laserBeam.transform.localScale = new Vector3(1, 1, distance);
+
+            // Destroy the laser after a short delay
+            Destroy(laserBeam,0.05f);
+        }
+
+       
+    }
+
+    // Coroutine to disable muzzle flash after 0.05 seconds
+    IEnumerator DisableMuzzleFlash(bool _Sphere)
+    {
+        if(!_Sphere)
+        {
+            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            BlueSphere.gameObject.SetActive(false);
+        }
+        if (_Sphere)
+        {
+            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedSphere.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            RedSphere.gameObject.SetActive(false);
+        }
+        //Laser.gameObject.SetActive(false);
+        
+    }
+    public void TakeDamage(float amount)
+    {
+        HP -= amount;
+        StartCoroutine(flashDamageScreen());
+        //UpdatePlayerUI();
+        //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+
+
+        //if (HP <= 0)
+        //{
+        //    GameManager.instance.youLose();
+
+        //}
+    }
+
+    public void getgunstats(Gunstats gun)
+    {
+
+        gunList.Add(gun);
+        changeGun();
+    }
+
+    void changeGun()
+    {
+        shootDamage = gunList[gunListPos].shootDamage;
+        shootDist = gunList[gunListPos].shootDist;
+        shootRate = gunList[gunListPos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+        //if(gunModel.name == "Freeze Gun")
+        //{
+        //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
+        //}
+
+        //gunModel.transform.position = gunList[gunListPos].position;
+        //gunModel.transform.rotation = gunList[gunListPos].rotation;
+    }
+
+
+    void SelectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
+        {
+            gunListPos++;
+            changeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
+        {
+            gunListPos--;
+            changeGun();
         }
     }
 
-    public void TakeDamage(float damage) 
+    //End
+
+    //Delvin's Additions
+
+    IEnumerator flashDamageScreen()
     {
-        HP -= damage;
+        playerDamageScreen.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        playerDamageScreen.SetActive(false);
     }
+
+    void EnterHidingSpot()
+    {
+        transform.position = hideSpotInside.position; // Move player inside
+        isHiding = true;
+        hidePrompt.SetActive(false);
+        exitPrompt.SetActive(true);
+        Cam.SetActive(true);
+    }
+
+    void ExitHidingSpot()
+    {
+        if (hideSpotOutside != null)
+        {
+            Controller.enabled = false; // Disable CharacterController
+            transform.position = hideSpotOutside.position; // Move player outside
+            Controller.enabled = true; // Re-enable CharacterController
+        }
+
+        isHiding = false;
+        exitPrompt.SetActive(false);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("HidingSpot"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+
+       else if (other.CompareTag("HidingSpot2"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpo2t"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+        else if (other.CompareTag("HidingSpot3"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot3"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+       else if (other.CompareTag("HidingSpot1"))
+        {
+            canHide = true;
+            hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
+            hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
+            hidePrompt.SetActive(true);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("HidingSpot"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+        else if (other.CompareTag("HidingSpot1"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+       else if (other.CompareTag("HidingSpot2"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+        else if (other.CompareTag("HidingSpot3"))
+        {
+            canHide = false;
+            hidePrompt.SetActive(false);
+            exitPrompt.SetActive(false);
+        }
+    }
+    //End od Delvin's Additions
 }

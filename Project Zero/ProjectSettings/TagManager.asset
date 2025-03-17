@@ -3,7 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - InsideSpot
+  - OutsideSpot
+  - HidingSpot
+  - InsideSpot1
+  - HidingSpot1
+  - OutsideSpot1
+  - HidingSpot2
+  - OutsideSpot2
+  - InsideSpot2
+  - HidingSpot3
+  - OutsideSpot3
+  - InsideSpot3
   layers:
   - Default
   - TransparentFX
@@ -11,7 +23,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - wall
   - enemy
   - 
   - 

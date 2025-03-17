@@ -8,17 +8,19 @@ public class ScreamerEnemy : MonoBehaviour
     [SerializeField] AudioClip[] screamSound;
     [SerializeField] float screamRadius = 15f;
     [SerializeField] LayerMask enemyLayer;
-
+    [SerializeField] float HP;
     public BossEnemy boss;
 
+
     bool hasScreamed = false;
-    PlayerController2 player;
+   
 
     void OnTriggerEnter(Collider other)
     {
+      
         if (!hasScreamed && other.CompareTag("Player"))
         {
-            player = other.GetComponent<PlayerController2>();
+            GameManager.instance.playerScript = other.GetComponent<PlayerController>();
             StartCoroutine(Scream());
         }
     }
@@ -44,15 +46,23 @@ public class ScreamerEnemy : MonoBehaviour
 
     void AlertNearbyEnemies()
     {
-        if (player == null) return; // Prevents null reference error
+        if (GameManager.instance.playerScript == null) return; // Prevents null reference error
 
         Collider[] enemies = Physics.OverlapSphere(transform.position, screamRadius, enemyLayer);
         foreach (Collider enemy in enemies)
         {
+            bool alerted = false;
+
             if (enemy.TryGetComponent(out CrawlerEnemy crawler))
             {
-                crawler.SetTarget(player.transform);
-                //boss.SetTarget(player.transform);
+                crawler.SetTarget(transform); // Alert crawler
+                alerted = true;
+            }
+
+            if (enemy.TryGetComponent(out BossEnemy boss))
+            {
+                boss.SetTarget(GameManager.instance.playerScript.transform); // Alert boss
+                alerted = true;
             }
         }
     }
