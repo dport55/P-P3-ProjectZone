@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
@@ -20,26 +21,14 @@ public class GameManager : MonoBehaviour
     int goalCount;
     //change
 
-    //Dylans Changes
-    public CameraController cameraController;
-
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        //instance = this;
-        //player = GameObject.FindWithTag("Player");
-        //playerScript = player.GetComponent<PlayerController>();
-
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);  // Prevent duplicates
-        }
+        instance = this;
+        player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerController>();
 
     }
 
@@ -75,6 +64,7 @@ public class GameManager : MonoBehaviour
 
     public void statePause()
     {
+        playButtonShow();
         isPaused = !isPaused;
         retical.SetActive(false);
         Time.timeScale = 0;
@@ -96,6 +86,18 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = menuPause;
         menuActive.SetActive(true);
+    }
+
+    public void playButtonShow()
+    {
+        if(SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            PlayButton.SetActive(true);
+        }
+        else
+        {
+            PlayButton.SetActive(false);
+        }
     }
 
     public void stateUnpause()
