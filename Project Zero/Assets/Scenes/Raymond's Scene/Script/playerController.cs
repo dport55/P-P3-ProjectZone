@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                                   //End of Delvin's Additions
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
-    [SerializeField] GameObject Cam;// UI Prompt for exiting
+    [SerializeField] GameObject Cam;// UI Prompt for camera
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
