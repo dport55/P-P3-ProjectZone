@@ -316,7 +316,6 @@ RectTransform:
   m_Children:
   - {fileID: 1217721795362526297}
   - {fileID: 1567423224415106863}
-  - {fileID: 8038177898257067749}
   - {fileID: 9220437523922266975}
   - {fileID: 9125694891128137477}
   - {fileID: 8637464345571943736}
@@ -332,6 +331,7 @@ RectTransform:
   - {fileID: 8237443861386967369}
   - {fileID: 7384676142026757837}
   - {fileID: 6874580516860670594}
+  - {fileID: 8038177898257067749}
   - {fileID: 2153219489480680858}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4426,6 +4426,7 @@ MonoBehaviour:
   screamerEnemy: {fileID: 0}
   staticEnemy: {fileID: 0}
   playerHPBar: {fileID: 1849526136859436584}
+  playerO2Bar: {fileID: 0}
   isPaused: 0
 --- !u!1 &8012874966273406137
 GameObject:
