@@ -382,6 +382,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     }
     public void TakeDamage(float amount, float Freeze, float O2)
     {
+
         HP -= amount;
         Oxygen -= O2;
         StartCoroutine(flashDamageScreen());
