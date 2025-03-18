@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public bool isPaused;
     int goalCount;
 
+    //Dylans Changes
+    public CameraController cameraController;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()

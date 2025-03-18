@@ -16,6 +16,7 @@ TagManager:
   - HidingSpot3
   - OutsideSpot3
   - InsideSpot3
+  - Door
   layers:
   - Default
   - TransparentFX
