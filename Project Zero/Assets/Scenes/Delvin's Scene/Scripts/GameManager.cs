@@ -24,10 +24,20 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        instance = this;
-        player = GameObject.FindWithTag("Player");
-        playerScript = player.GetComponent<PlayerController>();
-   
+        //instance = this;
+        //player = GameObject.FindWithTag("Player");
+        //playerScript = player.GetComponent<PlayerController>();
+
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);  // Prevent duplicates
+        }
+
     }
 
 
