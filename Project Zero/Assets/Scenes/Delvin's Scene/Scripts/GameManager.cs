@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     public bool isPaused;
     int goalCount;
 
+    //Hemant's Addition
+    public GameObject WeaponsDisplay, RedDisplay, BlueDisplay;
+    //End
+
     //Dylans Changes
     public CameraController cameraController;
 
