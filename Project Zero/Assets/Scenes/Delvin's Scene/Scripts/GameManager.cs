@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Image playerO2Bar;
     public bool isPaused;
     int goalCount;
+    //change
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
