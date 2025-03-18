@@ -21,7 +21,11 @@ public class GameManager : MonoBehaviour
     int goalCount;
     //change
 
-    
+    //Hemant's Addition
+    public GameObject WeaponsDisplay, RedDisplay, BlueDisplay;
+    //End
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
