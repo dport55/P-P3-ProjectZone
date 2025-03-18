@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,6 +27,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] GameObject gunModel;
     [SerializeField] Transform Laser, RedSphere,BlueSphere;
 
+    [Header("---- UI ----")]
+    [SerializeField] private TextMeshProUGUI partsCounterTMP;
+    [SerializeField] private TextMeshProUGUI remainingPartsTMP;
+
+    private int requiredParts = 5;
+
+
+
     int gunListPos;
     //End
 
@@ -41,7 +50,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpeedMod = 0.5f;
     [SerializeField] float interactRange = 2f;
-       
+
+    [Header("---- Slide Settings ----")]
+    [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
+    [SerializeField] private float slideDuration = 0f; // Time before slowing down
+    [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
+
+    private bool isSliding = false;
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -61,7 +76,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                                   //End of Delvin's Additions
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
-    [SerializeField] GameObject Cam;// UI Prompt for exiting
+    [SerializeField] GameObject Cam;// UI Prompt for camera
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -102,7 +117,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         crouch();
         ToggleFlashlight();
         Interact();
-
+        slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
         {
             EnterHidingSpot();
@@ -143,6 +158,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             shoot();
         }
         SelectGun();
+
+     
         //End
     }
 
@@ -178,54 +195,69 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 //Reduce height
                 Controller.height = crouchHeight;
 
-                //Prevent ground clipping
-                Controller.Move(Vector3.down * 0.1f);
+              
 
                 //Crouch speed
                 speed = (int)(originalSpeed * crouchSpeedMod);
 
                 isCrouching = true;
-
-                //Move camera down
-                if (playerCamera != null)
-                {
-                    playerCamera.localPosition -= new Vector3(0, crouchCameraOffset, 0);
-                }
+               
             }
             else
             {
-                if (CanStandUp()) //Prevent standing if blocked
-                {
-                    Controller.height = originalHeight;
-                    Controller.Move(Vector3.up * 0.1f); //Avoid getting stuck
+                    Controller.height = 2f;
 
                     //Restore original speed 
                     speed = (int)originalSpeed;
 
                     isCrouching = false;
+                Debug.Log(originalHeight);
 
-                    //Move camera back up
-                    if (playerCamera != null)
-                    {
-                        playerCamera.localPosition += new Vector3(0, crouchCameraOffset, 0);
-                    }
-                }
+                
             }
         }
     }
 
-
-    bool CanStandUp()
+    void slide()
     {
-        RaycastHit hit;
-        float headClearance = originalHeight - crouchHeight; 
-
-        if (Physics.SphereCast(transform.position, Controller.radius, Vector3.up, out hit, headClearance))
+        if (Input.GetButtonDown("Slide") && isSprinting && !isSliding)
         {
-            return false; //if Something is blocking the player from standing
+            StartCoroutine(SlideRoutine());
         }
-        return true;
     }
+
+   IEnumerator SlideRoutine()
+{
+    isSliding = true;
+    isCrouching = true; // Ensure player remains crouched
+    float slideTime = 0f;
+
+    // Reduce height but ensure no further scaling
+    Controller.height = 1f;
+   
+    // Initial speed boost
+    Vector3 slideDirection = transform.forward * slideSpeed;
+
+    while (slideTime < slideDuration)
+    {
+        Controller.Move(slideDirection * Time.deltaTime);
+        slideDirection *= slideFriction; // Gradually slow down
+        slideTime += Time.deltaTime;
+        yield return null;
+    }
+
+    isSliding = false;
+
+    // Reset height only if player is not holding crouch
+    if (!Input.GetButton("Crouch"))
+
+        {
+            Controller.height = 2f;
+            Controller.center = originalCenter;
+            isCrouching = false;
+        
+    }
+}
 
     void ToggleFlashlight()
     {
@@ -350,6 +382,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     }
     public void TakeDamage(float amount, float Freeze, float O2)
     {
+
         HP -= amount;
         Oxygen -= O2;
         StartCoroutine(flashDamageScreen());
