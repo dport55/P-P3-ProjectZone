@@ -104,6 +104,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
 
+        //Hemants addition
+        GameManager.instance.WeaponsDisplay.SetActive(false);
+        GameManager.instance.RedDisplay.SetActive(false);
+        GameManager.instance.BlueDisplay.SetActive(false);
+        //End
+
+
     }
 
     void Update()
@@ -405,10 +412,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     public void getgunstats(Gunstats gun)
     {
-
         gunList.Add(gun);
+        //gunListPos = gunList.Count - 1;
+        ChangeGunDisplay();
         changeGun();
     }
+
 
     void changeGun()
     {
@@ -429,19 +438,49 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     }
 
 
+
     void SelectGun()
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
         {
             gunListPos++;
+            ChangeGunDisplay();
+
             changeGun();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
         {
             gunListPos--;
+            ChangeGunDisplay();
+
             changeGun();
         }
     }
+
+    void ChangeGunDisplay()
+    {
+        if (gunList.Count > 0)
+        {
+            GameManager.instance.WeaponsDisplay.SetActive(true);
+
+            if (!gunList[gunListPos].RedSphere)
+            {
+                GameManager.instance.RedDisplay.SetActive(false);
+                GameManager.instance.BlueDisplay.SetActive(true);
+            }
+            else
+            {
+                GameManager.instance.RedDisplay.SetActive(true);
+                GameManager.instance.BlueDisplay.SetActive(false);
+            }
+        }
+        else
+        {
+            GameManager.instance.WeaponsDisplay.SetActive(false);
+        }
+    }
+
+
 
     //End
 
