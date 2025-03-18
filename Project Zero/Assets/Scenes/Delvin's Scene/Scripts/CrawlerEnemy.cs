@@ -37,6 +37,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void Start()
     {
+ 
         colorOrig = model.material.color;
         startingPos = transform.position;
         stoppingDisOrig = agent.stoppingDistance;
@@ -63,11 +64,12 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
             FaceTarget(); // Ensure rotation happens when engaging
         }
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (playerInRange && !CanSeePlayer())
         {
-            FaceTarget(); // Rotate even when stationary
+            CheckRoam();
+
         }
-        else if (!isEngaged)
+        else if (!playerInRange)
         {
             CheckRoam();
         }
@@ -75,7 +77,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void CheckRoam()
     {
-        if (roamTimer > roamPauseTime && agent.remainingDistance < 0.1f)
+        if (roamTimer > roamPauseTime && (agent.remainingDistance <= agent.stoppingDistance || GameManager.instance.playerScript.HP <= 0))
         {
             Roam();
         }
@@ -127,7 +129,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (GameManager.instance.playerScript == null) return;
 
         isEngaged = true; // Set engaged flag
-        
+        roamTimer = 0;
+
         agent.SetDestination(GameManager.instance.playerScript.transform.position);
         float distanceToPlayer = agent.remainingDistance;
         FaceTarget();
@@ -156,8 +159,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.instance.playerScript = other.GetComponent<PlayerController>(); // Assign player when detected
             playerInRange = true;
+          
         }
     }
 
@@ -173,6 +176,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     public void SetTarget(Transform target)
     {
         if (target == null) return; // Prevent null reference errors
+
+        FaceTarget();
 
         agent.SetDestination(target.position);
 
