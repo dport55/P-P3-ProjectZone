@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public Image playerHPBar;
     public Image playerO2Bar;
     public bool isPaused;
+    
+
     int goalCount;
     //change
 
