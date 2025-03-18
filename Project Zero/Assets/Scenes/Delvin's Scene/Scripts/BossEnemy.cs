@@ -20,6 +20,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     private bool isStunned = false;
     private bool playerInRange;
     private bool isWaiting = false;
+    private bool canBeFrozen = true; // Cooldown tracking
 
     public Collider attackCol1;
     public Collider attackCol2;
@@ -65,7 +66,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void MoveToRandomSpawnPoint()
     {
-        if (spawnPoints.Length == 0 || isWaiting && !isStunned) return;
+        if (spawnPoints.Length == 0 || isWaiting && isStunned) return;
 
         Transform randomSpawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
         agent.SetDestination(randomSpawn.position);
@@ -88,19 +89,17 @@ public class BossEnemy : MonoBehaviour, IDamage
                 }
             }
         }
-            return false;
-        
+        return false;
     }
 
     void EngagePlayer()
     {
         if (GameManager.instance.playerScript == null) return;
-        if (!isStunned) 
-        { 
-           agent.SetDestination(GameManager.instance.playerScript.transform.position);
-           float distance = agent.remainingDistance;
+        if (!isStunned)
+        {
+            agent.SetDestination(GameManager.instance.playerScript.transform.position);
+            float distance = agent.remainingDistance;
 
-        
             if (distance > agent.stoppingDistance)
             {
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsName("walk3"))
@@ -112,14 +111,20 @@ public class BossEnemy : MonoBehaviour, IDamage
             {
                 anim.Play("attack2RLSpike");
             }
-        } 
+        }
     }
 
     public void Stun(float duration)
     {
-        
+        if (canBeFrozen) // Check if freeze is allowed
+        {
             StartCoroutine(StunRoutine(duration));
-
+            StartCoroutine(FreezeCooldown()); // Start cooldown after freezing
+        }
+        else
+        {
+            Debug.Log("Freeze gun is on cooldown!");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -142,6 +147,8 @@ public class BossEnemy : MonoBehaviour, IDamage
     {
         agent.isStopped = true; // Stop movement
         isStunned = true;
+        canBeFrozen = false; // Prevent re-freezing
+
         anim.Play("rage"); // Play the rage animation
         StartCoroutine(FlashBlue()); // Start flashing effect
 
@@ -149,7 +156,13 @@ public class BossEnemy : MonoBehaviour, IDamage
 
         agent.isStopped = false; // Resume movement
         isStunned = false;
-        MoveToRandomSpawnPoint();
+    }
+
+    IEnumerator FreezeCooldown()
+    {
+        yield return new WaitForSeconds(5f); // Wait for cooldown
+        canBeFrozen = true; // Allow freezing again
+        Debug.Log("Boss can be frozen again!");
     }
 
     public void EnableCollider()
@@ -188,9 +201,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     {
         if (Freeze > 0)
         {
-            Stun(Freeze);
-            isStunned = true;
-
+            Stun(Freeze); // Apply freeze effect if allowed
         }
         else if (damage > 1)
         {
@@ -205,7 +216,6 @@ public class BossEnemy : MonoBehaviour, IDamage
         }
     }
 
-   
     IEnumerator FlashRed()
     {
         model.material.color = Color.red;
@@ -217,7 +227,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     {
         model.material.color = Color.blue;
         ParticleSystem effect = Instantiate(Frozeen, Spot);
-        Destroy(effect.gameObject, 5f);
+        Destroy(effect.gameObject, GameManager.instance.playerScript.freezeTime);
         yield return new WaitForSeconds(5f);
         model.material.color = colorOrig;
         Frozeen.Stop();

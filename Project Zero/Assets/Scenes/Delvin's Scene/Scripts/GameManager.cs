@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
     public void stateUnpause()
     {
         isPaused = !isPaused;
+        retical.SetActive(true);
         Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
