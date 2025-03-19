@@ -9,6 +9,7 @@ public class HidingCameraSwitcher : MonoBehaviour
     [SerializeField] GameObject Cam1;
     [SerializeField] GameObject Cam2;
     [SerializeField] GameObject Cam3;
+    [SerializeField] GameObject Cam4;
     [SerializeField] GameObject CamMain;
 
 
@@ -30,6 +31,7 @@ public class HidingCameraSwitcher : MonoBehaviour
                 Cam2.SetActive(false);
                 Cam3.SetActive(false);
                 CamMain.SetActive(false);
+                Cam4.SetActive(false);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -38,6 +40,7 @@ public class HidingCameraSwitcher : MonoBehaviour
                 Cam1.SetActive(false);
                 Cam3.SetActive(false);
                 CamMain.SetActive(false);
+                Cam4.SetActive(false);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha0))
             {
@@ -46,12 +49,24 @@ public class HidingCameraSwitcher : MonoBehaviour
                 Cam2.SetActive(false);
                 Cam1.SetActive(false);
                 Cam3.SetActive(false);
-                
+                Cam4.SetActive(false);
+
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3)) 
             {
                 SwitchCamera(3);
                 Cam3.SetActive(true);
+                Cam2.SetActive(false);
+                Cam1.SetActive(false);
+                CamMain.SetActive(false);
+                Cam4.SetActive(false);
+
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SwitchCamera(4);
+                Cam4.SetActive(true);
+                Cam3.SetActive(false);
                 Cam2.SetActive(false);
                 Cam1.SetActive(false);
                 CamMain.SetActive(false);

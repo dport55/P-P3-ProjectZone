@@ -364,9 +364,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             gunList[gunListPos].AmmoCur--;
         }
+        StartCoroutine(ShootEffect());
 
         // Start coroutine to turn off muzzle flash after a short delay
-       
+
         //// Activate the muzzle flash and randomize rotation
         //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
         //Laser.gameObject.SetActive(true);
@@ -383,29 +384,38 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
-                dmg.TakeDamage(shootDamage,freezeTime,0);
+                dmg.TakeDamage(shootDamage, freezeTime, 0);
             }
 
             // Instantiate the hit effect at the point of impact
             ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-            Destroy(hiteffect.gameObject,0.05F);
+            Destroy(hiteffect.gameObject, 0.05F);
 
             // Instantiate the laser effect from muzzle to hit point
             GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
-            
+
             // Make the laser point toward the hit
             laserBeam.transform.LookAt(hit.point);
             float distance = Vector3.Distance(muzzlePos, hit.point);
-           
-                StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
+
+            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
             laserBeam.transform.localScale = new Vector3(1, 1, distance);
 
             // Destroy the laser after a short delay
-            Destroy(laserBeam,0.05f);
-            
+            Destroy(laserBeam, 0.05f);
+
         }
 
-       
+
+    }
+
+    public IEnumerator ShootEffect()
+    {
+        if (gunList[gunListPos] && gunList[gunListPos].shootSound != null)
+        {
+            aud.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+        }
+        yield return null;
     }
 
     // Coroutine to disable muzzle flash after 0.05 seconds
@@ -575,7 +585,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-            hideSpotInside = other.transform.Find("InsideSpo2t"); // Get inside position
+            hideSpotInside = other.transform.Find("InsideSpot2"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
             hidePrompt.SetActive(true);
         }
