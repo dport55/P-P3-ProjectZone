@@ -82,6 +82,7 @@ public class DoorTrigger : MonoBehaviour
     public GameObject door;
     public float openHeight = 3f;
     public float openSpeed = 2f;
+    public string requiredKeyID;
 
     public float closeHeight = 0f;
     public float closeSpeed = 2f;
@@ -103,8 +104,12 @@ public class DoorTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isOpening)
         {
-            isOpening = true;
-            StartCoroutine(OpenDoor());
+            PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Get the PlayerInventory component
+            if (playerInventory != null && playerInventory.HasKey(requiredKeyID)) // Check if player has the key
+            {
+                isOpening = true;
+                StartCoroutine(OpenDoor());
+            }
         }
     }
 

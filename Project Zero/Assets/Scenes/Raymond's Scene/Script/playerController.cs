@@ -25,7 +25,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform Laser, RedSphere,BlueSphere;
+    [SerializeField] Transform Laser, RedSphere, BlueSphere;
+
+    [Header("Audio Settings")]
+    [SerializeField] AudioSource aud;
+    [Range(0, 1)][SerializeField] AudioClip[] audSteps;
+    [Range(0, 1)][SerializeField] float audStepsVol;
+    [Range(0, 1)][SerializeField] AudioClip[] audHurt;
+    [Range(0, 1)][SerializeField] float audHurtVol;
+    [Range(0, 1)][SerializeField] AudioClip[] audJump;
+    [Range(0, 1)][SerializeField] float audJumpVol;
+    [SerializeField] AudioClip headShot;
 
     [Header("---- UI ----")]
     [SerializeField] private TextMeshProUGUI partsCounterTMP;
@@ -34,6 +44,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private int requiredParts = 5;
 
 
+    bool isPlayerSteps;
 
     int gunListPos;
     //End
@@ -147,6 +158,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         if (Controller.isGrounded)
         {
+            if (moveDir.magnitude > 0.3f && !isPlayerSteps)
+            {
+                StartCoroutine(playSteps());
+            }
+
             jumpCount = 0;
             playerVel.y = -1f;
         }
@@ -166,7 +182,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         SelectGun();
 
-     
+
         //End
     }
 
@@ -184,12 +200,31 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
+    //Hemant's Addition
+    IEnumerator playSteps()
+    {
+        isPlayerSteps = true;
+        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+
+        if (!isSprinting)
+        {
+            yield return new WaitForSeconds(.5f);
+
+        }
+        else
+            yield return new WaitForSeconds(0.3f);
+        isPlayerSteps = false;
+    }
+    //End
+
     void jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
             playerVel.y = jumpSpeed;
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
+
         }
     }
 
@@ -394,7 +429,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         Oxygen -= O2;
         StartCoroutine(flashDamageScreen());
         UpdatePlayerUI();
-        //aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
 
 
         if (HP <= 0 || Oxygen <= 0)
