@@ -19,10 +19,11 @@ public class GameManager : MonoBehaviour
     public StaticEnemy staticEnemy;
     public Image playerHPBar;
     public Image playerO2Bar;
+    [SerializeField] TMP_Text goalCountText;
     public bool isPaused;
 
 
-    int goalCount;
+    
     //change
 
     //Hemant's Addition
@@ -170,5 +171,16 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
+    public void updateGameGoal(int parts)
+    {
+        
+        goalCountText.text = parts.ToString("F0") + "/10";
 
+        if (parts == 10)
+        {
+            statePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+        }
+    }
 }

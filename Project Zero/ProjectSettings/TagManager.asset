@@ -17,6 +17,7 @@ TagManager:
   - OutsideSpot3
   - InsideSpot3
   - Door
+  - Parts
   layers:
   - Default
   - TransparentFX
