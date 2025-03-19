@@ -1888,6 +1888,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2748671649709572448, guid: aa999758dbb4acb4598204c6ea36a279, type: 3}
+      propertyPath: speed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748671649709572448, guid: aa999758dbb4acb4598204c6ea36a279, type: 3}
+      propertyPath: O2Damage
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3705993165198106068, guid: aa999758dbb4acb4598204c6ea36a279, type: 3}
       propertyPath: m_Name
       value: O2 Damage
@@ -2814,7 +2822,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 131
+      value: 14.1
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2822,7 +2830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32.4
+      value: -6.7
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalRotation.w
