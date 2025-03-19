@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
-        Interact();
+        //Interact();
         slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
         {
@@ -312,33 +312,37 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
-    void Interact()
-    {
-        if (Input.GetButtonDown("Interact"))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactRange, interactableLayer))
-            {
-                if (hit.collider.CompareTag("Parts"))
-                {
-                    CollectPart(hit.collider.gameObject);
-                }
-                else if (hit.collider.CompareTag("SpacePod"))
-                {
-                    InsertPart(hit.collider.GetComponent<SpacePod>());
-                }
-            }
-        }
-    }
+    // Dylan's Edits
 
-    void CollectPart(GameObject part)
-    {
-        collectedParts++;
-        Destroy(part);
+    //void Interact()
+    //{
+    //    if (Input.GetButtonDown("Interact"))
+    //    {
+    //        RaycastHit hit;
+    //        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactRange, interactableLayer))
+    //        {
+    //            if (hit.collider.CompareTag("Parts"))
+    //            {
+    //                CollectPart(hit.collider.gameObject);
+    //            }
+    //            else if (hit.collider.CompareTag("SpacePod"))
+    //            {
+    //                InsertPart(hit.collider.GetComponent<SpacePod>());
+    //            }
+    //        }
+    //    }
+    //}
+
+    public void getParts(GameObject parts)
+    { 
+        
+       if(parts.CompareTag("Parts"))
+            collectedParts++;
+        //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
     }
 
-    void InsertPart(SpacePod pod)
+    public void InsertPart(SpacePod pod)
     {
         if (pod == null) return;
 
@@ -349,6 +353,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             //Debug.Log($"Inserted a part. Remaining: {collectedParts}");
         }
     }
+    // End of Dylan's Edits
+
     // Hemant's Adittion
 
     void shoot()

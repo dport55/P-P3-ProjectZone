@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PartsPickup : MonoBehaviour
 {
+    [SerializeField] GameObject part;
     public int collectedParts;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,19 +17,23 @@ public class PartsPickup : MonoBehaviour
 
     }
 
-    void CollectPart()
-    {
-        PlayerController playerController = GetComponent<PlayerController>();
-        playerController.CollectPart();
-        Destroy(gameObject);
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        IPickup playerController = GetComponent<IPickup>();
+    //        playerController.CollectPart();
+    //        Destroy(gameObject);
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the player entered the trigger area
-        if (other.CompareTag("Player"))
+        IPickup pick = other.GetComponent<IPickup>();
+        if (pick != null)
         {
-            CollectPart();  // Collect the part
+            pick.getParts(part);
+            Destroy(gameObject);
         }
     }
 }
