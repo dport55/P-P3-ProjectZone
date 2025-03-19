@@ -3,10 +3,12 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
@@ -18,7 +20,7 @@ public class GameManager : MonoBehaviour
     public Image playerHPBar;
     public Image playerO2Bar;
     public bool isPaused;
-    
+
 
     int goalCount;
     //change
@@ -96,7 +98,7 @@ public class GameManager : MonoBehaviour
 
     public void playButtonShow()
     {
-        if(SceneManager.GetActiveScene().name == "Tutorial")
+        if (SceneManager.GetActiveScene().name == "Tutorial")
         {
             PlayButton.SetActive(true);
         }
@@ -106,6 +108,50 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //public void showO2Warning()
+    //{
+    //    if (O2Count < 100)
+    //    {
+    //        PlayButton.SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        PlayButton.SetActive(false);
+    //    }
+    //}
+
+
+
+    private IEnumerator OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LowO2"))
+        {
+            O2WarningScreen1.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            O2WarningScreen1.SetActive(false);
+
+            O2WarningScreen2.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            O2WarningScreen2.SetActive(false);
+        }
+        else
+        {
+            O2WarningScreen1.SetActive(false);
+            O2WarningScreen2.SetActive(false);
+        }
+    }
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("LowO2"))
+    //    {
+    //        StopAllCoroutines();
+    //        O2WarningScreen1.SetActive(false);
+    //        O2WarningScreen2.SetActive(false);
+    //    }
+
+
+    //}
     public void stateUnpause()
     {
         isPaused = !isPaused;
