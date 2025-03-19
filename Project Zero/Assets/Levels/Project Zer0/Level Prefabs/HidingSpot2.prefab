@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7041605174416564693}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: InsideSpot
+  m_TagString: InsideSpot3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1787068215787450925}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4799998, z: 0}
+  m_LocalPosition: {x: 1.35, y: -0.26, z: 0.096}
   m_LocalScale: {x: 1, y: 0.076166004, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 1864538067029099899}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13051996, y: -0.443, z: 0}
+  m_LocalPosition: {x: -0.1509, y: -0.0812, z: -0.0132}
   m_LocalScale: {x: 0.051588938, y: 0.08987148, z: 0.084745765}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 5050783679799102699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.475, y: -0.26691833, z: 0}
+  m_LocalPosition: {x: 0.017, y: -0.262, z: 0.502}
   m_LocalScale: {x: 0.051588938, y: 0.08987148, z: 0.084745765}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 3454796666727505365}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: OutsideSpot
+  m_TagString: OutsideSpot3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 8097006473143562696}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.7, y: -2.4392605, z: 0}
+  m_LocalPosition: {x: 0.387, y: -0.07, z: -0.721}
   m_LocalScale: {x: 1, y: 0.076166004, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 4878378607427005456}
   m_Layer: 0
   m_Name: HidingSpot2
-  m_TagString: HidingSpot
+  m_TagString: HidingSpot3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,7 +154,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.7, y: 13.54, z: -26.41}
-  m_LocalScale: {x: 19.384, y: 11.127, z: 11.8}
+  m_LocalScale: {x: 2.2514517, y: 5.4113936, z: 6.0524564}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5185020786315341229}

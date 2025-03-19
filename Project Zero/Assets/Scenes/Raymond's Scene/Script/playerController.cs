@@ -579,7 +579,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-            hideSpotInside = other.transform.Find("InsideSpo2t"); // Get inside position
+            hideSpotInside = other.transform.Find("InsideSpot2"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
             hidePrompt.SetActive(true);
         }

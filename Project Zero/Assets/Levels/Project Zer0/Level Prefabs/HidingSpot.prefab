@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1910857240328196141}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13051996, y: -0.443, z: 0}
+  m_LocalPosition: {x: 0.051, y: 0.046, z: -0.0196}
   m_LocalScale: {x: 0.051588938, y: 0.08987148, z: 0.084745765}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4348231588820270810}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: OutsideSpot
+  m_TagString: OutsideSpot2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 7621717588157277699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.475, y: -0.26691833, z: 0}
+  m_LocalPosition: {x: 0.475, y: -0.06, z: 0.529}
   m_LocalScale: {x: 0.051588938, y: 0.08987148, z: 0.084745765}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 822826618594017956}
   m_Layer: 0
   m_Name: HidingSpot
-  m_TagString: HidingSpot
+  m_TagString: HidingSpot2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,7 +123,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.7, y: 13.54, z: -26.41}
-  m_LocalScale: {x: 19.384, y: 11.127, z: 11.8}
+  m_LocalScale: {x: 2.3561413, y: 8.264691, z: 5.383711}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2121102115891431241}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 4804421599264120263}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: InsideSpot
+  m_TagString: InsideSpot2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
