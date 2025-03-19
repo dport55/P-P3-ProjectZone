@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] int shootDist;
     [SerializeField] public float freezeTime;
 
+    // Amata's Addition
+    [SerializeField] GameObject O2WarningScreen1; // O2WarningScreen2;
+
     float shootTimer;
 
     [Header("=====Guns=====")]
@@ -35,7 +38,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Range(0, 1)][SerializeField] float audHurtVol;
     [Range(0, 1)][SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
-    
+
 
     [Header("---- UI ----")]
     [SerializeField] private TextMeshProUGUI partsCounterTMP;
@@ -50,8 +53,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //End
 
     [Header("---- Stats ----")]
-   public float HP = 6;
-    
+    public float HP = 6;
+
     [SerializeField] float Oxygen;
     [Range(3, 20)][SerializeField] int speed = 6;
     [Range(2, 5)][SerializeField] int sprintMod = 2;
@@ -96,7 +99,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     float HPOrig;
     float O2Orig;
 
-    
+
 
     void Start()
     {
@@ -111,7 +114,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         RedSphere.gameObject.SetActive(false);
         BlueSphere.gameObject.SetActive(false);
         isHiding = false;
-   
+
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
 
@@ -139,7 +142,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
         {
             EnterHidingSpot();
-          
+
         }
         else if (isHiding && Input.GetKeyDown(KeyCode.E))
         {
@@ -177,7 +180,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        if (gunList.Count != 0){
+        if (gunList.Count != 0)
+        {
             if (Input.GetButton("Fire1") && shootTimer >= shootRate)
             {
                 shoot();
@@ -240,25 +244,25 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 //Reduce height
                 Controller.height = crouchHeight;
 
-              
+
 
                 //Crouch speed
                 speed = (int)(originalSpeed * crouchSpeedMod);
 
                 isCrouching = true;
-               
+
             }
             else
             {
-                    Controller.height = 2f;
+                Controller.height = 2f;
 
-                    //Restore original speed 
-                    speed = (int)originalSpeed;
+                //Restore original speed 
+                speed = (int)originalSpeed;
 
-                    isCrouching = false;
+                isCrouching = false;
                 Debug.Log(originalHeight);
 
-                
+
             }
         }
     }
@@ -271,42 +275,42 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
-   IEnumerator SlideRoutine()
-{
-    isSliding = true;
-    isCrouching = true; // Ensure player remains crouched
-    float slideTime = 0f;
-
-    // Reduce height but ensure no further scaling
-    Controller.height = 1f;
-   
-    // Initial speed boost
-    Vector3 slideDirection = transform.forward * slideSpeed;
-
-    while (slideTime < slideDuration)
+    IEnumerator SlideRoutine()
     {
-        Controller.Move(slideDirection * Time.deltaTime);
-        slideDirection *= slideFriction; // Gradually slow down
-        slideTime += Time.deltaTime;
-        yield return null;
-    }
+        isSliding = true;
+        isCrouching = true; // Ensure player remains crouched
+        float slideTime = 0f;
 
-    isSliding = false;
+        // Reduce height but ensure no further scaling
+        Controller.height = 1f;
 
-    // Reset height only if player is not holding crouch
-    if (!Input.GetButton("Crouch"))
+        // Initial speed boost
+        Vector3 slideDirection = transform.forward * slideSpeed;
+
+        while (slideTime < slideDuration)
+        {
+            Controller.Move(slideDirection * Time.deltaTime);
+            slideDirection *= slideFriction; // Gradually slow down
+            slideTime += Time.deltaTime;
+            yield return null;
+        }
+
+        isSliding = false;
+
+        // Reset height only if player is not holding crouch
+        if (!Input.GetButton("Crouch"))
 
         {
             Controller.height = 2f;
             Controller.center = originalCenter;
             isCrouching = false;
-        
+
+        }
     }
-}
 
     void ToggleFlashlight()
     {
-        if (Input.GetButtonDown("Flashlight")) 
+        if (Input.GetButtonDown("Flashlight"))
         {
             if (flashlight != null)
             {
@@ -337,9 +341,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //}
 
     public void getParts(GameObject parts)
-    { 
-        
-       if(parts.CompareTag("Parts"))
+    {
+
+        if (parts.CompareTag("Parts"))
             collectedParts++;
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
@@ -424,7 +428,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // Coroutine to disable muzzle flash after 0.05 seconds
     IEnumerator DisableMuzzleFlash(bool _Sphere)
     {
-        if(!_Sphere)
+        if (!_Sphere)
         {
             BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
             BlueSphere.gameObject.SetActive(true);
@@ -439,7 +443,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             RedSphere.gameObject.SetActive(false);
         }
         //Laser.gameObject.SetActive(false);
-        
+
     }
     public void TakeDamage(float amount, float Freeze, float O2)
     {
@@ -553,7 +557,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         isHiding = true;
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(true);
-       
+
         Cam.SetActive(true);
     }
 
@@ -573,7 +577,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void OnTriggerEnter(Collider other)
     {
-       
+        //Amata's Addition
+        if (other.CompareTag("LowO2"))
+        {
+            O2WarningScreen1.SetActive(true);
+        }
+        //End of Amata's Addition
 
         if (other.CompareTag("HidingSpot"))
         {
@@ -584,7 +593,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hidePrompt.SetActive(true);
         }
 
-       else if (other.CompareTag("HidingSpot2"))
+        else if (other.CompareTag("HidingSpot2"))
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
@@ -600,7 +609,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
             hidePrompt.SetActive(true);
         }
-       else if (other.CompareTag("HidingSpot1"))
+        else if (other.CompareTag("HidingSpot1"))
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
@@ -612,7 +621,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void OnTriggerExit(Collider other)
     {
-        
+
+        //Amata's Addition
+        if (other.CompareTag("LowO2"))
+        {
+            O2WarningScreen1.SetActive(false);
+        }
+        //End of Amata's Addition
+
         if (other.CompareTag("HidingSpot"))
         {
             GameManager.instance.retical.SetActive(true);
@@ -627,7 +643,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
-       else if (other.CompareTag("HidingSpot2"))
+        else if (other.CompareTag("HidingSpot2"))
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
@@ -643,4 +659,5 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
     //End od Delvin's Additions
+
 }

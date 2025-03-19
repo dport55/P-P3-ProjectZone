@@ -122,24 +122,24 @@ public class GameManager : MonoBehaviour
 
 
 
-    private IEnumerator OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("LowO2"))
-        {
-            O2WarningScreen1.SetActive(true);
-            yield return new WaitForSeconds(2f);
-            O2WarningScreen1.SetActive(false);
+    //private IEnumerator OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("LowO2"))
+    //    {
+    //        O2WarningScreen1.SetActive(true);
+    //        yield return new WaitForSeconds(2f);
+    //        O2WarningScreen1.SetActive(false);
 
-            O2WarningScreen2.SetActive(true);
-            yield return new WaitForSeconds(2f);
-            O2WarningScreen2.SetActive(false);
-        }
-        else
-        {
-            O2WarningScreen1.SetActive(false);
-            O2WarningScreen2.SetActive(false);
-        }
-    }
+    //        O2WarningScreen2.SetActive(true);
+    //        yield return new WaitForSeconds(2f);
+    //        O2WarningScreen2.SetActive(false);
+    //    }
+    //    else
+    //    {
+    //        O2WarningScreen1.SetActive(false);
+    //        O2WarningScreen2.SetActive(false);
+    //    }
+    //}
 
     //private void OnTriggerExit(Collider other)
     //{
