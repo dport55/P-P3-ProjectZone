@@ -682,7 +682,7 @@ MonoBehaviour:
     m_Bits: 1024
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 0
   flashlight: {fileID: 0}
   shootDamage: 0
   shootRate: 0
@@ -693,6 +693,13 @@ MonoBehaviour:
   Laser: {fileID: 4885200449266314087}
   RedSphere: {fileID: 4923608869328062557}
   BlueSphere: {fileID: 5788294743415367666}
+  aud: {fileID: 0}
+  audSteps: []
+  audStepsVol: 0
+  audHurt: []
+  audHurtVol: 0
+  audJump: []
+  audJumpVol: 0
   partsCounterTMP: {fileID: 0}
   remainingPartsTMP: {fileID: 0}
   HP: 6

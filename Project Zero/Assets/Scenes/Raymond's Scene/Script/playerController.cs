@@ -268,38 +268,34 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
-   IEnumerator SlideRoutine()
-{
-    isSliding = true;
-    isCrouching = true; // Ensure player remains crouched
-    float slideTime = 0f;
-
-    // Reduce height but ensure no further scaling
-    Controller.height = 1f;
-   
-    // Initial speed boost
-    Vector3 slideDirection = transform.forward * slideSpeed;
-
-    while (slideTime < slideDuration)
+    IEnumerator SlideRoutine()
     {
-        Controller.Move(slideDirection * Time.deltaTime);
-        slideDirection *= slideFriction; // Gradually slow down
-        slideTime += Time.deltaTime;
-        yield return null;
-    }
+        isSliding = true;
+        isCrouching = true;
 
-    isSliding = false;
+        // Temporarily lower player height
+        Controller.height = 1f;
 
-    // Reset height only if player is not holding crouch
-    if (!Input.GetButton("Crouch"))
+        // Slide movement
+        Vector3 slideDirection = transform.forward * slideSpeed;
+        float slideTime = slideDuration;
 
+        while (slideTime > 0f)
+        {
+            Controller.Move(slideDirection * Time.deltaTime);
+            slideTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        // Reset states
+        isSliding = false;
+
+        if (!Input.GetButton("Crouch"))
         {
             Controller.height = 2f;
-            Controller.center = originalCenter;
             isCrouching = false;
-        
+        }
     }
-}
 
     void ToggleFlashlight()
     {
