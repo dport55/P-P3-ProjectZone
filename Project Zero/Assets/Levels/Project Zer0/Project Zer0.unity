@@ -1739,6 +1739,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: O2 Damage
       objectReference: {fileID: 0}
+    - target: {fileID: 3705993165198106068, guid: aa999758dbb4acb4598204c6ea36a279, type: 3}
+      propertyPath: m_TagString
+      value: LowO2
+      objectReference: {fileID: 0}
     - target: {fileID: 4304912801318801658, guid: aa999758dbb4acb4598204c6ea36a279, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.428419

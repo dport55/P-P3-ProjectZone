@@ -18,6 +18,7 @@ TagManager:
   - InsideSpot3
   - Door
   - Parts
+  - LowO2
   layers:
   - Default
   - TransparentFX
