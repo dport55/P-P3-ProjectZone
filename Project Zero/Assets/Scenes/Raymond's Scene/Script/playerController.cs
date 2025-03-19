@@ -177,8 +177,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1")&& shootTimer >= shootRate){
-            shoot();
+        if (gunList.Count != 0){
+            if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+            {
+                shoot();
+            }
         }
         SelectGun();
 
@@ -360,11 +363,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     void shoot()
     {
         shootTimer = 0;
-        if (gunList.Count > 0)
-        {
-            gunList[gunListPos].AmmoCur--;
-        }
-        StartCoroutine(ShootEffect());
+        //if (gunList.Count > 0)
+        //{
+        //    gunList[gunListPos].AmmoCur--;
+        //}
+        aud.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
         // Start coroutine to turn off muzzle flash after a short delay
 
