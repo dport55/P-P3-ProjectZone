@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private Vector3 moveDir;
     private Vector3 playerVel;
     private bool isSprinting;
-    private int collectedParts = 0;
+    private int collectedParts;
     //Delvin's Additions
     public GameObject playerDamageScreen;
     public bool isHiding = false;
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
+   
         //Interact();
         slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
@@ -187,7 +188,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 shoot();
             }
         }
-        SelectGun();
+            SelectGun();
 
 
         //End
@@ -345,6 +346,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         if (parts.CompareTag("Parts"))
             collectedParts++;
+
+       GameManager.instance.updateGameGoal(collectedParts);
+
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
     }
