@@ -28,18 +28,15 @@ public class PlayerInventory : MonoBehaviour
 
         if (isInventoryOpen)
         {
-           GameManager.instance.statePause();
+          
             UpdateInventoryUI();
         }
-        else
-        {
-            GameManager.instance.stateUnpause();
-        }
+      
     }
 
     void UpdateInventoryUI()
     {
-        // Clear previous keys from UI
+        // Clear previous keys from UI (destroy only instantiated instances)
         foreach (Transform child in keyContainer.transform)
         {
             Destroy(child.gameObject);
@@ -48,11 +45,10 @@ public class PlayerInventory : MonoBehaviour
         // Add collected keys to UI
         foreach (var key in collectedKeys)
         {
-            GameObject keyImage = Instantiate(keyImagePrefab, keyContainer.transform);
+            GameObject keyImage = Instantiate(keyImagePrefab, keyContainer.transform); // Correctly instantiating in scene hierarchy
             keyImage.GetComponent<Image>().sprite = key.Value; // Assign the key sprite
         }
     }
-
     public void AddKey(string keyID, Sprite keySprite)
     {
         if (!collectedKeys.ContainsKey(keyID))
