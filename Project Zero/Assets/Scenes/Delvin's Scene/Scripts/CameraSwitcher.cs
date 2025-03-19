@@ -101,6 +101,7 @@ public class HidingCameraSwitcher : MonoBehaviour
         foreach (var cam in hidingCameras)
         {
             cam.gameObject.SetActive(false);
+            Cam4.SetActive(false);
             Cam3.SetActive(false);
             Cam2.SetActive(false);
             Cam1.SetActive(false);

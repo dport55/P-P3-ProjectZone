@@ -3598,6 +3598,8 @@ MonoBehaviour:
   menuTutorial: {fileID: 6451167614010311310}
   retical: {fileID: 2128841880252354245}
   PlayButton: {fileID: 384018679719191505}
+  O2WarningScreen1: {fileID: 0}
+  O2WarningScreen2: {fileID: 0}
   player: {fileID: 0}
   playerScript: {fileID: 0}
   bossEnemy: {fileID: 0}
