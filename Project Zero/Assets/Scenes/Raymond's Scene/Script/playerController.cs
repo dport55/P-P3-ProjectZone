@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Range(0, 1)][SerializeField] float audHurtVol;
     [Range(0, 1)][SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
-    [SerializeField] AudioClip headShot;
+    
 
     [Header("---- UI ----")]
     [SerializeField] private TextMeshProUGUI partsCounterTMP;
