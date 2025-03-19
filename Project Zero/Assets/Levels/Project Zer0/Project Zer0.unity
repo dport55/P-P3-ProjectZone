@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 0.05565439, g: 0.064823024, b: 0.088050246, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 8401881fcb9afd34eb383fc90bbbbddc, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -529,7 +529,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7999759955748880874, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 3295714077712195717, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 8750255958273298419, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 8347947091153572499, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 8044706871498110265, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 4982769340779976905, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 2210781293692416602, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
+    - {fileID: 654567756338728033, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d221c53a13b64d4db0bea71e50ff515, type: 3}
@@ -2822,7 +2830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.1
+      value: 120.8
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2830,7 +2838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.7
+      value: 38.8
       objectReference: {fileID: 0}
     - target: {fileID: 7798835012229670542, guid: 520cb2bfbbe02b44a8562207d25e4e40, type: 3}
       propertyPath: m_LocalRotation.w
