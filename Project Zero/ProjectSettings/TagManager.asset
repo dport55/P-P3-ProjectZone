@@ -20,6 +20,7 @@ TagManager:
   - LowO2
   - Parts
   - Level
+  - VentDoor
   layers:
   - Default
   - TransparentFX
