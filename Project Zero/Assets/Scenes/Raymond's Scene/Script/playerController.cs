@@ -69,7 +69,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
     [SerializeField] private float slideDuration = 0f; // Time before slowing down
     [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
+    [SerializeField] private float slideCooldownTime = 2f;
 
+    private bool canSlide = true;
     private bool isSliding = false;
 
     private int originalSpeed;
@@ -278,8 +280,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     IEnumerator SlideRoutine()
     {
+        if (!canSlide)
+            yield break;
+
         isSliding = true;
         isCrouching = true;
+        canSlide = false; // Prevents sliding again until cooldown is over
 
         // Temporarily lower player height
         Controller.height = 1f;
@@ -303,6 +309,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             Controller.height = 2f;
             isCrouching = false;
         }
+
+        // Start cooldown before allowing another slide
+        yield return new WaitForSeconds(slideCooldownTime);
+        canSlide = true; // Re-enables sliding
     }
 
     void ToggleFlashlight()
