@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c8b6a28265cff5e4cb4355af1a24cfba
+timeCreated: 1428685750
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 37562
+  packageName: FREE SpaceShips
+  packageVersion: 1.0
+  assetPath: Assets/SpaceShips/SpaceShip2/Ship_2.prefab
+  uploadId: 64899

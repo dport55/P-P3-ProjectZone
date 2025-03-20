@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e75ce33b6b483b049a8968d726cdf490
+timeCreated: 1428686273
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 37562
+  packageName: FREE SpaceShips
+  packageVersion: 1.0
+  assetPath: Assets/SpaceShips/SpaceShip1/SpaceShip1.mat
+  uploadId: 64899
