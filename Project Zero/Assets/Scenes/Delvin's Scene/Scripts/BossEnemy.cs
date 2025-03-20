@@ -33,6 +33,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
     void Start()
     {
+        damageAmout = .5f;
         colorOrig = model.material.color;
         MoveToRandomSpawnPoint();
     }
@@ -213,7 +214,7 @@ public class BossEnemy : MonoBehaviour, IDamage
         {
             Stun(Freeze); // Apply freeze effect if allowed
         }
-        else if (damage > 1)
+        else if (damage > 0)
         {
             HP -= damage;
             StartCoroutine(FlashRed());
