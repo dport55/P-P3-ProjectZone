@@ -145,7 +145,9 @@ public class DoorTrigger : MonoBehaviour
         {
             isOpening = false;
             StartCoroutine(CloseDoor());
+           
         }
+        doorPrompt.SetActive(false);
     }
 
 
