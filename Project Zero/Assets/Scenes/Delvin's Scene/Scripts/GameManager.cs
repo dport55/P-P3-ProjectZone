@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu;
     public static GameManager instance;
     public GameObject player;
     public PlayerController playerScript;
@@ -71,6 +71,13 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
+    public void ShowSettings()
+    {
+        statePause();
+        menuPause.SetActive(false);
+        menuActive = SettingsMenu;
+        menuActive.SetActive(true);
+    }
     public void statePause()
     {
         playButtonShow();
@@ -95,6 +102,7 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = menuPause;
         menuActive.SetActive(true);
+        SettingsMenu.SetActive(false);
     }
 
     public void playButtonShow()

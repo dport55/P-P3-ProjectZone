@@ -15,6 +15,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] int roamPauseTime;
     [SerializeField] float roamTimer = 0f;
     [SerializeField] ParticleSystem Frozeen;
+    [SerializeField] public float damageAmout = .5f;
     public Transform Spot;
 
     private bool isStunned = false;
@@ -241,4 +242,10 @@ public class BossEnemy : MonoBehaviour, IDamage
         model.material.color = colorOrig;
         Frozeen.Stop();
     }
+
+    public void Damage(float damage) 
+    {
+        damageAmout = damage;
+    }
+
 }

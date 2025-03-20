@@ -87,6 +87,7 @@ public class DoorTrigger : MonoBehaviour
     public float closeHeight = 0f;
     public float closeSpeed = 2f;
 
+    [SerializeField] public GameObject doorPrompt;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private Vector3 targetPosition2;
@@ -104,11 +105,21 @@ public class DoorTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isOpening)
         {
-            PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Get the PlayerInventory component
-            if (playerInventory != null && playerInventory.HasKey(requiredKeyID)) // Check if player has the key
+            if (CompareTag("VentDoor")) // If the door is tagged as "VentDoor", open without a key
             {
                 isOpening = true;
                 StartCoroutine(OpenDoor());
+            }
+            else // Otherwise, check if the player has the required key
+            {
+                PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Get the PlayerInventory component
+                if (playerInventory != null && playerInventory.HasKey(requiredKeyID)) // Check if player has the key
+                {
+                    doorPrompt.SetActive(false);
+                    isOpening = true;
+                    StartCoroutine(OpenDoor());
+                }
+                doorPrompt.SetActive(true);
             }
         }
     }
