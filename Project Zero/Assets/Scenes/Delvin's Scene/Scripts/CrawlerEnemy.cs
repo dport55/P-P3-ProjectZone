@@ -79,6 +79,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (roamTimer > roamPauseTime && (agent.remainingDistance <= agent.stoppingDistance || GameManager.instance.playerScript.HP <= 0))
         {
+          
             Roam();
         }
     }
@@ -89,7 +90,9 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         Vector3 randomPos = Random.insideUnitSphere * roamDistance + startingPos;
         if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, roamDistance, 1))
         {
+            
             agent.SetDestination(hit.position);
+            
             anim.Play("crawl");
         }
     }

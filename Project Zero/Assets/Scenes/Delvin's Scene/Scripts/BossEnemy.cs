@@ -21,7 +21,10 @@ public class BossEnemy : MonoBehaviour, IDamage
     private bool playerInRange;
     private bool isWaiting = false;
     private bool canBeFrozen = true; // Cooldown tracking
-
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] growl;
+    [Range(0, 1)][SerializeField] float audgrowlVol;
+    float growlTimer;
     public Collider attackCol1;
     public Collider attackCol2;
 
@@ -36,6 +39,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     void Update()
     {
         roamTimer += Time.deltaTime;
+        growlTimer += Time.deltaTime;
 
         if (GameManager.instance.playerScript.isHiding)
         {
@@ -83,6 +87,11 @@ public class BossEnemy : MonoBehaviour, IDamage
 
             if (angleToPlayer < 60f)
             {
+                if (growlTimer >= 2f) // 2-second cooldown
+                {
+                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)], audgrowlVol);
+                    growlTimer = 0;
+                }
                 if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
                 {
                     return hit.collider.CompareTag("Player");

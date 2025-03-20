@@ -10,7 +10,7 @@ public class StaticEnemy : MonoBehaviour
 
     [SerializeField] float damageAmount;
     [SerializeField] float O2Damage;
-    [SerializeField] int speed;
+    [SerializeField] float speed;
     [SerializeField] int destroyTime;
 
     bool isDamaging;
@@ -73,7 +73,7 @@ public class StaticEnemy : MonoBehaviour
     {
         isDamaging = true;
         d.TakeDamage(damageAmount, 0f, O2Damage);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(speed);
         isDamaging = false;
 
     }
