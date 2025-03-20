@@ -5,8 +5,10 @@ public class CountdownTimer : MonoBehaviour
 {
     public static CountdownTimer instance;
 
-    [SerializeField] private TextMeshProUGUI timeText;
-    [SerializeField] private int startMinutes = 1; // Set the starting minutes in the Inspector
+    [SerializeField] public TextMeshProUGUI timeText;
+    [SerializeField] public int startMinutes = 1; 
+    [SerializeField] public GameManager gameManager;
+
     private float timeRemaining;
     public bool isRunning = true;
 
@@ -30,7 +32,7 @@ public class CountdownTimer : MonoBehaviour
         }
     }
 
-    void UpdateTimerDisplay()
+    void UpdateTimerDisplay() //Timers Format 
     {
         int minutes = Mathf.FloorToInt(timeRemaining / 60);
         int seconds = Mathf.FloorToInt(timeRemaining % 60);
@@ -51,4 +53,13 @@ public class CountdownTimer : MonoBehaviour
     {
         isRunning = true;
     }
+
+    //public void TimerEnded() //Lose Condition once timer hits 0
+    //{
+    //    //Debug.Log("Countdown finished!");
+    //    if (gameManager != null)
+    //    {
+    //        gameManager.youLose();
+    //    }
+    //}
 }

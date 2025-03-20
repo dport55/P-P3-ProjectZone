@@ -74,6 +74,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private bool canSlide = true;
     private bool isSliding = false;
 
+    [Header("---- Stamina Settings ----")]
+    [SerializeField] private float maxStamina = 100f;  // Max stamina the player can have
+    [SerializeField] private float staminaRegenRate = 10f;  // How fast stamina regenerates per second
+    [SerializeField] private float slideStaminaDrain = 25f;  // Stamina drained per slide action
+    [SerializeField] private float staminaDrainRate = 15f;  // Stamina drain per second while sprinting  
+    [SerializeField] private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued  
+    [SerializeField] private float fatigueRecoveryTime = 3f;  // How long before stamina starts regenerating after hitting 0  
+
+    private float currentStamina;
+    private bool isFatigued = false;
+
     private int originalSpeed;
     private bool isCrouching = false;
     private float originalHeight;
@@ -110,6 +121,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //store the players og speed
         originalSpeed = speed;
         UpdatePlayerUI();
+        currentStamina = maxStamina;
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
@@ -139,7 +151,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
-   
+        HandleStamina();
         //Interact();
         slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
@@ -195,17 +207,58 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         //End
     }
+    //Raymonds Additions
+    private void HandleStamina()
+    {
+        if (isFatigued)
+        {
+            // Wait for stamina to fully recover before removing fatigue
+            if (currentStamina >= maxStamina)
+            {
+                isFatigued = false;
+            }
+        }
+        else
+        {
+            if (Input.GetButton("Sprint") && moveDir.magnitude > 0)
+            {
+                currentStamina -= staminaDrainRate * Time.deltaTime;
+            }
+            else if (Input.GetButtonDown("Jump") || isSliding)
+            {
+                currentStamina -= staminaDrainRate * 2 * Time.deltaTime;
+            }
+            else
+            {
+                // Regenerate stamina over time if not fatigued
+                currentStamina = Mathf.Min(maxStamina, currentStamina + staminaRegenRate * Time.deltaTime);
+            }
 
+            // If stamina fully depletes, trigger fatigue
+            if (currentStamina <= fatigueThreshold)
+            {
+                isFatigued = true;
+                StartCoroutine(FatigueRecovery());
+            }
+        }
+    }
+    //Raymonds Additions
+    private IEnumerator FatigueRecovery()
+    {
+        yield return new WaitForSeconds(fatigueRecoveryTime);
+        currentStamina = maxStamina; // Fully restore stamina after waiting
+    }
+    //Raymonds Additions
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint") && !isCrouching)
+        if (!isFatigued && Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
-        else if (Input.GetButtonUp("Sprint"))
+        if (Input.GetButtonUp("Sprint"))
         {
-            speed /= sprintMod;
+            speed = originalSpeed;
             isSprinting = false;
         }
     }
@@ -226,18 +279,18 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         isPlayerSteps = false;
     }
     //End
-
+    //Raymonds Additions
     void jump()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
+        if (!isFatigued && Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
-            jumpCount++;
             playerVel.y = jumpSpeed;
+            jumpCount++;
             aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
-
         }
-    }
 
+    }
+    //Raymonds Additions
     void crouch()
     {
         if (Input.GetButtonDown("Crouch"))
@@ -269,15 +322,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
         }
     }
-
+    //Raymonds Additions
     void slide()
     {
-        if (Input.GetButtonDown("Slide") && isSprinting && !isSliding)
+        if (!isFatigued && canSlide && Input.GetButtonDown("Slide"))
         {
             StartCoroutine(SlideRoutine());
         }
     }
-
+    //Raymonds Additions
     IEnumerator SlideRoutine()
     {
         if (!canSlide)
@@ -314,7 +367,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         yield return new WaitForSeconds(slideCooldownTime);
         canSlide = true; // Re-enables sliding
     }
-
+    //Raymonds Additions
     void ToggleFlashlight()
     {
         if (Input.GetButtonDown("Flashlight"))
@@ -325,7 +378,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
         }
     }
-
     // Dylan's Edits
 
     //void Interact()
@@ -346,7 +398,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //        }
     //    }
     //}
-
+    //Raymonds Additions
     public void getParts(GameObject parts)
     {
 
@@ -358,7 +410,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
     }
-
+    //Raymonds Additions
     public void InsertPart(SpacePod pod)
     {
         if (pod == null) return;
@@ -373,7 +425,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // End of Dylan's Edits
 
     // Hemant's Adittion
-
+   
     void shoot()
     {
         shootTimer = 0;
