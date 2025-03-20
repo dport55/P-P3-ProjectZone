@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Energy Blaster
   m_EditorClassIdentifier: 
-  RedSphere: 1
-  model: {fileID: 5362808307749203380, guid: 460b09b3999f980448b54c53b41f5873, type: 3}
+  RedFlash: 1
+  model: {fileID: 8599503992940980889, guid: 23e48266be76af14e9926eb9b757ae12, type: 3}
   shootDamage: 1
   shootDist: 25
   shootRate: 0.25

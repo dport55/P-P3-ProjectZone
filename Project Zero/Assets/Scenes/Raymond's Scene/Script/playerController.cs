@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform Laser, RedSphere, BlueSphere;
+    [SerializeField] Transform Muzzlepos, RedFlash, BlueFlash;
 
     [Header("Audio Settings")]
     [SerializeField] AudioSource aud;
@@ -111,8 +111,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
-        RedSphere.gameObject.SetActive(false);
-        BlueSphere.gameObject.SetActive(false);
+        RedFlash.gameObject.SetActive(false);
+        BlueFlash.gameObject.SetActive(false);
         isHiding = false;
 
         hidePrompt.SetActive(false);
@@ -380,7 +380,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Laser.gameObject.SetActive(true);
 
         // Use the muzzle flash’s world position directly
-        Vector3 muzzlePos = Laser.position;
+        Vector3 muzzlePos = Muzzlepos.position;
 
         RaycastHit hit;
 
@@ -405,7 +405,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             laserBeam.transform.LookAt(hit.point);
             float distance = Vector3.Distance(muzzlePos, hit.point);
 
-            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
+            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
             laserBeam.transform.localScale = new Vector3(1, 1, distance);
 
             // Destroy the laser after a short delay
@@ -430,17 +430,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (!_Sphere)
         {
-            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            BlueSphere.gameObject.SetActive(true);
+            BlueFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            BlueSphere.gameObject.SetActive(false);
+            BlueFlash.gameObject.SetActive(false);
         }
         if (_Sphere)
         {
-            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            RedSphere.gameObject.SetActive(true);
+            RedFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            RedSphere.gameObject.SetActive(false);
+            RedFlash.gameObject.SetActive(false);
         }
         //Laser.gameObject.SetActive(false);
 
@@ -521,7 +521,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.WeaponsDisplay.SetActive(true);
 
-            if (!gunList[gunListPos].RedSphere)
+            if (!gunList[gunListPos].RedFlash)
             {
                 GameManager.instance.RedDisplay.SetActive(false);
                 GameManager.instance.BlueDisplay.SetActive(true);

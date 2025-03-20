@@ -6,7 +6,8 @@ using UnityEngine.UIElements;
 [CreateAssetMenu]
 public class Gunstats : ScriptableObject
 {
-    public bool RedSphere;
+    
+    public bool RedFlash;
     public GameObject model;
     public int shootDamage;
     public int shootDist;

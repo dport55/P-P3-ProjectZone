@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Freeze Gun
   m_EditorClassIdentifier: 
-  RedSphere: 0
-  model: {fileID: 787057100562914357, guid: 371711cf542f6d84bafd6596c502935b, type: 3}
+  RedFlash: 0
+  model: {fileID: 4785264872323722461, guid: 66de4169d61904041bd149d22f6cb652, type: 3}
   shootDamage: 0
   shootDist: 100
   shootRate: 0.5
