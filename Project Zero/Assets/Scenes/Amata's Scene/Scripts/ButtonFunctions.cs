@@ -30,4 +30,15 @@ public class ButtonFunctions : MonoBehaviour
         Application.Quit();
 #endif
     }
+    public void SettingsMenu()
+    {
+      
+        GameManager.instance.ShowSettings();
+    }
+
+    public void BackButton()
+    {
+
+        GameManager.instance.pauseShow();
+    }
 }

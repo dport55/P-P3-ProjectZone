@@ -15,6 +15,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] int FOV;
     [SerializeField] int roamPauseTime;
     [SerializeField] int roamDistance;
+    [SerializeField] public float damageAmout = .5f;
 
     [SerializeField] float attackRate;
 
@@ -245,4 +246,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         //Debug.Log("Rotating towards player with offset: " + transform.rotation.eulerAngles);
     }
 
+    public void Damage(float damage)
+    {
+        damageAmout = damage;
+    }
 }

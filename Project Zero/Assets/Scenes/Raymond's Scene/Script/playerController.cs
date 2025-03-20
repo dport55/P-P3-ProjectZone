@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
     [SerializeField] Transform Laser, RedSphere, BlueSphere;
+    [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
     [SerializeField] AudioSource aud;
@@ -371,16 +372,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //{
         //    gunList[gunListPos].AmmoCur--;
         //}
-        aud.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
-        // Start coroutine to turn off muzzle flash after a short delay
-
-        //// Activate the muzzle flash and randomize rotation
-        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-        //Laser.gameObject.SetActive(true);
-
-        // Use the muzzle flash’s world position directly
-        Vector3 muzzlePos = Laser.position;
+            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+       
+    
+   
+    // Use the muzzle flash’s world position directly
+    Vector3 muzzlePos = Laser.position;
 
         RaycastHit hit;
 
@@ -415,7 +413,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
 
     }
-
+ 
     public IEnumerator ShootEffect()
     {
         if (gunList[gunListPos] && gunList[gunListPos].shootSound != null)
@@ -483,9 +481,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
         freezeTime = gunList[gunListPos].freezeTime;
+        ////Delvins Additions
+        //gunAudio = gunList[gunListPos].model.GetComponent<AudioSource>();
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+      
+        
+
         //if(gunModel.name == "Freeze Gun")
         //{
         //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
