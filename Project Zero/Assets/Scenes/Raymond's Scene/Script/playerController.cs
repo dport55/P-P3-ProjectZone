@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] public float freezeTime;
 
     // Amata's Addition
-    [SerializeField] GameObject O2WarningScreen1; // O2WarningScreen2;
+    [SerializeField] GameObject O2WarningScreen1, jumpPrompt, jumpObject;
 
     float shootTimer;
 
@@ -585,6 +585,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             O2WarningScreen1.SetActive(true);
         }
+
+        if (other.CompareTag("JumpObj"))
+        {
+            jumpPrompt.SetActive(true);
+        }
+
+
         //End of Amata's Addition
 
         if (other.CompareTag("HidingSpot"))

@@ -21,6 +21,7 @@ TagManager:
   - Parts
   - Level
   - VentDoor
+  - JumpObj
   layers:
   - Default
   - TransparentFX
