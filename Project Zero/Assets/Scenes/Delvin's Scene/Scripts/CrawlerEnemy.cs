@@ -15,7 +15,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] int FOV;
     [SerializeField] int roamPauseTime;
     [SerializeField] int roamDistance;
-    [SerializeField] public float damageAmout = .5f;
+    [SerializeField] public float damageAmout = .25f;
 
     [SerializeField] float attackRate;
 
@@ -38,7 +38,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     void Start()
     {
- 
+        damageAmout = .25f;
         colorOrig = model.material.color;
         startingPos = transform.position;
         stoppingDisOrig = agent.stoppingDistance;
