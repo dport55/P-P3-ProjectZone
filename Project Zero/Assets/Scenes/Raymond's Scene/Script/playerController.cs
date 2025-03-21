@@ -381,53 +381,49 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // Hemant's Adittion
 
     void shoot()
-    {
-        shootTimer = 0;
-        //if (gunList.Count > 0)
-        //{
-        //    gunList[gunListPos].AmmoCur--;
-        //}
+{
+    shootTimer = 0;
 
-            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
-       
-    
-   
-    // Use the muzzle flash’s world position directly
+    // Play gun sound
+    gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+
+    // Get the muzzle position
     Vector3 muzzlePos = Muzzlepos.position;
+    Quaternion muzzleRot = Muzzlepos.rotation;
 
-        RaycastHit hit;
+        // Spawn the laser projectile prefab from the current gun's data
+        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+        laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
 
-        // Raycast from camera to detect hit point
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
+
+
+        // Pass damage and distance data to the Shot script
+        Shot shotScript = laser.GetComponent<Shot>();
+    if (shotScript != null)
+    {
+        shotScript.damage = gunList[gunListPos].shootDamage;   // Set damage per gun
+        shotScript.maxDistance = gunList[gunListPos].shootDist; // Set max range
+        shotScript.speed = 50f; // Adjust laser speed if needed
+    }
+
+    // Muzzle flash effect
+    StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
+
+    // Hit effect setup if we want to keep impact visuals
+    RaycastHit hit;
+    if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
+    {
+        IDamage dmg = hit.collider.GetComponent<IDamage>();
+        if (dmg != null)
         {
-            // Apply damage if the hit object has an IDamage component
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
-            {
-                dmg.TakeDamage(shootDamage, freezeTime, 0);
-            }
-
-            // Instantiate the hit effect at the point of impact
-            ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-            Destroy(hiteffect.gameObject, 0.05F);
-
-            // Instantiate the laser effect from muzzle to hit point
-            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
-
-            // Make the laser point toward the hit
-            laserBeam.transform.LookAt(hit.point);
-            float distance = Vector3.Distance(muzzlePos, hit.point);
-
-            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
-            laserBeam.transform.localScale = new Vector3(1, 1, distance);
-
-            // Destroy the laser after a short delay
-            Destroy(laserBeam, 0.05f);
-
+            dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
         }
 
-
+        ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+        Destroy(hitEffect.gameObject, 0.05f);
     }
+}
+
  
     public IEnumerator ShootEffect()
     {
