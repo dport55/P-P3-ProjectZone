@@ -83,6 +83,7 @@ public class DoorTrigger : MonoBehaviour
     public float openHeight = 3f;
     public float openSpeed = 2f;
     public string requiredKeyID;
+    private int partsRequired = 1;
 
     public float closeHeight = 0f;
     public float closeSpeed = 2f;
@@ -100,30 +101,47 @@ public class DoorTrigger : MonoBehaviour
         targetPosition2 = initialPosition + new Vector3(0, closeHeight, 0);
 
     }
-
+//Delvin's Changes
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !isOpening)
         {
+            PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Get the PlayerInventory component
             if (CompareTag("VentDoor")) // If the door is tagged as "VentDoor", open without a key
             {
                 isOpening = true;
                 StartCoroutine(OpenDoor());
             }
+            else if (CompareTag("WinDoor")) // If this door is the WinDoor
+            {
+                if (playerInventory != null && playerInventory.collectedParts >= partsRequired) // Check parts count
+                {
+                    isOpening = true;
+                    doorPrompt.SetActive(false); // Hide prompt
+                    StartCoroutine(OpenDoor());
+                }
+                else
+                {
+                    doorPrompt.SetActive(true); // Show message to collect more parts
+                }
+            }
             else // Otherwise, check if the player has the required key
             {
-                PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Get the PlayerInventory component
+           
                 if (playerInventory != null && playerInventory.HasKey(requiredKeyID)) // Check if player has the key
                 {
                     doorPrompt.SetActive(false);
                     isOpening = true;
                     StartCoroutine(OpenDoor());
                 }
-                doorPrompt.SetActive(true);
+                else
+                {
+                    doorPrompt.SetActive(true);
+                }
             }
         }
     }
-
+    //End of Delvin's Changes
 
     System.Collections.IEnumerator OpenDoor()
     {

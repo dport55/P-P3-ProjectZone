@@ -24,7 +24,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     private bool canBeFrozen = true; // Cooldown tracking
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
-    [Range(0, 1)][SerializeField] float audgrowlVol;
+   
     float growlTimer;
     public Collider attackCol1;
     public Collider attackCol2;
@@ -91,7 +91,7 @@ public class BossEnemy : MonoBehaviour, IDamage
             {
                 if (growlTimer >= 2f) // 2-second cooldown
                 {
-                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)], audgrowlVol);
+                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)]);
                     growlTimer = 0;
                 }
                 if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))

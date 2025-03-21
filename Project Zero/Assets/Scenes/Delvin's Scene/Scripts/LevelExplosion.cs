@@ -7,6 +7,10 @@ public class LevelExplosion : MonoBehaviour
     [SerializeField] private GameObject explosionEffect;
     [SerializeField] private float radius = 5f;
     [SerializeField] private float force = 700f;
+    [SerializeField] public AudioSource explosionSound;
+    [SerializeField] public AudioClip[] explosionClip;
+    [SerializeField] public float vol;
+
 
     private float countdown;
     private bool hasExploded = false;
@@ -56,6 +60,8 @@ public class LevelExplosion : MonoBehaviour
 
                 // Apply explosion force
                 rb.AddExplosionForce(force, transform.position, radius);
+                explosionSound.PlayOneShot(explosionClip[Random.Range(0, explosionClip.Length)], vol);
+                Debug.Log(vol);
             }
         }
 
