@@ -98,10 +98,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     private bool isRefillingOxygen = false;
     private  bool isTakingOxygenDamage = false;
-    //End of Delvin's Additions
+
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
     [SerializeField] GameObject Cam;// UI Prompt for camera
+    //End of Delvin's Additions
+
+
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -148,11 +151,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
+        //Delvin's Additions
 
         if (!isTakingOxygenDamage)
         {
             TryRefillOxygen();
         }
+        //End of Delvin's Additions
 
         //Interact();
         slide();
@@ -619,6 +624,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
             hidePrompt.SetActive(true);
+        }
+        else if (other.CompareTag("WinTrigger"))
+        {
+            GameManager.instance.ShowWinMenu();
         }
     }
 

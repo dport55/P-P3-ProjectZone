@@ -21,6 +21,8 @@ TagManager:
   - Parts
   - Level
   - VentDoor
+  - WinDoor
+  - WinTrigger
   layers:
   - Default
   - TransparentFX
