@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1267055642121941502}
   - component: {fileID: 5817837272729584192}
   - component: {fileID: -5691704085536948473}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 'Red Laser '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
