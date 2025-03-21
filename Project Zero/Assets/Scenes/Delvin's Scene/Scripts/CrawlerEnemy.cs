@@ -21,7 +21,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
-    [Range(0, 1)][SerializeField] float audgrowlVol;
+
 
     public Collider attackCol;
 
@@ -113,7 +113,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
                 // Prevent growl spam
                 if (growlTimer >= 2f) // 2-second cooldown
                 {
-                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)], audgrowlVol);
+                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)]);
                     growlTimer = 0;
                 }
                 if (agent.remainingDistance <= agent.stoppingDistance)
