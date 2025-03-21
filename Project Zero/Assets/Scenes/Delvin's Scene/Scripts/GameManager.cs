@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public GameObject WinCam;
     public Image playerHPBar;
     public Image playerO2Bar;
+    public Animator creditsAnimator;
+
     [SerializeField] TMP_Text goalCountText;
 
     public GameObject Explosion1;
@@ -83,19 +85,23 @@ public class GameManager : MonoBehaviour
         WinCam.SetActive(true); // Enable the WinCam
         menuActive = menuWin;
         menuActive.SetActive(true);
-
-        // Activate explosions immediately
+  
+      
         Explosion1.SetActive(true);
         Explosion2.SetActive(true);
         Explosion3.SetActive(true);
         Explosion4.SetActive(true);
         Explosion5.SetActive(true);
         Explosion6.SetActive(true);
-  
+StartCoroutine(DelayPauseAndCredits(3f));
+       
 
-
-    // Start coroutine to delay pause and credits
-    StartCoroutine(DelayPauseAndCredits(3f));
+        if (creditsAnimator != null)
+        {
+            creditsAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
+        // Start coroutine to delay pause and credits
+        
     StartCoroutine(DelayPause());// 3 seconds delay
     }
 
@@ -108,7 +114,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator DelayPause()
     {
-        yield return new WaitForSeconds(35f); // Wait for specified time
+        yield return new WaitForSeconds(7f); // Wait for specified time
 
 
         statePause(); // Show credits  statePause(); // Pause the game
