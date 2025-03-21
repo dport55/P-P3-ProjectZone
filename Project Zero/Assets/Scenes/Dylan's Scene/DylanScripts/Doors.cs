@@ -119,7 +119,10 @@ public class DoorTrigger : MonoBehaviour
                     isOpening = true;
                     StartCoroutine(OpenDoor());
                 }
-                doorPrompt.SetActive(true);
+                else
+                {
+                    doorPrompt.SetActive(true);
+                }
             }
         }
     }
