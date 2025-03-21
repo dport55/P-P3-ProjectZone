@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
+    private bool isPlayingBreathing = false;
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
     [SerializeField] LayerMask ignoreLayer;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
     [SerializeField] Transform Laser, RedSphere, BlueSphere;
+    [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
     [SerializeField] AudioSource aud;
@@ -38,6 +40,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Range(0, 1)][SerializeField] float audHurtVol;
     [Range(0, 1)][SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
+
+    //Delvin's Additions
+
+    [SerializeField] AudioClip[] breathing;
+    //End of Delvin's Additions
 
 
     [Header("---- UI ----")]
@@ -83,11 +90,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private int collectedParts;
     //Delvin's Additions
     public GameObject playerDamageScreen;
+    public GameObject playerO2Screen;
     public bool isHiding = false;
     private Transform hideSpotInside; // Position inside the hiding place
     private Transform hideSpotOutside; // Position outside the hiding place
     private bool canHide = false; // Player is near a hiding spot
-                                  //End of Delvin's Additions
+
+    private bool isRefillingOxygen = false;
+    private  bool isTakingOxygenDamage = false;
+    //End of Delvin's Additions
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
     [SerializeField] GameObject Cam;// UI Prompt for camera
@@ -137,7 +148,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
-   
+
+        if (!isTakingOxygenDamage)
+        {
+            TryRefillOxygen();
+        }
+
         //Interact();
         slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
@@ -371,16 +387,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //{
         //    gunList[gunListPos].AmmoCur--;
         //}
-        aud.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
-        // Start coroutine to turn off muzzle flash after a short delay
-
-        //// Activate the muzzle flash and randomize rotation
-        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-        //Laser.gameObject.SetActive(true);
-
-        // Use the muzzle flash’s world position directly
-        Vector3 muzzlePos = Laser.position;
+            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+       
+    
+   
+    // Use the muzzle flash’s world position directly
+    Vector3 muzzlePos = Laser.position;
 
         RaycastHit hit;
 
@@ -415,7 +428,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
 
     }
-
+ 
     public IEnumerator ShootEffect()
     {
         if (gunList[gunListPos] && gunList[gunListPos].shootSound != null)
@@ -445,22 +458,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Laser.gameObject.SetActive(false);
 
     }
-    public void TakeDamage(float amount, float Freeze, float O2)
-    {
-
-        HP -= amount;
-        Oxygen -= O2;
-        StartCoroutine(flashDamageScreen());
-        UpdatePlayerUI();
-        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
-
-
-        if (HP <= 0 || Oxygen <= 0)
-        {
-            GameManager.instance.youLose();
-
-        }
-    }
 
     void UpdatePlayerUI()
     {
@@ -483,9 +480,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
         freezeTime = gunList[gunListPos].freezeTime;
+        ////Delvins Additions
+        //gunAudio = gunList[gunListPos].model.GetComponent<AudioSource>();
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+      
+        
+
         //if(gunModel.name == "Freeze Gun")
         //{
         //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
@@ -658,6 +661,84 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             exitPrompt.SetActive(false);
         }
     }
+    public void TakeDamage(float amount, float Freeze, float O2)
+    {
+        if (amount > 0)
+        {
+            HP -= amount;
+            aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+            StartCoroutine(flashDamageScreen());
+        }
+        if (O2 > 0)
+        {
+            Oxygen -= O2;
+            StartCoroutine(flashO2Screen());
+            StartCoroutine(PlayBreathing());
+            isTakingOxygenDamage = true; // player taking O2 damage
+            isRefillingOxygen = false;   // Stop refilling
+            StartCoroutine(ResetOxygenDamage()); // Allow refill 
+        }
+
+        UpdatePlayerUI();
+
+        if (HP <= 0 || Oxygen <= 0)
+        {
+            GameManager.instance.youLose();
+        }
+    }
+
+    private IEnumerator ResetOxygenDamage()
+    {
+        yield return new WaitForSeconds(2f);
+        isTakingOxygenDamage = false; 
+    }
+    IEnumerator PlayBreathing()
+    {
+        if (isPlayingBreathing) yield break; // Prevent overlapping sounds
+
+        isPlayingBreathing = true;
+        AudioClip clip = breathing[Random.Range(0, breathing.Length)];
+        aud.PlayOneShot(clip, 1f);
+        yield return new WaitForSeconds(clip.length); // Wait until the sound finishes
+        isPlayingBreathing = false;
+    }
+
+    // Call this function to play breathing sound
+    void PlayBreathingSound()
+    {
+        StartCoroutine(PlayBreathing());
+    }
+    // Oxygen refill coroutine
+    private IEnumerator RefillOxygen()
+    {
+        isRefillingOxygen = true;
+
+        while (Oxygen < 100f && !isTakingOxygenDamage) 
+        {
+            StartCoroutine(PlayBreathing());
+            Oxygen += 10f * Time.deltaTime; 
+            Oxygen = Mathf.Min(Oxygen, 100f);
+            UpdatePlayerUI(); // Update UI to reflect oxygen change
+            yield return null; 
+        }
+
+        isRefillingOxygen = false; 
+    }
+
+    private void TryRefillOxygen()
+    {
+        if (Oxygen < 100f && !isTakingOxygenDamage && !isRefillingOxygen)
+        {
+            StartCoroutine(RefillOxygen());
+        }
+    }
+    IEnumerator flashO2Screen()
+    {
+        playerO2Screen.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        playerO2Screen.SetActive(false);
+    }
+
     //End od Delvin's Additions
 
 }
