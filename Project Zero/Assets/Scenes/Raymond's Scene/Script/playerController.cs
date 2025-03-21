@@ -387,42 +387,38 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // Play gun sound
     gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
-    // Get the muzzle position
-    Vector3 muzzlePos = Muzzlepos.position;
-    Quaternion muzzleRot = Muzzlepos.rotation;
-
         // Spawn the laser projectile prefab from the current gun's data
         GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
         laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
-
-
 
         // Pass damage and distance data to the Shot script
         Shot shotScript = laser.GetComponent<Shot>();
     if (shotScript != null)
     {
-        shotScript.damage = gunList[gunListPos].shootDamage;   // Set damage per gun
-        shotScript.maxDistance = gunList[gunListPos].shootDist; // Set max range
-        shotScript.speed = 50f; // Adjust laser speed if needed
-    }
+        shotScript.freezetime = gunList[gunListPos].freezeTime;
+        shotScript.damage = gunList[gunListPos].shootDamage;  
+        shotScript.maxDistance = gunList[gunListPos].shootDist; 
+        shotScript.speed = 50f; 
+            shotScript.hitEffect = gunList[gunListPos].HitEffect;
+        }
 
     // Muzzle flash effect
     StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
 
-    // Hit effect setup if we want to keep impact visuals
-    RaycastHit hit;
-    if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
-    {
-        IDamage dmg = hit.collider.GetComponent<IDamage>();
-        if (dmg != null)
-        {
-            dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
-        }
+        //Hit effect setup if we want to keep impact visuals
+       //RaycastHit hit;
+       // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
+       // {
+       //     IDamage dmg = hit.collider.GetComponent<IDamage>();
+       //     if (dmg != null)
+       //     {
+       //         dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
+       //     }
 
-        ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-        Destroy(hitEffect.gameObject, 0.05f);
+       //     ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+       //     Destroy(hitEffect.gameObject, 0.05f);
+       // }
     }
-}
 
  
     public IEnumerator ShootEffect()
