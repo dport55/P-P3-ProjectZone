@@ -3,37 +3,18 @@ using UnityEngine;
 public class PartsPickup : MonoBehaviour
 {
     [SerializeField] GameObject part;
-    public int collectedParts;
+    //public int collectedParts;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Player"))
-    //    {
-    //        IPickup playerController = GetComponent<IPickup>();
-    //        playerController.CollectPart();
-    //        Destroy(gameObject);
-    //    }
-    //}
-
+    //Delvin's Changes
     private void OnTriggerEnter(Collider other)
     {
-        IPickup pick = other.GetComponent<IPickup>();
+        PlayerInventory pick = other.GetComponent<PlayerInventory>(); // Get IPickup interface from Player
+
         if (pick != null)
         {
-            pick.getParts(part);
-            Destroy(gameObject);
+            pick.getParts(part); // Call getParts() on PlayerInventory
+            Destroy(gameObject); // Destroy part after collection
         }
     }
+    //End of Delvin's Changes
 }

@@ -29,17 +29,20 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform Laser, RedSphere, BlueSphere;
+    [SerializeField] Transform Muzzlepos, RedFlash, BlueFlash;
     [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
-    [SerializeField] AudioSource aud;
+    [SerializeField] AudioSource aud, stepSource;
     [Range(0, 1)][SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
     [Range(0, 1)][SerializeField] AudioClip[] audHurt;
     [Range(0, 1)][SerializeField] float audHurtVol;
     [Range(0, 1)][SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
+
+
+    private int currentStepIndex = 0;
 
     //Delvin's Additions
 
@@ -57,7 +60,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     bool isPlayerSteps;
 
     int gunListPos;
-    //End
+    //End Hemant's Adittion
 
     [Header("---- Stats ----")]
     public float HP = 6;
@@ -98,10 +101,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     private bool isRefillingOxygen = false;
     private  bool isTakingOxygenDamage = false;
-    //End of Delvin's Additions
+
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
     [SerializeField] GameObject Cam;// UI Prompt for camera
+    //End of Delvin's Additions
+
+
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -122,8 +128,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
-        RedSphere.gameObject.SetActive(false);
-        BlueSphere.gameObject.SetActive(false);
+        RedFlash.gameObject.SetActive(false);
+        BlueFlash.gameObject.SetActive(false);
         isHiding = false;
 
         hidePrompt.SetActive(false);
@@ -148,11 +154,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
+        //Delvin's Additions
 
         if (!isTakingOxygenDamage)
         {
             TryRefillOxygen();
         }
+        //End of Delvin's Additions
 
         //Interact();
         slide();
@@ -228,7 +236,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator playSteps()
     {
         isPlayerSteps = true;
-        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+        stepSource.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
+
+        // Move to the next sound and loop back if needed
+        currentStepIndex++;
+        if (currentStepIndex >= audSteps.Length)
+        {
+            currentStepIndex = 0;  // Reset to loop sounds
+        }
+
 
         if (!isSprinting)
         {
@@ -236,7 +252,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         }
         else
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.35f);
         isPlayerSteps = false;
     }
     //End
@@ -381,53 +397,45 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // Hemant's Adittion
 
     void shoot()
+{
+    shootTimer = 0;
+
+    // Play gun sound
+    gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+
+        // Spawn the laser projectile prefab from the current gun's data
+        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+        laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
+
+        // Pass damage and distance data to the Shot script
+        Shot shotScript = laser.GetComponent<Shot>();
+    if (shotScript != null)
     {
-        shootTimer = 0;
-        //if (gunList.Count > 0)
-        //{
-        //    gunList[gunListPos].AmmoCur--;
-        //}
-
-            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
-       
-    
-   
-    // Use the muzzle flash’s world position directly
-    Vector3 muzzlePos = Laser.position;
-
-        RaycastHit hit;
-
-        // Raycast from camera to detect hit point
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
-        {
-            // Apply damage if the hit object has an IDamage component
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
-            {
-                dmg.TakeDamage(shootDamage, freezeTime, 0);
-            }
-
-            // Instantiate the hit effect at the point of impact
-            ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-            Destroy(hiteffect.gameObject, 0.05F);
-
-            // Instantiate the laser effect from muzzle to hit point
-            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
-
-            // Make the laser point toward the hit
-            laserBeam.transform.LookAt(hit.point);
-            float distance = Vector3.Distance(muzzlePos, hit.point);
-
-            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
-            laserBeam.transform.localScale = new Vector3(1, 1, distance);
-
-            // Destroy the laser after a short delay
-            Destroy(laserBeam, 0.05f);
-
+        shotScript.freezetime = gunList[gunListPos].freezeTime;
+        shotScript.damage = gunList[gunListPos].shootDamage;  
+        shotScript.maxDistance = gunList[gunListPos].shootDist; 
+        shotScript.speed = 50f; 
+            shotScript.hitEffect = gunList[gunListPos].HitEffect;
         }
 
+    // Muzzle flash effect
+    StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
 
+        //Hit effect setup if we want to keep impact visuals
+       //RaycastHit hit;
+       // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
+       // {
+       //     IDamage dmg = hit.collider.GetComponent<IDamage>();
+       //     if (dmg != null)
+       //     {
+       //         dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
+       //     }
+
+       //     ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+       //     Destroy(hitEffect.gameObject, 0.05f);
+       // }
     }
+
  
     public IEnumerator ShootEffect()
     {
@@ -443,17 +451,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (!_Sphere)
         {
-            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            BlueSphere.gameObject.SetActive(true);
+            BlueFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            BlueSphere.gameObject.SetActive(false);
+            BlueFlash.gameObject.SetActive(false);
         }
         if (_Sphere)
         {
-            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            RedSphere.gameObject.SetActive(true);
+            RedFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            RedSphere.gameObject.SetActive(false);
+            RedFlash.gameObject.SetActive(false);
         }
         //Laser.gameObject.SetActive(false);
 
@@ -524,7 +532,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.WeaponsDisplay.SetActive(true);
 
-            if (!gunList[gunListPos].RedSphere)
+            if (!gunList[gunListPos].RedFlash)
             {
                 GameManager.instance.RedDisplay.SetActive(false);
                 GameManager.instance.BlueDisplay.SetActive(true);
@@ -619,6 +627,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
             hidePrompt.SetActive(true);
+        }
+        else if (other.CompareTag("WinTrigger"))
+        {
+            GameManager.instance.ShowWinMenu();
         }
     }
 

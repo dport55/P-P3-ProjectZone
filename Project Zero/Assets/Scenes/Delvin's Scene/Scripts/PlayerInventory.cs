@@ -9,7 +9,7 @@ public class PlayerInventory : MonoBehaviour
     public GameObject inventoryPanel; // Assign the Inventory UI Panel in the Inspector
     public GameObject keyContainer;   // Assign a UI Container (e.g., an empty GameObject with Grid Layout)
     public GameObject keyImagePrefab; // Prefab for displaying collected keys
-
+    public int collectedParts = 0;
     private bool isInventoryOpen = false;
 
     void Update()
@@ -19,6 +19,7 @@ public class PlayerInventory : MonoBehaviour
             
             ToggleInventory();
         }
+
     }
 
     void ToggleInventory()
@@ -62,5 +63,12 @@ public class PlayerInventory : MonoBehaviour
     public bool HasKey(string keyID)
     {
         return collectedKeys.ContainsKey(keyID);
+    }
+
+    public void getParts(GameObject part)
+    {
+        collectedParts++; // Increase part count
+        GameManager.instance.updateGameGoal(collectedParts);
+        Debug.Log("Parts Collected: " + collectedParts);
     }
 }
