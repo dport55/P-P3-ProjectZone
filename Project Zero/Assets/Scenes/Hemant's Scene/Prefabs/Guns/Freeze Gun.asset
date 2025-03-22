@@ -22,6 +22,6 @@ MonoBehaviour:
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
   freezeTime: 5
   HitEffect: {fileID: 848933242839161176, guid: 0a13663f2fda8814d9a9b8b1fb4ddfdb, type: 3}
-  ShootEffect: {fileID: 4732082873416208967, guid: 080bec8d2c1cc374eb683a6521b97cc7, type: 3}
+  ShootEffect: {fileID: 8899081000178884001, guid: 080bec8d2c1cc374eb683a6521b97cc7, type: 3}
   shootSound: {fileID: 8300000, guid: 5ef76ea16550a0748a47d2836535dccd, type: 3}
   shootVol: 0.3
