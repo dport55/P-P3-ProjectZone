@@ -33,13 +33,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
-    [SerializeField] AudioSource aud;
+    [SerializeField] AudioSource aud, stepSource;
     [Range(0, 1)][SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
     [Range(0, 1)][SerializeField] AudioClip[] audHurt;
     [Range(0, 1)][SerializeField] float audHurtVol;
     [Range(0, 1)][SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
+
+
+    private int currentStepIndex = 0;
 
     //Delvin's Additions
 
@@ -57,7 +60,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     bool isPlayerSteps;
 
     int gunListPos;
-    //End
+    //End Hemant's Adittion
 
     [Header("---- Stats ----")]
     public float HP = 6;
@@ -233,7 +236,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator playSteps()
     {
         isPlayerSteps = true;
-        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+        stepSource.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
+
+        // Move to the next sound and loop back if needed
+        currentStepIndex++;
+        if (currentStepIndex >= audSteps.Length)
+        {
+            currentStepIndex = 0;  // Reset to loop sounds
+        }
+
 
         if (!isSprinting)
         {
@@ -241,7 +252,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         }
         else
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.35f);
         isPlayerSteps = false;
     }
     //End
