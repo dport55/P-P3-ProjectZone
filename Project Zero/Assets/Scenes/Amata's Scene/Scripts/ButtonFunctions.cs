@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
+    [SerializeField] GameObject mainMenuSettings, mainMenuCredits;
     public void resume()
     {
         GameManager.instance.stateUnpause();
@@ -33,12 +34,27 @@ public class ButtonFunctions : MonoBehaviour
     public void SettingsMenu()
     {
       
-        GameManager.instance.ShowSettings();
+        GameManager.instance.MainMenuSettings();
     }
 
+    //public void MainMenuSettings()
+    //{
+    //    mainMenuSettings.SetActive(true);
+
+    //}
+
+    public void MainMenuCredits()
+    {
+        mainMenuCredits.SetActive(true);
+    }
     public void BackButton()
     {
 
         GameManager.instance.pauseShow();
     }
+
+    //public void MainMenuBackButton()
+    //{
+        
+    //}
 }

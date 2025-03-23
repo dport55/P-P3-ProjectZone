@@ -21,8 +21,7 @@ TagManager:
   - Parts
   - Level
   - VentDoor
-  - WinDoor
-  - WinTrigger
+  - JumpObj
   layers:
   - Default
   - TransparentFX
@@ -32,10 +31,10 @@ TagManager:
   - UI
   - wall
   - enemy
-  - Weapon
+  - 
   - Map Icon
   - Player
-  - Laser
+  - 
   - 
   - 
   - 
