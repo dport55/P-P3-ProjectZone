@@ -38,11 +38,18 @@ public class GameManager : MonoBehaviour
     public bool isPaused;
 
 
-    
+
     //change
 
     //Hemant's Addition
     public GameObject WeaponsDisplay, RedDisplay, BlueDisplay;
+
+    [Header("Audio Settings")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip background_aud;
+    [Range(0, 1)][SerializeField] float aud_vol;
+    bool GameON;
+
     //End
 
 
@@ -54,8 +61,28 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
+
+        //Hemant's Addition
+        PlayBackgroundMusic();
+        //End
     }
 
+    //Hemant's Addition
+    void PlayBackgroundMusic()
+    {
+        if (aud != null && background_aud != null)
+        {
+            aud.clip = background_aud;
+            aud.volume = aud_vol;
+            aud.loop = true;  // Ensure it loops
+            aud.Play();
+        }
+        else
+        {
+            Debug.LogWarning("AudioSource or AudioClip is missing!");
+        }
+    }
+    //End
 
     private void Start()
     {
