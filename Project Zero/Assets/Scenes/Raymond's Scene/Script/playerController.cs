@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
-    [SerializeField] AudioSource aud, stepSource;
+    [SerializeField] AudioSource aud;
     [Range(0, 1)][SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
     [Range(0, 1)][SerializeField] AudioClip[] audHurt;
@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator playSteps()
     {
         isPlayerSteps = true;
-        stepSource.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
+        aud.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
 
         // Move to the next sound and loop back if needed
         currentStepIndex++;
@@ -248,7 +248,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         if (!isSprinting)
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.7f);
 
         }
         else
