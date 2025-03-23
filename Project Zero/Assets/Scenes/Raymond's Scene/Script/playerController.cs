@@ -434,7 +434,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
             gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
         }
+
     }
+
+    
+
+
 
     public IEnumerator ShootEffect()
     {
