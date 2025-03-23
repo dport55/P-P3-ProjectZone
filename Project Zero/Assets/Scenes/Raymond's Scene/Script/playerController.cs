@@ -422,21 +422,22 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
 
         //Hit effect setup if we want to keep impact visuals
-       //RaycastHit hit;
-       // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
-       // {
-       //     IDamage dmg = hit.collider.GetComponent<IDamage>();
-       //     if (dmg != null)
-       //     {
-       //         dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
-       //     }
+        //RaycastHit hit;
+        // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
+        // {
+        //     IDamage dmg = hit.collider.GetComponent<IDamage>();
+        //     if (dmg != null)
+        //     {
+        //         dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
+        //     }
 
-       //     ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-       //     Destroy(hitEffect.gameObject, 0.05f);
-       // }
+        //     ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
+        //     Destroy(hitEffect.gameObject, 0.05f);
+        // }
+   
     }
 
- 
+
     public IEnumerator ShootEffect()
     {
         if (gunList[gunListPos] && gunList[gunListPos].shootSound != null)
