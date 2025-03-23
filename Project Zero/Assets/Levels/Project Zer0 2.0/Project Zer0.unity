@@ -6030,6 +6030,10 @@ PrefabInstance:
       propertyPath: screamerEnemy
       value: 
       objectReference: {fileID: 4704678433691568610}
+    - target: {fileID: 4489943337937219238, guid: 13914bf67d5937a4d95c8453d06f560a, type: 3}
+      propertyPath: background_aud
+      value: 
+      objectReference: {fileID: 8300000, guid: ee9cb67a664e759488932e1551fa48b4, type: 3}
     - target: {fileID: 6428921757354591227, guid: 13914bf67d5937a4d95c8453d06f560a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
