@@ -754,7 +754,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator flashO2Screen()
     {
         playerO2Screen.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(.5f);
         playerO2Screen.SetActive(false);
     }
 

@@ -24,7 +24,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     private bool canBeFrozen = true; // Cooldown tracking
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
-   
+    [SerializeField] AudioClip[] hurtGrowl;
     float growlTimer;
     public Collider attackCol1;
     public Collider attackCol2;
@@ -202,23 +202,47 @@ public class BossEnemy : MonoBehaviour, IDamage
     public void SetTarget(Transform target)
     {
         if (target == null) return;
-
+        agent.speed *= 1.5f;
         agent.SetDestination(target.position);
         anim.Play("run2");
         playerInRange = true;
     }
-
     public void TakeDamage(float damage, float Freeze, float O2)
     {
         if (Freeze > 0)
         {
-            Stun(Freeze); // Apply freeze effect if allowed
+            Stun(Freeze); 
         }
         else if (damage > 0)
         {
             HP -= damage;
-            StartCoroutine(FlashRed());
+
+            // Increase movement speed when hit
+            agent.speed *= 1.5f; 
+
+            // Check if the boss is currently attacking
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack2RLSpike"))
+            {
+                
+                anim.Play("run2");
+
+                // Array of possible hurt animations
+                string[] hurtAnimations = { "gethit4", "gethit3", "gethit1" };
+
+                // Play a random hurt animation
+                string randomHurtAnim = hurtAnimations[Random.Range(0, hurtAnimations.Length)];
+                anim.Play(randomHurtAnim);
+
+                // Play hurt sound 
+                if (hurtGrowl.Length > 0)
+                {
+                    aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
+                }
+
+                StartCoroutine(FlashRed());
+            }
         }
+
         agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0)
