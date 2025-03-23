@@ -34,14 +34,14 @@ public class ButtonFunctions : MonoBehaviour
     public void SettingsMenu()
     {
       
-        GameManager.instance.ShowSettings();
+        GameManager.instance.MainMenuSettings();
     }
 
-    public void MainMenuSettings()
-    {
-        mainMenuSettings.SetActive(true);
+    //public void MainMenuSettings()
+    //{
+    //    mainMenuSettings.SetActive(true);
 
-    }
+    //}
 
     public void MainMenuCredits()
     {
@@ -53,9 +53,8 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.pauseShow();
     }
 
-    public void MainMenuBackButton()
-    {
-        mainMenuCredits.SetActive(false);
-        mainMenuSettings.SetActive(false);
-    }
+    //public void MainMenuBackButton()
+    //{
+        
+    //}
 }

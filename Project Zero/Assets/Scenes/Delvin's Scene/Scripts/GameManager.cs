@@ -234,5 +234,17 @@ StartCoroutine(DelayPauseAndCredits(3f));
         goalCountText.text = parts.ToString("F0") + "/10";
 
     }
+
+    public void MainMenuSettings()
+    {
+        Time.timeScale = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SettingsMenu.SetActive(true);
+
+    }
+
     //End of Delvin's Changes
+
+
 }
