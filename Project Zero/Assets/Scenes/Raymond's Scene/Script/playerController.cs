@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
-    [SerializeField] AudioSource aud, stepSource;
+    [SerializeField] AudioSource aud;
     [Range(0, 1)][SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
     [Range(0, 1)][SerializeField] AudioClip[] audHurt;
@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator playSteps()
     {
         isPlayerSteps = true;
-        stepSource.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
+        aud.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
 
         // Move to the next sound and loop back if needed
         currentStepIndex++;
@@ -248,7 +248,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         if (!isSprinting)
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.7f);
 
         }
         else
@@ -397,46 +397,50 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // Hemant's Adittion
 
     void shoot()
-{
-    shootTimer = 0;
-
-    // Play gun sound
-    gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
-
-        // Spawn the laser projectile prefab from the current gun's data
-        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
-        laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
-
-        // Pass damage and distance data to the Shot script
-        Shot shotScript = laser.GetComponent<Shot>();
-    if (shotScript != null)
     {
-        shotScript.freezetime = gunList[gunListPos].freezeTime;
-        shotScript.damage = gunList[gunListPos].shootDamage;  
-        shotScript.maxDistance = gunList[gunListPos].shootDist; 
-        shotScript.speed = 50f; 
-            shotScript.hitEffect = gunList[gunListPos].HitEffect;
+
+        if (gunList[gunListPos].AmmoCur > 0)
+        {
+            shootTimer = 0;
+            gunList[gunListPos].AmmoCur--;
+            // Play gun sound
+            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+
+            // Spawn the laser projectile prefab from the current gun's data
+            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+            laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
+
+            // Pass damage and distance data to the Shot script
+            Shot shotScript = laser.GetComponent<Shot>();
+            if (shotScript != null)
+            {
+                shotScript.freezetime = gunList[gunListPos].freezeTime;
+                shotScript.damage = gunList[gunListPos].shootDamage;
+                shotScript.maxDistance = gunList[gunListPos].shootDist;
+                shotScript.speed = 50f;
+                shotScript.hitEffect = gunList[gunListPos].HitEffect;
+            }
+
+            // Muzzle flash effect
+            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
         }
-
-    // Muzzle flash effect
-    StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
-
-        //Hit effect setup if we want to keep impact visuals
-       //RaycastHit hit;
-       // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shotScript.maxDistance, ~ignoreLayer))
-       // {
-       //     IDamage dmg = hit.collider.GetComponent<IDamage>();
-       //     if (dmg != null)
-       //     {
-       //         dmg.TakeDamage(gunList[gunListPos].shootDamage, freezeTime, 0);
-       //     }
-
-       //     ParticleSystem hitEffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-       //     Destroy(hitEffect.gameObject, 0.05f);
-       // }
+        else { StartCoroutine(Reload()); }
     }
 
- 
+    public IEnumerator Reload()
+    {
+        if (gunList[gunListPos].AmmoCur == 0)
+        {
+            yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
+            gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
+        }
+
+    }
+
+    
+
+
+
     public IEnumerator ShootEffect()
     {
         if (gunList[gunListPos] && gunList[gunListPos].shootSound != null)
