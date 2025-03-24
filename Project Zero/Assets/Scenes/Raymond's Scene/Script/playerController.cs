@@ -77,11 +77,24 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float interactRange = 2f;
 
     [Header("---- Slide Settings ----")]
-    [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
-    [SerializeField] private float slideDuration = 0f; // Time before slowing down
-    [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
+    [SerializeField] private float slideSpeed = 0f;
+    [SerializeField] private float slideDuration = 0f;
+    [SerializeField] private float slideFriction = 0f;
+    [SerializeField] private float slideCooldownTime = 2f;
 
+    private bool canSlide = true;
     private bool isSliding = false;
+
+    [Header("---- Stamina Settings ----")]
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaRegenRate = 10f;
+    [SerializeField] private float slideStaminaDrain = 25f;
+    [SerializeField] private float staminaDrainRate = 15f;
+    [SerializeField] private float fatigueRecoveryTime = 3f;
+
+    private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued 
+    private float currentStamina;
+    private bool isFatigued = false;
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -156,7 +169,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         crouch();
         ToggleFlashlight();
         //Delvin's Additions
-
+          HandleStamina();
         if (!isTakingOxygenDamage)
         {
             TryRefillOxygen();
@@ -236,16 +249,52 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //End
     }
 
+    private void HandleStamina()
+    {
+        if (isFatigued)
+        {
+            // Wait for stamina to fully recover before removing fatigue
+            if (currentStamina >= maxStamina)
+            {
+                isFatigued = false;
+            }
+        }
+        else
+        {
+            if (Input.GetButton("Sprint") && moveDir.magnitude > 0)
+            {
+                currentStamina -= staminaDrainRate * Time.deltaTime;
+            }
+            else
+            {
+                // Regenerate stamina over time if not fatigued
+                currentStamina = Mathf.Min(maxStamina, currentStamina + staminaRegenRate * Time.deltaTime);
+            }
+
+            // If stamina fully depletes, trigger fatigue
+            if (currentStamina <= fatigueThreshold)
+            {
+                isFatigued = true;
+                StartCoroutine(FatigueRecovery());
+            }
+        }
+    }
+    //Raymonds Additions
+    private IEnumerator FatigueRecovery()
+    {
+        yield return new WaitForSeconds(fatigueRecoveryTime);
+        currentStamina = maxStamina; // Fully restore stamina after waiting
+    }
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint") && !isCrouching)
+        if (!isFatigued && Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
-        else if (Input.GetButtonUp("Sprint"))
+        if (Input.GetButtonUp("Sprint"))
         {
-            speed /= sprintMod;
+            speed = originalSpeed;
             isSprinting = false;
         }
     }
@@ -320,16 +369,20 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void slide()
     {
-        if (Input.GetButtonDown("Slide") && isSprinting && !isSliding)
+        if (!isFatigued && canSlide && Input.GetButtonDown("Slide"))
         {
             StartCoroutine(SlideRoutine());
         }
     }
-
+    //Raymonds Additions
     IEnumerator SlideRoutine()
     {
+        if (!canSlide)
+            yield break;
+
         isSliding = true;
         isCrouching = true;
+        canSlide = false;
 
         // Temporarily lower player height
         Controller.height = 1f;
@@ -345,7 +398,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             yield return null;
         }
 
-        // Reset states
         isSliding = false;
 
         if (!Input.GetButton("Crouch"))
@@ -353,8 +405,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             Controller.height = 2f;
             isCrouching = false;
         }
-    }
 
+        // Start cooldown before allowing another slide
+        yield return new WaitForSeconds(slideCooldownTime);
+        canSlide = true;
+    }
     void ToggleFlashlight()
     {
         if (Input.GetButtonDown("Flashlight"))
