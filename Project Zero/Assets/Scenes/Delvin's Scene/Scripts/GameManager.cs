@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     public GameObject Explosion5;
     public GameObject Explosion6;
     public GameObject Credits;
+    public GameObject ship;
+    public GameObject playerMarker;
+    public GameObject[] displayClose;
 
     //End of Delvin's Changes
     public bool isPaused;
@@ -108,19 +111,18 @@ public class GameManager : MonoBehaviour
 //Delvin's Changes
     public void ShowWinMenu()
     {
-        //MainCamera.enabled = false; // Disable camera switcher
+        foreach (GameObject close in displayClose)
+        {
+            close.SetActive(false);
+        }
+        retical.SetActive(false);
+        playerMarker.SetActive(false);
         WinCam.SetActive(true); // Enable the WinCam
         menuActive = menuWin;
         menuActive.SetActive(true);
-  
-      
-        Explosion1.SetActive(true);
-        Explosion2.SetActive(true);
-        Explosion3.SetActive(true);
-        Explosion4.SetActive(true);
-        Explosion5.SetActive(true);
-        Explosion6.SetActive(true);
-StartCoroutine(DelayPauseAndCredits(3f));
+        StartCoroutine(ShipTakeoff());
+
+       StartCoroutine(DelayPauseAndCredits(6f));
        
 
         if (creditsAnimator != null)
@@ -139,9 +141,47 @@ StartCoroutine(DelayPauseAndCredits(3f));
       
         Credits.SetActive(true); // Show credits  statePause(); // Pause the game
     }
+    private IEnumerator ShipTakeoff()
+    {
+        ship.SetActive(true); // Activate ship, animation should play automatically
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds before triggering explosions
+
+        // Activate explosions after delay
+        Explosion1.SetActive(true);
+        Explosion2.SetActive(true);
+        Explosion3.SetActive(true);
+        Explosion4.SetActive(true);
+        Explosion5.SetActive(true);
+        Explosion6.SetActive(true);
+
+        StartCoroutine(CameraShake(WinCam, 0.5f, 0.3f)); // Shake camera when explosions start
+    }
+
+    // Camera Shake Effect
+    private IEnumerator CameraShake(GameObject targetCam, float duration, float magnitude)
+    {
+        if (targetCam == null) yield break; // Prevent errors if WinCam is not assigned
+
+        Transform camTransform = targetCam.transform;
+        Vector3 originalPosition = camTransform.localPosition;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float offsetX = Random.Range(-1f, 1f) * magnitude;
+            float offsetY = Random.Range(-1f, 1f) * magnitude;
+            camTransform.localPosition = originalPosition + new Vector3(offsetX, offsetY, 0);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        camTransform.localPosition = originalPosition; // Reset camera position
+    }
+
     private IEnumerator DelayPause()
     {
-        yield return new WaitForSeconds(7f); // Wait for specified time
+        yield return new WaitForSeconds(11f); // Wait for specified time
 
 
         statePause(); // Show credits  statePause(); // Pause the game
