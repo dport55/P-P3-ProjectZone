@@ -22,6 +22,7 @@ TagManager:
   - Level
   - VentDoor
   - JumpObj
+  - JumpPrompt
   layers:
   - Default
   - TransparentFX
