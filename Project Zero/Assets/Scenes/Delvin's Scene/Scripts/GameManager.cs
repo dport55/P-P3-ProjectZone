@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerMarker;
     public GameObject[] displayClose;
     public GameObject PartsList;
-
+    [SerializeField] GameObject startMenu;
     //End of Delvin's Changes
     public bool isPaused;
 
@@ -79,6 +79,13 @@ public class GameManager : MonoBehaviour
         {
             TutorialStartMenu.SetActive(true);
         }
+
+        // Delvin's Changes
+        if (startMenu != null)
+        {
+            startMenu.SetActive(true);
+        }
+        //End of Delvin's Changes
     }
 
     //Hemant's Addition
@@ -322,7 +329,7 @@ public class GameManager : MonoBehaviour
     //Delvin's Changes
     public void updateGameGoal(int parts)
     {
-        goalCountText.text = parts.ToString("F0") + "/10";
+        goalCountText.text = parts.ToString("F0") + "/13";
 
     }
 
@@ -343,6 +350,19 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
         menuPause.SetActive(false);
         PartsList.SetActive(true);
+    }
+
+    public void startGame()
+    {
+
+        Debug.Log("Game Started!"); // Check if this logs in the Console
+
+        // Hide the start menu
+        if (startMenu != null)
+        {
+            startMenu.SetActive(false);
+
+        }
     }
     //End of Delvin's Changes
 }

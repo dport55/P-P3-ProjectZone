@@ -774,7 +774,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     private IEnumerator ResetOxygenDamage()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         isTakingOxygenDamage = false; 
     }
     IEnumerator PlayBreathing()
