@@ -1,18 +1,17 @@
 using UnityEngine;
 
 public class PartsPickup : MonoBehaviour
-{
-    [SerializeField] GameObject part;
-    //public int collectedParts;
+{   //Delvin's Changes
+    [SerializeField] private string partID; // Unique identifier for each part
+    [SerializeField] private Sprite partSprite; // Sprite to display in inventory
 
-    //Delvin's Changes
     private void OnTriggerEnter(Collider other)
     {
-        PlayerInventory pick = other.GetComponent<PlayerInventory>(); // Get IPickup interface from Player
+        PlayerInventory pick = other.GetComponent<PlayerInventory>();
 
         if (pick != null)
         {
-            pick.getParts(part); // Call getParts() on PlayerInventory
+            pick.GetPart(partID, partSprite); // Pass part ID and sprite
             Destroy(gameObject); // Destroy part after collection
         }
     }

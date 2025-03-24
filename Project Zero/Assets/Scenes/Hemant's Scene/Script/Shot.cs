@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UIElements;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Shot : MonoBehaviour
 {
@@ -48,7 +51,9 @@ public class Shot : MonoBehaviour
 
         if (hitEffect != null)
         {
+
            GameObject hit = Instantiate(hitEffect.gameObject, transform.position, Quaternion.identity);
+
             Destroy(hit.gameObject, 0.5f);
         }
 
@@ -56,4 +61,6 @@ public class Shot : MonoBehaviour
         Destroy(gameObject);
        
     }
+
+
 }
