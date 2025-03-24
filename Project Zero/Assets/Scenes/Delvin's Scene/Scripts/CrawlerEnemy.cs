@@ -196,13 +196,8 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
     
         HP -= damage;
-        anim.Play("GetHurt");
+    
         StartCoroutine(FlashRed());
-
-        if (hurtGrowl.Length > 0)
-        {
-            aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
-        }
 
 
         if (GameManager.instance.playerScript != null)
@@ -218,10 +213,16 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
 
     IEnumerator FlashRed()
     {
+        
+        agent.isStopped = true;
         model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+        aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
+        yield return new WaitForSeconds(0.6f); 
         model.material.color = colorOrig;
+        agent.isStopped = false;
+        
     }
+
 
     public void EnableCollider()
     {
