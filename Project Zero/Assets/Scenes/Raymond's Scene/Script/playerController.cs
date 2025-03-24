@@ -173,6 +173,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             ExitHidingSpot();
         }
+        if (gunList[gunListPos].AmmoCur == 0)
+        {
+            StartCoroutine(Reload());
+        }
     }
 
     void movement()
@@ -424,7 +428,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             // Muzzle flash effect
             StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
         }
-        else { StartCoroutine(Reload()); }
+        else { gunAudio.PlayOneShot(gunList[gunListPos].gunClick); }
     }
 
     public IEnumerator Reload()
