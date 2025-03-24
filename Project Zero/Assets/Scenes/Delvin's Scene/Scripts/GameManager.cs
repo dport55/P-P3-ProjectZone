@@ -153,11 +153,12 @@ StartCoroutine(DelayPauseAndCredits(3f));
         menuPause.SetActive(false);
         menuActive = SettingsMenu;
         menuActive.SetActive(true);
+        menuPause.SetActive(false);
     }
     //End of Delvin's Changes
     public void statePause()
     {
-        playButtonShow();
+      
         isPaused = !isPaused;
         retical.SetActive(false);
         Time.timeScale = 0;
