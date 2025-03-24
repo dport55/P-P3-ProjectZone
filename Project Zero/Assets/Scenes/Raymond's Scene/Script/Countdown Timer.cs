@@ -7,7 +7,6 @@ public class CountdownTimer : MonoBehaviour
 
     [SerializeField] public TextMeshProUGUI timeText;
     [SerializeField] public int startMinutes = 1; 
-    [SerializeField] public GameManager gameManager;
 
     private float timeRemaining;
     public bool isRunning = true;
@@ -15,7 +14,7 @@ public class CountdownTimer : MonoBehaviour
     void Awake()
     {
         instance = this;
-        timeRemaining = startMinutes * 60; // Convert minutes to seconds
+        timeRemaining = startMinutes * 60; 
     }
 
     void Update()
@@ -27,6 +26,8 @@ public class CountdownTimer : MonoBehaviour
             {
                 timeRemaining = 0;
                 isRunning = false;
+                GameManager.instance.youLose();
+                Debug.Log("You lose");
             }
             UpdateTimerDisplay();
         }
@@ -54,12 +55,4 @@ public class CountdownTimer : MonoBehaviour
         isRunning = true;
     }
 
-    //public void TimerEnded() //Lose Condition once timer hits 0
-    //{
-    //    //Debug.Log("Countdown finished!");
-    //    if (gameManager != null)
-    //    {
-    //        gameManager.youLose();
-    //    }
-    //}
 }

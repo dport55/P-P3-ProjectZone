@@ -66,22 +66,22 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float interactRange = 2f;
 
     [Header("---- Slide Settings ----")]
-    [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
-    [SerializeField] private float slideDuration = 0f; // Time before slowing down
-    [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
+    [SerializeField] private float slideSpeed = 0f;  
+    [SerializeField] private float slideDuration = 0f; 
+    [SerializeField] private float slideFriction = 0f;  
     [SerializeField] private float slideCooldownTime = 2f;
 
     private bool canSlide = true;
     private bool isSliding = false;
 
     [Header("---- Stamina Settings ----")]
-    [SerializeField] private float maxStamina = 100f;  // Max stamina the player can have
-    [SerializeField] private float staminaRegenRate = 10f;  // How fast stamina regenerates per second
-    [SerializeField] private float slideStaminaDrain = 25f;  // Stamina drained per slide action
-    [SerializeField] private float staminaDrainRate = 15f;  // Stamina drain per second while sprinting  
-    [SerializeField] private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued  
-    [SerializeField] private float fatigueRecoveryTime = 3f;  // How long before stamina starts regenerating after hitting 0  
+    [SerializeField] private float maxStamina = 100f;  
+    [SerializeField] private float staminaRegenRate = 10f;  
+    [SerializeField] private float slideStaminaDrain = 25f;  
+    [SerializeField] private float staminaDrainRate = 15f;  
+    [SerializeField] private float fatigueRecoveryTime = 3f;  
 
+    private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued 
     private float currentStamina;
     private bool isFatigued = false;
 
@@ -224,10 +224,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             {
                 currentStamina -= staminaDrainRate * Time.deltaTime;
             }
-            else if (Input.GetButtonDown("Jump") || isSliding)
-            {
-                currentStamina -= staminaDrainRate * 2 * Time.deltaTime;
-            }
             else
             {
                 // Regenerate stamina over time if not fatigued
@@ -282,7 +278,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //Raymonds Additions
     void jump()
     {
-        if (!isFatigued && Input.GetButtonDown("Jump") && jumpCount < jumpMax)
+        if(Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             playerVel.y = jumpSpeed;
             jumpCount++;
@@ -300,8 +296,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 //Reduce height
                 Controller.height = crouchHeight;
 
-
-
                 //Crouch speed
                 speed = (int)(originalSpeed * crouchSpeedMod);
 
@@ -317,7 +311,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
                 isCrouching = false;
                 Debug.Log(originalHeight);
-
 
             }
         }
@@ -338,7 +331,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         isSliding = true;
         isCrouching = true;
-        canSlide = false; // Prevents sliding again until cooldown is over
+        canSlide = false; 
 
         // Temporarily lower player height
         Controller.height = 1f;
@@ -354,7 +347,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             yield return null;
         }
 
-        // Reset states
         isSliding = false;
 
         if (!Input.GetButton("Crouch"))
@@ -365,7 +357,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         // Start cooldown before allowing another slide
         yield return new WaitForSeconds(slideCooldownTime);
-        canSlide = true; // Re-enables sliding
+        canSlide = true;
     }
     //Raymonds Additions
     void ToggleFlashlight()
@@ -374,7 +366,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             if (flashlight != null)
             {
-                flashlight.enabled = !flashlight.enabled; //Toggle the flashlight
+                flashlight.enabled = !flashlight.enabled; 
             }
         }
     }
