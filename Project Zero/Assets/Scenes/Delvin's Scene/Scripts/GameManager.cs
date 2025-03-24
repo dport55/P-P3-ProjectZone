@@ -5,10 +5,13 @@ using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu;
+    [SerializeField] public GameObject startMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -87,6 +90,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //TutorialShow();
+
+        // Dylan's Add
+        ShowStartMenu();
     }
 
     void Update()
@@ -274,5 +280,20 @@ StartCoroutine(DelayPauseAndCredits(3f));
 
     //End of Delvin's Changes
 
+    // Dylan's Additions
+    public void ShowStartMenu()
+    {
+        startMenu.SetActive(true);  
+        Time.timeScale = 0;         
+    }
 
+    public void StartGame()
+    {
+        startMenu.SetActive(false); 
+        retical.SetActive(true);    
+        player.SetActive(true);     
+        Time.timeScale = 1;         
+    }
+
+    // End of DYl
 }
