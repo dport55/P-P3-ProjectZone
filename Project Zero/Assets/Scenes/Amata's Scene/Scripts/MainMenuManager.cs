@@ -9,9 +9,8 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton;
+    [SerializeField] public GameObject MainMenuPanel, CreditsPanel;
     public static MainMenuManager instance;
-    public bool isPaused;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,5 +22,22 @@ public class MainMenuManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void MainMenuCreditsPanelShow()
+    {
+        MainMenuPanel.SetActive(false);
+        CreditsPanel.SetActive(true);
+    }
+
+    public void MainMenuPanelShow()
+    {
+        MainMenuPanel.SetActive(true);
+        CreditsPanel.SetActive(false);
+    }
+
+    public void MainMenuStart()
+    {
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Tutorial"));
     }
 }
