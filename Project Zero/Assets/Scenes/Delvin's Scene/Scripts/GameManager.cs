@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, TutorialToGameButton, O2WarningScreen1, SettingsMenu, TutorialStartMenu;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
     public Image playerStaminaBar;
     public Animator creditsAnimator;
 
+
+
+    [SerializeField] TMP_Text goalCountText;
+
     public GameObject Explosion1;
     public GameObject Explosion2;
     public GameObject Explosion3;
@@ -36,7 +40,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerMarker;
     public GameObject[] displayClose;
     public GameObject PartsList;
-
+    [SerializeField] GameObject startMenu;
     //End of Delvin's Changes
     public bool isPaused;
 
@@ -64,6 +68,11 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
+
+        //Hemant's Addition
+        PlayBackgroundMusic();
+        //End
+
         //Amata's changes
         Scene currentScene = SceneManager.GetActiveScene();
         if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
@@ -71,11 +80,22 @@ public class GameManager : MonoBehaviour
             TutorialStartMenu.SetActive(true);
         }
 
+        // Delvin's Changes
+
+        isPaused = true;
+        Time.timeScale = 0;
+
+        // Make cursor visible and unlocked so player can click Start
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
 
-        //Hemant's Addition
-        PlayBackgroundMusic();
-        //End
+        // Activate Start Menu
+        if (startMenu != null)
+        {
+            startMenu.SetActive(true);
+        }
+        //End of Delvin's Changes
     }
 
     //Hemant's Addition
@@ -223,7 +243,7 @@ public class GameManager : MonoBehaviour
         retical.SetActive(false);
         Time.timeScale = 0;
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void TutorialShow()
@@ -247,58 +267,14 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Tutorial")
         {
-            TutorialToGameButton.SetActive(true);
+            PlayButton.SetActive(true);
         }
         else
         {
-            TutorialToGameButton.SetActive(false);
+            PlayButton.SetActive(false);
         }
     }
 
-    //public void showO2Warning()
-    //{
-    //    if (O2Count < 100)
-    //    {
-    //        PlayButton.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        PlayButton.SetActive(false);
-    //    }
-    //}
-
-
-
-    //private IEnumerator OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        O2WarningScreen1.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen1.SetActive(false);
-
-    //        O2WarningScreen2.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        StopAllCoroutines();
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-
-
-    //}
     public void stateUnpause()
     {
         isPaused = !isPaused;
@@ -317,11 +293,11 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
     //Delvin's Changes
-    //public void updateGameGoal(int parts)
-    //{
-    //    goalCountText.text = parts.ToString("F0") + "/13";
+    public void updateGameGoal(int parts)
+    {
+        goalCountText.text = parts.ToString("F0") + "/13";
 
-    //}
+    }
 
     public void MainMenuSettings()
     {
@@ -340,6 +316,18 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
         menuPause.SetActive(false);
         PartsList.SetActive(true);
+    }
+
+    public void GameStart()
+    {
+        Debug.Log("Game Started!"); // Check if this logs in the Console
+
+        // Hide the start menu
+        if (startMenu != null)
+        {
+            startMenu.SetActive(false);
+
+        }
     }
     //End of Delvin's Changes
 }
