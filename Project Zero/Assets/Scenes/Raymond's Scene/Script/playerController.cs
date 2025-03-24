@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] LayerMask interactableLayer;
     [SerializeField] Light flashlight;
     private SpacePod currentSpacePod;
-
+     
     // Hemant's Adittion
     [Header("---- Shooting Settings ----")]
     [SerializeField] float shootDamage;
