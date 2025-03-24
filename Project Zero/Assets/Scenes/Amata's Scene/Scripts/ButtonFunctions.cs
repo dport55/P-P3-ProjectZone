@@ -52,4 +52,9 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.ShowParts();
     }
 
+    public void startGame()
+    {
+        GameManager.instance.startGame();
+        GameManager.instance.stateUnpause();
+    }
 }

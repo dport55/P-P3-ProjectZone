@@ -162,6 +162,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            EngagePlayer();
           
         }
     }
