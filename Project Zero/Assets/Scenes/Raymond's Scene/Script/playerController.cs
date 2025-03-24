@@ -424,10 +424,25 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             gunList[gunListPos].AmmoCur--;
             // Play gun sound
             gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+        RaycastHit hit;
 
-            // Spawn the laser projectile prefab from the current gun's data
-            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+        // Spawn the laser projectile prefab from the current gun's data
+        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+            
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunList[gunListPos].shootDist))
+        {
+            Vector3 direction = (hit.point - Muzzlepos.position).normalized;
+
+
+            laser.transform.rotation = Quaternion.LookRotation(direction);
+            laser.transform.rotation = laser.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
+
+        }
+        else
+        {
             laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
+        }
 
             // Pass damage and distance data to the Shot script
             Shot shotScript = laser.GetComponent<Shot>();
@@ -518,7 +533,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
-        GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
+        //GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
     }
 
     public void getgunstats(Gunstats gun)
@@ -532,6 +547,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void changeGun()
     {
+        isReloading = false;
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
@@ -541,10 +557,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
-
-      
-        
-
+         
         //if(gunModel.name == "Freeze Gun")
         //{
         //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);

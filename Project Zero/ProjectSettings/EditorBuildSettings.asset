@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Amata's Scene/Scenes/Tutorial.unity
     guid: 83ef3cec07eb56042b58e6ade48caecf
   - enabled: 1

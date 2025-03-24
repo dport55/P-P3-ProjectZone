@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acda38db5c11c134fb13a2cfbab97690, type: 3}
   m_Name: Freeze Gun
   m_EditorClassIdentifier: 
-  RedFlash: 1
+  RedFlash: 0
   model: {fileID: 4785264872323722461, guid: 66de4169d61904041bd149d22f6cb652, type: 3}
   shootDamage: 0
   shootDist: 100
   shootRate: 0.5
-  ReloadTimer: 30
-  AmmoCur: 1
+  ReloadTimer: 5
+  AmmoCur: 0
   AmmoMax: 1
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
   freezeTime: 5

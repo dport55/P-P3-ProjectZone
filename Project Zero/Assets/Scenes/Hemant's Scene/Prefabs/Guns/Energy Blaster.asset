@@ -17,8 +17,8 @@ MonoBehaviour:
   shootDamage: 1
   shootDist: 25
   shootRate: 0.5
-  ReloadTimer: 15
-  AmmoCur: 15
+  ReloadTimer: 5
+  AmmoCur: 12
   AmmoMax: 15
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
   freezeTime: 0
