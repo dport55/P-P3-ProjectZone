@@ -200,7 +200,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         StartCoroutine(FlashRed());
 
 
-        if (GameManager.instance.playerScript != null)
+        if (GameManager.instance.playerScript != null && HP > 0)
         {
             agent.SetDestination(GameManager.instance.playerScript.transform.position);
         }

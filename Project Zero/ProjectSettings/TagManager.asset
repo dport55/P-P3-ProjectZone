@@ -22,6 +22,9 @@ TagManager:
   - Level
   - VentDoor
   - JumpObj
+  - WinTrigger
+  - WinDoor
+  - Marker
   layers:
   - Default
   - TransparentFX
