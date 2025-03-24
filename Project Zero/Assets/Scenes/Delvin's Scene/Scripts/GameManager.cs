@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public GameObject Credits;
     public GameObject ship;
     public GameObject playerMarker;
+    public GameObject[] displayClose;
 
     //End of Delvin's Changes
     public bool isPaused;
@@ -110,7 +111,10 @@ public class GameManager : MonoBehaviour
 //Delvin's Changes
     public void ShowWinMenu()
     {
-        //MainCamera.enabled = false; // Disable camera switcher
+        foreach (GameObject close in displayClose)
+        {
+            close.SetActive(false);
+        }
         retical.SetActive(false);
         playerMarker.SetActive(false);
         WinCam.SetActive(true); // Enable the WinCam
