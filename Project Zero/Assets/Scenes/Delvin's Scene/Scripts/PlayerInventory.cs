@@ -81,7 +81,7 @@ public class PlayerInventory : MonoBehaviour
         if (!collectedKeys.ContainsKey(keyID))
         {
             collectedKeys[keyID] = keySprite;
-            Debug.Log("Collected Key: " + keyID);
+            partsPicked.text = ("Collected Key: " + keyID);
             UpdateInventoryUI();
         }
     }
