@@ -16,11 +16,10 @@ public class Gunstats : ScriptableObject
     public int AmmoCur, AmmoMax;
     public Transform muzzlePos;
     public float freezeTime;
-    //public Vector3 position;
-    //public Quaternion rotation;
+    
     public ParticleSystem HitEffect;
     [SerializeField] public GameObject ShootEffect;
-    public AudioClip shootSound, gunClick;
+    public AudioClip shootSound, gunClick,gunReload;
     public float shootVol;
 }
     

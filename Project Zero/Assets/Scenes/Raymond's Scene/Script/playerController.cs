@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform Muzzlepos, RedFlash, BlueFlash;
+    [SerializeField] Transform Muzzlepos, RedFlash, BlueFlash, RedGlow, BlueGlow;
     [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
@@ -207,29 +207,33 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        needReload = CheckAmmo();
-
-        if (!needReload && !isReloading)
+        if (gunList.Count != 0)
         {
-            if (gunList.Count != 0)
+            needReload = CheckAmmo();
+
+            if (!needReload && !isReloading)
             {
+
                 if (Input.GetButton("Fire1") && shootTimer >= shootRate)
                 {
                     shoot();
                 }
+
             }
-        }
-        else if (!isReloading) 
-        {
-            StartCoroutine(Reload());
-        }
-        if (isReloading)
-        {
-            if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+            else if (!isReloading)
             {
-                gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
+                StartCoroutine(Reload());
             }
+            if (isReloading)
+            {
+                if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+                {
+                    gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
+                }
+            }
+
         }
+        
         SelectGun();
 
 
@@ -372,7 +376,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //{
     //    if (Input.GetButtonDown("Interact"))
     //    {
-    //        RaycastHit hit;
+    //        RaycastHit hit;   
     //        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactRange, interactableLayer))
     //        {
     //            if (hit.collider.CompareTag("Parts"))
@@ -449,7 +453,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
 
         Debug.Log("Reload Complete!");
-
+        StartCoroutine(RechargeFlash(gunList[gunListPos].RedFlash));
+        gunAudio.PlayOneShot(gunList[gunListPos].gunReload, gunList[gunListPos].shootVol);
         isReloading = false; 
 
 
@@ -472,19 +477,35 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         yield return null;
     }
 
+    IEnumerator RechargeFlash(bool _Sphere)
+    {
+        if (!_Sphere)
+        {
+            BlueGlow.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            BlueGlow.gameObject.SetActive(false);
+        }
+        if (_Sphere)
+        {
+            RedGlow.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.05f);
+            RedGlow.gameObject.SetActive(false);
+        }
+        //Laser.gameObject.SetActive(false);
+
+    }
+
     // Coroutine to disable muzzle flash after 0.05 seconds
     IEnumerator DisableMuzzleFlash(bool _Sphere)
     {
         if (!_Sphere)
         {
-            BlueFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
             BlueFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
             BlueFlash.gameObject.SetActive(false);
         }
         if (_Sphere)
         {
-            RedFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
             RedFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
             RedFlash.gameObject.SetActive(false);
