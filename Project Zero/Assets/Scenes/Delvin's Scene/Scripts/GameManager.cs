@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -24,8 +24,7 @@ public class GameManager : MonoBehaviour
     public Image playerO2Bar;
     public Animator creditsAnimator;
 
-    //Amata's Changes
-    [SerializeField] GameObject TutorialStartMenu;
+
 
     [SerializeField] TMP_Text goalCountText;
 
