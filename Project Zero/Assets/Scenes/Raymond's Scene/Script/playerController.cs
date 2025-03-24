@@ -466,7 +466,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (parts.CompareTag("Parts"))
             collectedParts++;
 
-       GameManager.instance.updateGameGoal(collectedParts);
+       //GameManager.instance.updateGameGoal(collectedParts);
 
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");

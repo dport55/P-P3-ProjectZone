@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, TutorialToGameButton, O2WarningScreen1, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -24,10 +24,6 @@ public class GameManager : MonoBehaviour
     public Image playerO2Bar;
     public Image playerStaminaBar;
     public Animator creditsAnimator;
-
-
-
-    [SerializeField] TMP_Text goalCountText;
 
     public GameObject Explosion1;
     public GameObject Explosion2;
@@ -68,17 +64,18 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
-
-        //Hemant's Addition
-        PlayBackgroundMusic();
-        //End
-
         //Amata's changes
         Scene currentScene = SceneManager.GetActiveScene();
         if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
         {
             TutorialStartMenu.SetActive(true);
         }
+
+
+
+        //Hemant's Addition
+        PlayBackgroundMusic();
+        //End
     }
 
     //Hemant's Addition
@@ -250,11 +247,11 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Tutorial")
         {
-            PlayButton.SetActive(true);
+            TutorialToGameButton.SetActive(true);
         }
         else
         {
-            PlayButton.SetActive(false);
+            TutorialToGameButton.SetActive(false);
         }
     }
 
@@ -320,11 +317,11 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
     //Delvin's Changes
-    public void updateGameGoal(int parts)
-    {
-        goalCountText.text = parts.ToString("F0") + "/13";
+    //public void updateGameGoal(int parts)
+    //{
+    //    goalCountText.text = parts.ToString("F0") + "/13";
 
-    }
+    //}
 
     public void MainMenuSettings()
     {

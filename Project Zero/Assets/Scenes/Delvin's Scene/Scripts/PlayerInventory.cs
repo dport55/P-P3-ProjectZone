@@ -104,7 +104,7 @@ public class PlayerInventory : MonoBehaviour
             parts[partID] = (partSprite, 1); // First time collecting this part
         }
 
-        GameManager.instance.updateGameGoal(collectedParts);
+        //GameManager.instance.updateGameGoal(collectedParts);
         aud.PlayOneShot(pickup);
        
         partsPicked.text = ($"Collected Part: {partID}");
