@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     public Image playerO2Bar;
     public Animator creditsAnimator;
 
+    //Amata's Changes
+    [SerializeField] GameObject TutorialStartMenu;
+
     [SerializeField] TMP_Text goalCountText;
 
     public GameObject Explosion1;
@@ -65,6 +68,13 @@ public class GameManager : MonoBehaviour
         //Hemant's Addition
         PlayBackgroundMusic();
         //End
+
+        //Amata's changes
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
+        {
+            TutorialStartMenu.SetActive(true);
+        }
     }
 
     //Hemant's Addition
@@ -103,6 +113,15 @@ public class GameManager : MonoBehaviour
             {
                 stateUnpause();
             }
+        }
+    }
+
+    //Amata's changes
+    public void StartGame()
+    {
+        if (TutorialStartMenu != null)
+        {
+            TutorialStartMenu.SetActive(false);
         }
     }
 //Delvin's Changes
