@@ -6,7 +6,7 @@ public class CountdownTimer : MonoBehaviour
     public static CountdownTimer instance;
 
     [SerializeField] public TextMeshProUGUI timeText;
-    [SerializeField] public int startMinutes = 1; 
+    [SerializeField] public int startMinutes = 0; 
 
     private float timeRemaining;
     public bool isRunning = true;
