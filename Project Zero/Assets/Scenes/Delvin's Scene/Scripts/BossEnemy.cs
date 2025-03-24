@@ -15,6 +15,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] int roamPauseTime;
     [SerializeField] float roamTimer = 0f;
     [SerializeField] ParticleSystem Frozeen;
+    [SerializeField] public float damageAmout = .5f;
     public Transform Spot;
 
     private bool isStunned = false;
@@ -23,15 +24,17 @@ public class BossEnemy : MonoBehaviour, IDamage
     private bool canBeFrozen = true; // Cooldown tracking
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] growl;
-    [Range(0, 1)][SerializeField] float audgrowlVol;
+    [SerializeField] AudioClip[] hurtGrowl;
     float growlTimer;
     public Collider attackCol1;
     public Collider attackCol2;
 
+    public bool takingDamage = false;
     Color colorOrig;
 
     void Start()
     {
+        damageAmout = .5f;
         colorOrig = model.material.color;
         MoveToRandomSpawnPoint();
     }
@@ -89,7 +92,7 @@ public class BossEnemy : MonoBehaviour, IDamage
             {
                 if (growlTimer >= 2f) // 2-second cooldown
                 {
-                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)], audgrowlVol);
+                    aud.PlayOneShot(growl[Random.Range(0, growl.Length)]);
                     growlTimer = 0;
                 }
                 if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit))
@@ -104,7 +107,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     void EngagePlayer()
     {
         if (GameManager.instance.playerScript == null) return;
-        if (!isStunned)
+        if (!isStunned && !takingDamage)
         {
             agent.SetDestination(GameManager.instance.playerScript.transform.position);
             float distance = agent.remainingDistance;
@@ -200,38 +203,77 @@ public class BossEnemy : MonoBehaviour, IDamage
     public void SetTarget(Transform target)
     {
         if (target == null) return;
-
+        agent.speed *= 1.5f;
         agent.SetDestination(target.position);
         anim.Play("run2");
         playerInRange = true;
     }
-
     public void TakeDamage(float damage, float Freeze, float O2)
     {
+        takingDamage = true;
         if (Freeze > 0)
         {
-            Stun(Freeze); // Apply freeze effect if allowed
+            Stun(Freeze); 
         }
-        else if (damage > 1)
+        else if (damage > 0)
         {
             HP -= damage;
-            StartCoroutine(FlashRed());
+
+           
+            // Check if the boss is currently attacking
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack2RLSpike"))
+            {
+               
+
+                // Play hurt sound 
+                if (hurtGrowl.Length > 0)
+                {
+                    aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
+                }
+
+                StartCoroutine(FlashRed());
+            }
+            takingDamage = false;
         }
+
         agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0)
         {
-            Destroy(gameObject);
+          
+           StartCoroutine(Death()); 
         }
     }
 
     IEnumerator FlashRed()
     {
+        // Stop movement and attacks while playing hit animation
+        agent.isStopped = true;
+        isStunned = true;
+
         model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+        anim.CrossFade("gethit3", 0.1f); // Ensures immediate override
+        yield return new WaitForSeconds(0.5f); // Wait for animation to finish
+
         model.material.color = colorOrig;
+
+        // Resume movement after hit animation
+        agent.isStopped = false;
+        isStunned = false;
     }
 
+    IEnumerator Death()
+    {
+        // Stop all actions permanently
+        agent.isStopped = true;
+        isStunned = true;
+        takingDamage = true;
+
+        anim.CrossFade("death3", 0.1f);
+        yield return new WaitForSeconds(3f); // Wait for animation to complete
+
+        Destroy(gameObject);
+    }
     IEnumerator FlashBlue()
     {
         model.material.color = Color.blue;
@@ -241,4 +283,10 @@ public class BossEnemy : MonoBehaviour, IDamage
         model.material.color = colorOrig;
         Frozeen.Stop();
     }
+
+    public void Damage(float damage) 
+    {
+        damageAmout = damage;
+    }
+
 }

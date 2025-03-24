@@ -6,13 +6,14 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
+    private bool isPlayingBreathing = false;
     [Header("---- Components ----")]
     [SerializeField] CharacterController Controller;
     [SerializeField] LayerMask ignoreLayer;
     [SerializeField] LayerMask interactableLayer;
     [SerializeField] Light flashlight;
     private SpacePod currentSpacePod;
-     
+
     // Hemant's Adittion
     [Header("---- Shooting Settings ----")]
     [SerializeField] float shootDamage;
@@ -21,14 +22,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] public float freezeTime;
 
     // Amata's Addition
-    [SerializeField] GameObject O2WarningScreen1; // O2WarningScreen2;
+    [SerializeField] GameObject O2WarningScreen1, jumpPrompt, jumpObject;
 
     float shootTimer;
 
     [Header("=====Guns=====")]
     [SerializeField] List<Gunstats> gunList = new List<Gunstats>();
     [SerializeField] GameObject gunModel;
-    [SerializeField] Transform Laser, RedSphere, BlueSphere;
+    [SerializeField] Transform Muzzlepos, RedFlash, BlueFlash;
+    [SerializeField] AudioSource gunAudio;
 
     [Header("Audio Settings")]
     [SerializeField] AudioSource aud;
@@ -40,6 +42,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Range(0, 1)][SerializeField] float audJumpVol;
 
 
+    private int currentStepIndex = 0;
+
+    //Delvin's Additions
+
+    [SerializeField] AudioClip[] breathing;
+    //End of Delvin's Additions
+
+
     [Header("---- UI ----")]
     [SerializeField] private TextMeshProUGUI partsCounterTMP;
     [SerializeField] private TextMeshProUGUI remainingPartsTMP;
@@ -48,9 +58,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
 
     bool isPlayerSteps;
-
+    bool needReload = false;
+    bool isReloading = false;
     int gunListPos;
-    //End
+    //End Hemant's Adittion
 
     [Header("---- Stats ----")]
     public float HP = 6;
@@ -66,24 +77,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float interactRange = 2f;
 
     [Header("---- Slide Settings ----")]
-    [SerializeField] private float slideSpeed = 0f;  
-    [SerializeField] private float slideDuration = 0f; 
-    [SerializeField] private float slideFriction = 0f;  
-    [SerializeField] private float slideCooldownTime = 2f;
+    [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
+    [SerializeField] private float slideDuration = 0f; // Time before slowing down
+    [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
 
-    private bool canSlide = true;
     private bool isSliding = false;
-
-    [Header("---- Stamina Settings ----")]
-    [SerializeField] private float maxStamina = 100f;  
-    [SerializeField] private float staminaRegenRate = 10f;  
-    [SerializeField] private float slideStaminaDrain = 25f;  
-    [SerializeField] private float staminaDrainRate = 15f;  
-    [SerializeField] private float fatigueRecoveryTime = 3f;  
-
-    private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued 
-    private float currentStamina;
-    private bool isFatigued = false;
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -96,14 +94,21 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private int collectedParts;
     //Delvin's Additions
     public GameObject playerDamageScreen;
+    public GameObject playerO2Screen;
     public bool isHiding = false;
     private Transform hideSpotInside; // Position inside the hiding place
     private Transform hideSpotOutside; // Position outside the hiding place
     private bool canHide = false; // Player is near a hiding spot
-                                  //End of Delvin's Additions
+
+    private bool isRefillingOxygen = false;
+    private  bool isTakingOxygenDamage = false;
+
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
     [SerializeField] GameObject Cam;// UI Prompt for camera
+    //End of Delvin's Additions
+
+
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
     [SerializeField] float crouchCameraOffset = 0.5f;
@@ -121,12 +126,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //store the players og speed
         originalSpeed = speed;
         UpdatePlayerUI();
-        currentStamina = maxStamina;
         //Store original height and center
         originalHeight = Controller.height;
         originalCenter = Controller.center;
-        RedSphere.gameObject.SetActive(false);
-        BlueSphere.gameObject.SetActive(false);
+        RedFlash.gameObject.SetActive(false);
+        BlueFlash.gameObject.SetActive(false);
         isHiding = false;
 
         hidePrompt.SetActive(false);
@@ -151,7 +155,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         crouch();
         ToggleFlashlight();
-        HandleStamina();
+        //Delvin's Additions
+
+        if (!isTakingOxygenDamage)
+        {
+            TryRefillOxygen();
+        }
+        //End of Delvin's Additions
+
         //Interact();
         slide();
         if (canHide && !isHiding && Input.GetKeyDown(KeyCode.E))
@@ -163,6 +174,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             ExitHidingSpot();
         }
+       
     }
 
     void movement()
@@ -195,66 +207,45 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        if (gunList.Count != 0)
+        needReload = CheckAmmo();
+
+        if (!needReload && !isReloading)
+        {
+            if (gunList.Count != 0)
+            {
+                if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+            }
+        }
+        else if (!isReloading) 
+        {
+            StartCoroutine(Reload());
+        }
+        if (isReloading)
         {
             if (Input.GetButton("Fire1") && shootTimer >= shootRate)
             {
-                shoot();
+                gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
             }
         }
-            SelectGun();
+        SelectGun();
 
 
         //End
     }
-    //Raymonds Additions
-    private void HandleStamina()
-    {
-        if (isFatigued)
-        {
-            // Wait for stamina to fully recover before removing fatigue
-            if (currentStamina >= maxStamina)
-            {
-                isFatigued = false;
-            }
-        }
-        else
-        {
-            if (Input.GetButton("Sprint") && moveDir.magnitude > 0)
-            {
-                currentStamina -= staminaDrainRate * Time.deltaTime;
-            }
-            else
-            {
-                // Regenerate stamina over time if not fatigued
-                currentStamina = Mathf.Min(maxStamina, currentStamina + staminaRegenRate * Time.deltaTime);
-            }
 
-            // If stamina fully depletes, trigger fatigue
-            if (currentStamina <= fatigueThreshold)
-            {
-                isFatigued = true;
-                StartCoroutine(FatigueRecovery());
-            }
-        }
-    }
-    //Raymonds Additions
-    private IEnumerator FatigueRecovery()
-    {
-        yield return new WaitForSeconds(fatigueRecoveryTime);
-        currentStamina = maxStamina; // Fully restore stamina after waiting
-    }
-    //Raymonds Additions
     void sprint()
     {
-        if (!isFatigued && Input.GetButtonDown("Sprint") && !isCrouching)
+        if (Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
-        if (Input.GetButtonUp("Sprint"))
+        else if (Input.GetButtonUp("Sprint"))
         {
-            speed = originalSpeed;
+            speed /= sprintMod;
             isSprinting = false;
         }
     }
@@ -263,30 +254,38 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator playSteps()
     {
         isPlayerSteps = true;
-        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+        aud.PlayOneShot(audSteps[currentStepIndex], audStepsVol);
+
+        // Move to the next sound and loop back if needed
+        currentStepIndex++;
+        if (currentStepIndex >= audSteps.Length)
+        {
+            currentStepIndex = 0;  // Reset to loop sounds
+        }
+
 
         if (!isSprinting)
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.7f);
 
         }
         else
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.35f);
         isPlayerSteps = false;
     }
     //End
-    //Raymonds Additions
+
     void jump()
     {
-        if(Input.GetButtonDown("Jump") && jumpCount < jumpMax)
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
-            playerVel.y = jumpSpeed;
             jumpCount++;
+            playerVel.y = jumpSpeed;
             aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
-        }
 
+        }
     }
-    //Raymonds Additions
+
     void crouch()
     {
         if (Input.GetButtonDown("Crouch"))
@@ -295,6 +294,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             {
                 //Reduce height
                 Controller.height = crouchHeight;
+
+
 
                 //Crouch speed
                 speed = (int)(originalSpeed * crouchSpeedMod);
@@ -312,26 +313,23 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 isCrouching = false;
                 Debug.Log(originalHeight);
 
+
             }
         }
     }
-    //Raymonds Additions
+
     void slide()
     {
-        if (!isFatigued && canSlide && Input.GetButtonDown("Slide"))
+        if (Input.GetButtonDown("Slide") && isSprinting && !isSliding)
         {
             StartCoroutine(SlideRoutine());
         }
     }
-    //Raymonds Additions
+
     IEnumerator SlideRoutine()
     {
-        if (!canSlide)
-            yield break;
-
         isSliding = true;
         isCrouching = true;
-        canSlide = false; 
 
         // Temporarily lower player height
         Controller.height = 1f;
@@ -347,6 +345,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             yield return null;
         }
 
+        // Reset states
         isSliding = false;
 
         if (!Input.GetButton("Crouch"))
@@ -354,22 +353,19 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             Controller.height = 2f;
             isCrouching = false;
         }
-
-        // Start cooldown before allowing another slide
-        yield return new WaitForSeconds(slideCooldownTime);
-        canSlide = true;
     }
-    //Raymonds Additions
+
     void ToggleFlashlight()
     {
         if (Input.GetButtonDown("Flashlight"))
         {
             if (flashlight != null)
             {
-                flashlight.enabled = !flashlight.enabled; 
+                flashlight.enabled = !flashlight.enabled; //Toggle the flashlight
             }
         }
     }
+
     // Dylan's Edits
 
     //void Interact()
@@ -390,7 +386,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //        }
     //    }
     //}
-    //Raymonds Additions
+
     public void getParts(GameObject parts)
     {
 
@@ -402,7 +398,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
     }
-    //Raymonds Additions
+
     public void InsertPart(SpacePod pod)
     {
         if (pod == null) return;
@@ -417,58 +413,55 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     // End of Dylan's Edits
 
     // Hemant's Adittion
-   
+
     void shoot()
     {
-        shootTimer = 0;
-        //if (gunList.Count > 0)
-        //{
-        //    gunList[gunListPos].AmmoCur--;
-        //}
-        aud.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+            shootTimer = 0;
+            gunList[gunListPos].AmmoCur--;
+            // Play gun sound
+            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
-        // Start coroutine to turn off muzzle flash after a short delay
+            // Spawn the laser projectile prefab from the current gun's data
+            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+            laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
 
-        //// Activate the muzzle flash and randomize rotation
-        //Laser.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-        //Laser.gameObject.SetActive(true);
-
-        // Use the muzzle flash’s world position directly
-        Vector3 muzzlePos = Laser.position;
-
-        RaycastHit hit;
-
-        // Raycast from camera to detect hit point
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreLayer))
-        {
-            // Apply damage if the hit object has an IDamage component
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
+            // Pass damage and distance data to the Shot script
+            Shot shotScript = laser.GetComponent<Shot>();
+            if (shotScript != null)
             {
-                dmg.TakeDamage(shootDamage, freezeTime, 0);
+                shotScript.freezetime = gunList[gunListPos].freezeTime;
+                shotScript.damage = gunList[gunListPos].shootDamage;
+                shotScript.maxDistance = gunList[gunListPos].shootDist;
+                shotScript.speed = 50f;
+                shotScript.hitEffect = gunList[gunListPos].HitEffect;
             }
 
-            // Instantiate the hit effect at the point of impact
-            ParticleSystem hiteffect = Instantiate(gunList[gunListPos].HitEffect, hit.point, Quaternion.identity);
-            Destroy(hiteffect.gameObject, 0.05F);
+            // Muzzle flash effect
+            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
+    }
 
-            // Instantiate the laser effect from muzzle to hit point
-            GameObject laserBeam = Instantiate(gunList[gunListPos].ShootEffect, muzzlePos, Quaternion.identity);
+    public IEnumerator Reload()
+    {
+        isReloading = true;
+        Debug.Log("Reloading...");
 
-            // Make the laser point toward the hit
-            laserBeam.transform.LookAt(hit.point);
-            float distance = Vector3.Distance(muzzlePos, hit.point);
+        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);        
+        gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
 
-            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedSphere));
-            laserBeam.transform.localScale = new Vector3(1, 1, distance);
+        Debug.Log("Reload Complete!");
 
-            // Destroy the laser after a short delay
-            Destroy(laserBeam, 0.05f);
-
-        }
+        isReloading = false; 
 
 
     }
+    public bool CheckAmmo()
+    {
+        if (gunList[gunListPos].AmmoCur <= 0)
+            return true;
+        else
+            return false;
+    }
+
 
     public IEnumerator ShootEffect()
     {
@@ -484,36 +477,20 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (!_Sphere)
         {
-            BlueSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            BlueSphere.gameObject.SetActive(true);
+            BlueFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            BlueFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            BlueSphere.gameObject.SetActive(false);
+            BlueFlash.gameObject.SetActive(false);
         }
         if (_Sphere)
         {
-            RedSphere.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-            RedSphere.gameObject.SetActive(true);
+            RedFlash.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            RedFlash.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.05f);
-            RedSphere.gameObject.SetActive(false);
+            RedFlash.gameObject.SetActive(false);
         }
         //Laser.gameObject.SetActive(false);
 
-    }
-    public void TakeDamage(float amount, float Freeze, float O2)
-    {
-
-        HP -= amount;
-        Oxygen -= O2;
-        StartCoroutine(flashDamageScreen());
-        UpdatePlayerUI();
-        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
-
-
-        if (HP <= 0 || Oxygen <= 0)
-        {
-            GameManager.instance.youLose();
-
-        }
     }
 
     void UpdatePlayerUI()
@@ -537,9 +514,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
         freezeTime = gunList[gunListPos].freezeTime;
+        ////Delvins Additions
+        //gunAudio = gunList[gunListPos].model.GetComponent<AudioSource>();
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+      
+        
+
         //if(gunModel.name == "Freeze Gun")
         //{
         //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
@@ -575,7 +558,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.WeaponsDisplay.SetActive(true);
 
-            if (!gunList[gunListPos].RedSphere)
+            if (!gunList[gunListPos].RedFlash)
             {
                 GameManager.instance.RedDisplay.SetActive(false);
                 GameManager.instance.BlueDisplay.SetActive(true);
@@ -636,6 +619,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             O2WarningScreen1.SetActive(true);
         }
+
+        if (other.CompareTag("JumpObj"))
+        {
+            jumpPrompt.SetActive(true);
+        }
+
+
         //End of Amata's Addition
 
         if (other.CompareTag("HidingSpot"))
@@ -670,6 +660,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
             hidePrompt.SetActive(true);
+        }
+        else if (other.CompareTag("WinTrigger"))
+        {
+            GameManager.instance.ShowWinMenu();
         }
     }
 
@@ -712,6 +706,84 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             exitPrompt.SetActive(false);
         }
     }
+    public void TakeDamage(float amount, float Freeze, float O2)
+    {
+        if (amount > 0)
+        {
+            HP -= amount;
+            aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+            StartCoroutine(flashDamageScreen());
+        }
+        if (O2 > 0)
+        {
+            Oxygen -= O2;
+            StartCoroutine(flashO2Screen());
+            StartCoroutine(PlayBreathing());
+            isTakingOxygenDamage = true; // player taking O2 damage
+            isRefillingOxygen = false;   // Stop refilling
+            StartCoroutine(ResetOxygenDamage()); // Allow refill 
+        }
+
+        UpdatePlayerUI();
+
+        if (HP <= 0 || Oxygen <= 0)
+        {
+            GameManager.instance.youLose();
+        }
+    }
+
+    private IEnumerator ResetOxygenDamage()
+    {
+        yield return new WaitForSeconds(2f);
+        isTakingOxygenDamage = false; 
+    }
+    IEnumerator PlayBreathing()
+    {
+        if (isPlayingBreathing) yield break; // Prevent overlapping sounds
+
+        isPlayingBreathing = true;
+        AudioClip clip = breathing[Random.Range(0, breathing.Length)];
+        aud.PlayOneShot(clip, 1f);
+        yield return new WaitForSeconds(clip.length); // Wait until the sound finishes
+        isPlayingBreathing = false;
+    }
+
+    // Call this function to play breathing sound
+    void PlayBreathingSound()
+    {
+        StartCoroutine(PlayBreathing());
+    }
+    // Oxygen refill coroutine
+    private IEnumerator RefillOxygen()
+    {
+        isRefillingOxygen = true;
+
+        while (Oxygen < 100f && !isTakingOxygenDamage) 
+        {
+            StartCoroutine(PlayBreathing());
+            Oxygen += 10f * Time.deltaTime; 
+            Oxygen = Mathf.Min(Oxygen, 100f);
+            UpdatePlayerUI(); // Update UI to reflect oxygen change
+            yield return null; 
+        }
+
+        isRefillingOxygen = false; 
+    }
+
+    private void TryRefillOxygen()
+    {
+        if (Oxygen < 100f && !isTakingOxygenDamage && !isRefillingOxygen)
+        {
+            StartCoroutine(RefillOxygen());
+        }
+    }
+    IEnumerator flashO2Screen()
+    {
+        playerO2Screen.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        playerO2Screen.SetActive(false);
+    }
+
     //End od Delvin's Additions
 
 }

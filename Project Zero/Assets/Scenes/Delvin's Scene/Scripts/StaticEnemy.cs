@@ -12,11 +12,14 @@ public class StaticEnemy : MonoBehaviour
     [SerializeField] float O2Damage;
     [SerializeField] float speed;
     [SerializeField] int destroyTime;
+   
 
     bool isDamaging;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+      
+
         if (type == damageType.moving)
         {
             //rb.linearVelocity = transform.forward * speed;
@@ -27,7 +30,7 @@ public class StaticEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+   
     }
 
     private void OnTriggerEnter(Collider other)
@@ -77,5 +80,7 @@ public class StaticEnemy : MonoBehaviour
         isDamaging = false;
 
     }
+   
+  
 
 }

@@ -1,8 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class ScreamerEnemy : MonoBehaviour, IDamage
 {
+    [SerializeField] Renderer model;
+    [SerializeField] NavMeshAgent agent;
+   
+
     [SerializeField] Animator anim;
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] screamSound;
