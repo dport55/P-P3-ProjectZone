@@ -77,11 +77,24 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float interactRange = 2f;
 
     [Header("---- Slide Settings ----")]
-    [SerializeField] private float slideSpeed = 0f;  // Initial slide boost
-    [SerializeField] private float slideDuration = 0f; // Time before slowing down
-    [SerializeField] private float slideFriction = 0f;  // How fast the slide slows
+    [SerializeField] private float slideSpeed = 0f;
+    [SerializeField] private float slideDuration = 0f;
+    [SerializeField] private float slideFriction = 0f;
+    [SerializeField] private float slideCooldownTime = 2f;
 
+    private bool canSlide = true;
     private bool isSliding = false;
+
+    [Header("---- Stamina Settings ----")]
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaRegenRate = 10f;
+    [SerializeField] private float slideStaminaDrain = 25f;
+    [SerializeField] private float staminaDrainRate = 15f;
+    [SerializeField] private float fatigueRecoveryTime = 3f;
+
+    private float fatigueThreshold = 0f;  // When stamina hits 0, player is fatigued 
+    private float currentStamina;
+    private bool isFatigued = false;
 
     private int originalSpeed;
     private bool isCrouching = false;
@@ -116,13 +129,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     float HPOrig;
     float O2Orig;
-
-
+    float stamina;
+    float staminaOrig;
 
     void Start()
     {
         HPOrig = HP;
         O2Orig = Oxygen;
+        currentStamina = maxStamina;
         //store the players og speed
         originalSpeed = speed;
         UpdatePlayerUI();
@@ -132,6 +146,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         RedFlash.gameObject.SetActive(false);
         BlueFlash.gameObject.SetActive(false);
         isHiding = false;
+
+        
 
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
@@ -156,7 +172,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         crouch();
         ToggleFlashlight();
         //Delvin's Additions
-
+          HandleStamina();
         if (!isTakingOxygenDamage)
         {
             TryRefillOxygen();
@@ -240,16 +256,63 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         //End
     }
 
+    private void HandleStamina()
+    {
+        if (isFatigued)
+        {
+            // Wait for stamina to fully recover before removing fatigue
+            if (currentStamina >= maxStamina)
+            {
+                isFatigued = false;
+            }
+        }
+        else
+        {
+            if (Input.GetButton("Sprint") && moveDir.magnitude > 0)
+            {
+                currentStamina -= staminaDrainRate * Time.deltaTime;
+            }
+            else
+            {
+                // Regenerate stamina over time if not fatigued
+                currentStamina = Mathf.Min(maxStamina, currentStamina + staminaRegenRate * Time.deltaTime);
+            }
+
+            // If stamina fully depletes, trigger fatigue
+            if (currentStamina <= fatigueThreshold)
+            {
+                isFatigued = true;
+                StartCoroutine(FatigueRecovery());
+            }
+        }
+        UpdatePlayerUI();
+    }
+    //Raymonds Additions
+    private IEnumerator FatigueRecovery()
+    {
+        yield return new WaitForSeconds(fatigueRecoveryTime);
+        currentStamina = maxStamina; // Fully restore stamina after waiting
+        UpdatePlayerUI();
+    }
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint") && !isCrouching)
+        // Stop sprinting immediately if fatigued
+        if (isFatigued && isSprinting)
+        {
+            speed = originalSpeed;
+            isSprinting = false;
+            return;
+        }
+
+        if (!isFatigued && Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
-        else if (Input.GetButtonUp("Sprint"))
+
+        if (Input.GetButtonUp("Sprint") && isSprinting)
         {
-            speed /= sprintMod;
+            speed = originalSpeed;
             isSprinting = false;
         }
     }
@@ -324,16 +387,20 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void slide()
     {
-        if (Input.GetButtonDown("Slide") && isSprinting && !isSliding)
+        if (!isFatigued && canSlide && Input.GetButtonDown("Slide"))
         {
             StartCoroutine(SlideRoutine());
         }
     }
-
+    //Raymonds Additions
     IEnumerator SlideRoutine()
     {
+        if (!canSlide)
+            yield break;
+
         isSliding = true;
         isCrouching = true;
+        canSlide = false;
 
         // Temporarily lower player height
         Controller.height = 1f;
@@ -349,7 +416,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             yield return null;
         }
 
-        // Reset states
         isSliding = false;
 
         if (!Input.GetButton("Crouch"))
@@ -357,8 +423,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             Controller.height = 2f;
             isCrouching = false;
         }
-    }
 
+        // Start cooldown before allowing another slide
+        yield return new WaitForSeconds(slideCooldownTime);
+        canSlide = true;
+    }
     void ToggleFlashlight()
     {
         if (Input.GetButtonDown("Flashlight"))
@@ -424,25 +493,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             gunList[gunListPos].AmmoCur--;
             // Play gun sound
             gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
-        RaycastHit hit;
 
-        // Spawn the laser projectile prefab from the current gun's data
-        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
-            
-
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunList[gunListPos].shootDist))
-        {
-            Vector3 direction = (hit.point - Muzzlepos.position).normalized;
-
-
-            laser.transform.rotation = Quaternion.LookRotation(direction);
-            laser.transform.rotation = laser.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
-
-        }
-        else
-        {
+            // Spawn the laser projectile prefab from the current gun's data
+            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
             laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
-        }
 
             // Pass damage and distance data to the Shot script
             Shot shotScript = laser.GetComponent<Shot>();
@@ -533,7 +587,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
-        //GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
+        GameManager.instance.playerStaminaBar.fillAmount = currentStamina / maxStamina;
     }
 
     public void getgunstats(Gunstats gun)
@@ -547,7 +601,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void changeGun()
     {
-        isReloading = false;
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;
@@ -557,7 +610,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
-         
+
+      
+        
+
         //if(gunModel.name == "Freeze Gun")
         //{
         //    gunModel.transform.rotation = new Quaternion(0f, 270f, 5f,0f);
@@ -774,7 +830,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     private IEnumerator ResetOxygenDamage()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         isTakingOxygenDamage = false; 
     }
     IEnumerator PlayBreathing()
