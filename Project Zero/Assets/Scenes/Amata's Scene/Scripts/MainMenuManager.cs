@@ -18,6 +18,11 @@ public class MainMenuManager : MonoBehaviour
         
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -38,6 +43,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void MainMenuStart()
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Tutorial"));
+        SceneManager.LoadScene(1);
     }
 }
