@@ -58,7 +58,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
 
     bool isPlayerSteps;
-
+    bool needReload = false;
+    bool isReloading = false;
     int gunListPos;
     //End Hemant's Adittion
 
@@ -173,10 +174,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             ExitHidingSpot();
         }
-        if (gunList[gunListPos].AmmoCur == 0)
-        {
-            StartCoroutine(Reload());
-        }
+       
     }
 
     void movement()
@@ -209,14 +207,30 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        if (gunList.Count != 0)
+        needReload = CheckAmmo();
+
+        if (!needReload && !isReloading)
+        {
+            if (gunList.Count != 0)
+            {
+                if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+            }
+        }
+        else if (!isReloading) 
+        {
+            StartCoroutine(Reload());
+        }
+        if (isReloading)
         {
             if (Input.GetButton("Fire1") && shootTimer >= shootRate)
             {
-                shoot();
+                gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
             }
         }
-            SelectGun();
+        SelectGun();
 
 
         //End
@@ -402,9 +416,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void shoot()
     {
-
-        if (gunList[gunListPos].AmmoCur > 0)
-        {
             shootTimer = 0;
             gunList[gunListPos].AmmoCur--;
             // Play gun sound
@@ -427,22 +438,29 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
             // Muzzle flash effect
             StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
-        }
-        else { gunAudio.PlayOneShot(gunList[gunListPos].gunClick); }
     }
 
     public IEnumerator Reload()
     {
-        if (gunList[gunListPos].AmmoCur == 0)
-        {
-            yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
-            gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
-        }
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);        
+        gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
+
+        Debug.Log("Reload Complete!");
+
+        isReloading = false; 
+
 
     }
-
-    
-
+    public bool CheckAmmo()
+    {
+        if (gunList[gunListPos].AmmoCur <= 0)
+            return true;
+        else
+            return false;
+    }
 
 
     public IEnumerator ShootEffect()
