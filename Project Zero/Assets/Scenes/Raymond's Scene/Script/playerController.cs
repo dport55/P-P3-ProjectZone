@@ -696,6 +696,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             O2WarningScreen1.SetActive(false);
         }
+
+        if (other.CompareTag("JumpObj"))
+        {
+            jumpPrompt.SetActive(false);
+        }
         //End of Amata's Addition
 
         if (other.CompareTag("HidingSpot"))

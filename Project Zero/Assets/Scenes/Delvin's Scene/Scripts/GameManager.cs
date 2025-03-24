@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public Image playerHPBar;
     public Image playerO2Bar;
     public Animator creditsAnimator;
+
+
 
     [SerializeField] TMP_Text goalCountText;
 
@@ -69,6 +71,13 @@ public class GameManager : MonoBehaviour
         //Hemant's Addition
         PlayBackgroundMusic();
         //End
+
+        //Amata's changes
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
+        {
+            TutorialStartMenu.SetActive(true);
+        }
     }
 
     //Hemant's Addition
@@ -107,6 +116,15 @@ public class GameManager : MonoBehaviour
             {
                 stateUnpause();
             }
+        }
+    }
+
+    //Amata's changes
+    public void StartGame()
+    {
+        if (TutorialStartMenu != null)
+        {
+            TutorialStartMenu.SetActive(false);
         }
     }
 //Delvin's Changes
@@ -196,6 +214,9 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
         menuPause.SetActive(false);
     }
+
+    
+
     //End of Delvin's Changes
     public void statePause()
     {
@@ -323,6 +344,4 @@ public class GameManager : MonoBehaviour
         PartsList.SetActive(true);
     }
     //End of Delvin's Changes
-
-
 }
