@@ -518,7 +518,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
-        GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
+        //GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
     }
 
     public void getgunstats(Gunstats gun)
@@ -761,7 +761,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     private IEnumerator ResetOxygenDamage()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         isTakingOxygenDamage = false; 
     }
     IEnumerator PlayBreathing()
