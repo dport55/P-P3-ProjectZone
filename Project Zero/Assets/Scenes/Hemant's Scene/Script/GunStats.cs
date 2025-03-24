@@ -20,7 +20,7 @@ public class Gunstats : ScriptableObject
     //public Quaternion rotation;
     public ParticleSystem HitEffect;
     [SerializeField] public GameObject ShootEffect;
-    public AudioClip shootSound;
+    public AudioClip shootSound, gunClick;
     public float shootVol;
 }
     
