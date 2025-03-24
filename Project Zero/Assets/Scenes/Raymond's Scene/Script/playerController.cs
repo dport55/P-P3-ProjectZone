@@ -129,13 +129,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     float HPOrig;
     float O2Orig;
-
-
+    float stamina;
+    float staminaOrig;
 
     void Start()
     {
         HPOrig = HP;
         O2Orig = Oxygen;
+        currentStamina = maxStamina;
         //store the players og speed
         originalSpeed = speed;
         UpdatePlayerUI();
@@ -145,6 +146,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         RedFlash.gameObject.SetActive(false);
         BlueFlash.gameObject.SetActive(false);
         isHiding = false;
+
+        
 
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
@@ -282,21 +285,32 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 StartCoroutine(FatigueRecovery());
             }
         }
+        UpdatePlayerUI();
     }
     //Raymonds Additions
     private IEnumerator FatigueRecovery()
     {
         yield return new WaitForSeconds(fatigueRecoveryTime);
         currentStamina = maxStamina; // Fully restore stamina after waiting
+        UpdatePlayerUI();
     }
     void sprint()
     {
+        // Stop sprinting immediately if fatigued
+        if (isFatigued && isSprinting)
+        {
+            speed = originalSpeed;
+            isSprinting = false;
+            return;
+        }
+
         if (!isFatigued && Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
-        if (Input.GetButtonUp("Sprint"))
+
+        if (Input.GetButtonUp("Sprint") && isSprinting)
         {
             speed = originalSpeed;
             isSprinting = false;
@@ -573,7 +587,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
-        GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
+        GameManager.instance.playerStaminaBar.fillAmount = currentStamina / maxStamina;
     }
 
     public void getgunstats(Gunstats gun)
