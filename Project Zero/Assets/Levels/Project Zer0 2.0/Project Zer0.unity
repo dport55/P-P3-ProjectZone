@@ -416,13 +416,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2
   spawnMaterials:
-  - {fileID: 269720838}
+  - {fileID: 857849762}
   spawnAmount: 1
   spawnHeightOffset: 0.2
   spawnRadius: 2
-  aud: {fileID: 0}
-  crateBreak: []
-  destroyedEffect: {fileID: 0}
+  aud: {fileID: 261391674}
+  crateBreak:
+  - {fileID: 8300000, guid: d7c0ba6a12ff0444db2e691c6b8480f5, type: 3}
+  destroyedEffect: {fileID: 159918, guid: a0040bf7072bc2f4e82d887d50a9c5e2, type: 3}
 --- !u!1 &217213379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
@@ -446,9 +447,10 @@ MonoBehaviour:
   spawnAmount: 1
   spawnHeightOffset: 0.2
   spawnRadius: 2
-  aud: {fileID: 0}
-  crateBreak: []
-  destroyedEffect: {fileID: 0}
+  aud: {fileID: 261391674}
+  crateBreak:
+  - {fileID: 8300000, guid: e620d1feaaf514349970a6484ec2f061, type: 3}
+  destroyedEffect: {fileID: 159918, guid: a0040bf7072bc2f4e82d887d50a9c5e2, type: 3}
 --- !u!1 &224257898
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,6 +2032,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7026980235685388452, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
   m_PrefabInstance: {fileID: 3327001544297107519}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &857849762 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1709230855758960331, guid: a2d9de15fb4ea4844a508ec0d42f2bd8, type: 3}
+  m_PrefabInstance: {fileID: 753750765215706911}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &878104141 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7725085280813018938, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
@@ -2169,13 +2176,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2
   spawnMaterials:
-  - {fileID: 269720838}
+  - {fileID: 6034287550795406660, guid: 2c027de1fb8c5ba4e8c5c023a9afcce5, type: 3}
   spawnAmount: 1
   spawnHeightOffset: 0.2
   spawnRadius: 2
-  aud: {fileID: 0}
-  crateBreak: []
-  destroyedEffect: {fileID: 0}
+  aud: {fileID: 261391674}
+  crateBreak:
+  - {fileID: 8300000, guid: 7fe67f3d2511240d3a5ce7ddbd529b89, type: 3}
+  destroyedEffect: {fileID: 159918, guid: a0040bf7072bc2f4e82d887d50a9c5e2, type: 3}
 --- !u!1 &935568406 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6074910040860118097, guid: 6c94d3e93ea423f40a8a18a45dff7006, type: 3}
@@ -5276,9 +5284,10 @@ MonoBehaviour:
   spawnAmount: 1
   spawnHeightOffset: 0.2
   spawnRadius: 2
-  aud: {fileID: 0}
-  crateBreak: []
-  destroyedEffect: {fileID: 0}
+  aud: {fileID: 261391674}
+  crateBreak:
+  - {fileID: 8300000, guid: bfb4fae11c0ea40968f13d9051ecdec4, type: 3}
+  destroyedEffect: {fileID: 159918, guid: a0040bf7072bc2f4e82d887d50a9c5e2, type: 3}
 --- !u!1 &1167387141 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1270577860194409780, guid: 6c94d3e93ea423f40a8a18a45dff7006, type: 3}
@@ -7895,6 +7904,10 @@ PrefabInstance:
     - target: {fileID: 1382397465147028747, guid: a2d9de15fb4ea4844a508ec0d42f2bd8, type: 3}
       propertyPath: m_LocalPosition.z
       value: -67.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1709230855758960331, guid: a2d9de15fb4ea4844a508ec0d42f2bd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2410791264504220800, guid: a2d9de15fb4ea4844a508ec0d42f2bd8, type: 3}
       propertyPath: Cam1
