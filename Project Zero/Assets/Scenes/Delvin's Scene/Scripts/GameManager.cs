@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public GameObject ship;
     public GameObject playerMarker;
     public GameObject[] displayClose;
+    public GameObject PartsList;
 
     //End of Delvin's Changes
     public bool isPaused;
@@ -312,6 +313,15 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void ShowParts()
+    {
+        statePause();
+        menuPause.SetActive(false);
+        menuActive = PartsList;
+        menuActive.SetActive(true);
+        menuPause.SetActive(false);
+        PartsList.SetActive(true);
+    }
     //End of Delvin's Changes
 
 

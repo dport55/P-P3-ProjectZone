@@ -47,4 +47,9 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.pauseShow();
     }
 
+    public void ShowPartsList()
+    {
+        GameManager.instance.ShowParts();
+    }
+
 }

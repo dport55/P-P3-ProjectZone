@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using UnityEngine.Windows.WebCam;
 public class PlayerInventory : MonoBehaviour
 {
     private Dictionary<string, Sprite> collectedKeys = new Dictionary<string, Sprite>();
@@ -104,9 +106,18 @@ public class PlayerInventory : MonoBehaviour
 
         GameManager.instance.updateGameGoal(collectedParts);
         aud.PlayOneShot(pickup);
+       
         partsPicked.text = ($"Collected Part: {partID}");
 
         UpdateInventoryUI(); 
+       StartCoroutine(PlayerHud());
     }
 
+    private IEnumerator PlayerHud()
+    {
+       
+        yield return new WaitForSeconds(1f);
+        partsPicked.text = "";
+
+    }
 }
