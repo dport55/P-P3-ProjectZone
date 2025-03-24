@@ -6,7 +6,7 @@ public class CountdownTimer : MonoBehaviour
     public static CountdownTimer instance;
 
     [SerializeField] public TextMeshProUGUI timeText;
-    [SerializeField] public int startMinutes = 0; 
+     public int startMinutes = 0; 
 
     private float timeRemaining;
     public bool isRunning = true;
@@ -14,7 +14,8 @@ public class CountdownTimer : MonoBehaviour
     void Awake()
     {
         instance = this;
-        timeRemaining = startMinutes * 60; 
+        startMinutes = 15; //Change this for the actual timer 
+        timeRemaining = startMinutes * 60;
     }
 
     void Update()
