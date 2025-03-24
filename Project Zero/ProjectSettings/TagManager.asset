@@ -22,8 +22,7 @@ TagManager:
   - Level
   - VentDoor
   - JumpObj
-  - WinTrigger
-  - WinDoor
+  - JumpPrompt
   layers:
   - Default
   - TransparentFX
@@ -33,7 +32,7 @@ TagManager:
   - UI
   - wall
   - enemy
-  - Weapon
+  - 
   - Map Icon
   - Player
   - 

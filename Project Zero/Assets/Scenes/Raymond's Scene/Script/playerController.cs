@@ -518,6 +518,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerO2Bar.fillAmount = (float)Oxygen / O2Orig;
+        GameManager.instance.playerStaminaBar.fillAmount = (float)stamina / staminaOrig;
     }
 
     public void getgunstats(Gunstats gun)
@@ -695,6 +696,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (other.CompareTag("LowO2"))
         {
             O2WarningScreen1.SetActive(false);
+        }
+
+        if (other.CompareTag("JumpObj"))
+        {
+            jumpPrompt.SetActive(false);
         }
         //End of Amata's Addition
 
