@@ -61,9 +61,9 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.ShowParts();
     }
 
-    public void startGame()
+    public void GameStart()
     {
-        GameManager.instance.startGame();
+        GameManager.instance.GameStart();
         GameManager.instance.stateUnpause();
     }
 }

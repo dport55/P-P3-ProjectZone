@@ -81,6 +81,16 @@ public class GameManager : MonoBehaviour
         }
 
         // Delvin's Changes
+
+        isPaused = true;
+        Time.timeScale = 0;
+
+        // Make cursor visible and unlocked so player can click Start
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+
+        // Activate Start Menu
         if (startMenu != null)
         {
             startMenu.SetActive(true);
@@ -233,7 +243,7 @@ public class GameManager : MonoBehaviour
         retical.SetActive(false);
         Time.timeScale = 0;
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void TutorialShow()
@@ -265,50 +275,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //public void showO2Warning()
-    //{
-    //    if (O2Count < 100)
-    //    {
-    //        PlayButton.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        PlayButton.SetActive(false);
-    //    }
-    //}
-
-
-
-    //private IEnumerator OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        O2WarningScreen1.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen1.SetActive(false);
-
-    //        O2WarningScreen2.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        StopAllCoroutines();
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-
-
-    //}
     public void stateUnpause()
     {
         isPaused = !isPaused;
@@ -352,9 +318,8 @@ public class GameManager : MonoBehaviour
         PartsList.SetActive(true);
     }
 
-    public void startGame()
+    public void GameStart()
     {
-
         Debug.Log("Game Started!"); // Check if this logs in the Console
 
         // Hide the start menu
