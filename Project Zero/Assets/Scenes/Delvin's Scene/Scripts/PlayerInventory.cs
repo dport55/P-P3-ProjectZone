@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class PlayerInventory : MonoBehaviour
 {
     private Dictionary<string, Sprite> collectedKeys = new Dictionary<string, Sprite>();
@@ -64,7 +64,7 @@ public class PlayerInventory : MonoBehaviour
             partImage.GetComponent<Image>().sprite = part.Value.sprite;
 
             // Find the Text component inside the prefab
-            Text countText = partImage.GetComponentInChildren<Text>(); // Assumes a Text component exists as a child
+            TMP_Text countText = partImage.GetComponentInChildren<TMP_Text>();// Assumes a Text component exists as a child
             if (countText != null)
             {
                 countText.text = part.Value.count > 1 ? $"x{part.Value.count}" : ""; // Show count only if more than 1

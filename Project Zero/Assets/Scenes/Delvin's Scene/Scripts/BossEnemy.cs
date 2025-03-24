@@ -29,6 +29,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     public Collider attackCol1;
     public Collider attackCol2;
 
+    public bool takingDamage = false;
     Color colorOrig;
 
     void Start()
@@ -106,7 +107,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     void EngagePlayer()
     {
         if (GameManager.instance.playerScript == null) return;
-        if (!isStunned)
+        if (!isStunned && !takingDamage)
         {
             agent.SetDestination(GameManager.instance.playerScript.transform.position);
             float distance = agent.remainingDistance;
@@ -209,6 +210,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     }
     public void TakeDamage(float damage, float Freeze, float O2)
     {
+        takingDamage = true;
         if (Freeze > 0)
         {
             Stun(Freeze); 
@@ -217,21 +219,11 @@ public class BossEnemy : MonoBehaviour, IDamage
         {
             HP -= damage;
 
-            // Increase movement speed when hit
-            agent.speed *= 1.5f; 
-
+           
             // Check if the boss is currently attacking
             if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack2RLSpike"))
             {
-                
-                anim.Play("run2");
-
-                // Array of possible hurt animations
-                string[] hurtAnimations = { "gethit4", "gethit3", "gethit1" };
-
-                // Play a random hurt animation
-                string randomHurtAnim = hurtAnimations[Random.Range(0, hurtAnimations.Length)];
-                anim.Play(randomHurtAnim);
+               
 
                 // Play hurt sound 
                 if (hurtGrowl.Length > 0)
@@ -241,23 +233,47 @@ public class BossEnemy : MonoBehaviour, IDamage
 
                 StartCoroutine(FlashRed());
             }
+            takingDamage = false;
         }
 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0)
         {
-            Destroy(gameObject);
+          
+           StartCoroutine(Death()); 
         }
     }
 
     IEnumerator FlashRed()
     {
+        // Stop movement and attacks while playing hit animation
+        agent.isStopped = true;
+        isStunned = true;
+
         model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+        anim.CrossFade("gethit3", 0.1f); // Ensures immediate override
+        yield return new WaitForSeconds(0.5f); // Wait for animation to finish
+
         model.material.color = colorOrig;
+
+        // Resume movement after hit animation
+        agent.isStopped = false;
+        isStunned = false;
     }
 
+    IEnumerator Death()
+    {
+        // Stop all actions permanently
+        agent.isStopped = true;
+        isStunned = true;
+        takingDamage = true;
+
+        anim.CrossFade("death3", 0.1f);
+        yield return new WaitForSeconds(3f); // Wait for animation to complete
+
+        Destroy(gameObject);
+    }
     IEnumerator FlashBlue()
     {
         model.material.color = Color.blue;
