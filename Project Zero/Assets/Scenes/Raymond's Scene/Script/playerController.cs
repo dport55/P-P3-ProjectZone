@@ -757,7 +757,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         yield return new WaitForSeconds(0.1f);
         playerO2Screen.SetActive(false);
     }
-
     //End od Delvin's Additions
 
+    //Dylan's Additions
+    public void getHealth(float healAmount)
+    {
+        HP += healAmount;
+        HP = Mathf.Clamp(HP, 0, HPOrig); // This should prevent health from overflowing.
+        UpdatePlayerUI();
+    }
+    //End of Dylan's Additions
 }
