@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e988d33ef11d97742b81377a806ed01a
+timeCreated: 1556985858
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 146016
+  packageName: LowPoly Sci-Fi Crates Free
+  packageVersion: 1.0
+  assetPath: Assets/Crates_0/Crate_0/Prefabs/Crate_0_9.prefab
+  uploadId: 315357

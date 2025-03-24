@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 85190a6157da48f46a88780f9e0ad4a2
+timeCreated: 1556836605
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 146016
+  packageName: LowPoly Sci-Fi Crates Free
+  packageVersion: 1.0
+  assetPath: Assets/Crates_0/Crate_0/Materials/CreateCap_0_10.mat
+  uploadId: 315357

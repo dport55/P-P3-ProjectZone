@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UIElements;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Shot : MonoBehaviour
 {
@@ -48,12 +51,16 @@ public class Shot : MonoBehaviour
 
         if (hitEffect != null)
         {
-            Instantiate(hitEffect, transform.position, Quaternion.identity);
-            Destroy(hitEffect.gameObject, 0.05f);
+
+           GameObject hit = Instantiate(hitEffect.gameObject, transform.position, Quaternion.identity);
+
+            Destroy(hit.gameObject, 0.5f);
         }
 
         // Destroy the laser and hiteffct on impact
         Destroy(gameObject);
        
     }
+
+
 }
