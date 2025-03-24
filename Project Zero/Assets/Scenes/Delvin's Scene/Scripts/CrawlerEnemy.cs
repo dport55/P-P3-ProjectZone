@@ -162,6 +162,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            EngagePlayer();
           
         }
     }
@@ -214,12 +215,12 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     IEnumerator FlashRed()
     {
         
-        agent.isStopped = true;
+        //agent.isStopped = true;
         model.material.color = Color.red;
         aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
-        yield return new WaitForSeconds(0.6f); 
+        yield return new WaitForSeconds(0.1f); 
         model.material.color = colorOrig;
-        agent.isStopped = false;
+        //agent.isStopped = false;
         
     }
 
