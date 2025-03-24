@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject WinCam;
     public Image playerHPBar;
     public Image playerO2Bar;
+    public Image playerStaminaBar;
     public Animator creditsAnimator;
 
 
