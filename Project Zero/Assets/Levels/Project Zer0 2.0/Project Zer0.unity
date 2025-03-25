@@ -1218,6 +1218,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 36.53
       objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
+      objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 87.04189
@@ -1411,6 +1415,10 @@ PrefabInstance:
     - target: {fileID: 9009901904509844892, guid: 58ed049072f3550418a7262e554640fc, type: 3}
       propertyPath: m_Radius
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9009901904509844892, guid: 58ed049072f3550418a7262e554640fc, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1068904667626299194, guid: 58ed049072f3550418a7262e554640fc, type: 3}
@@ -1823,6 +1831,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 9009901904509844892, guid: 58ed049072f3550418a7262e554640fc, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1068904667626299194, guid: 58ed049072f3550418a7262e554640fc, type: 3}
     - {fileID: 8516802958820072032, guid: 58ed049072f3550418a7262e554640fc, type: 3}
@@ -1845,13 +1857,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024006790856890375, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4883804991121731025, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457585817865894556, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5499333367482633041, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361765143594612093, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_Name
       value: WeaponCrate (2)
       objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_TagString
       value: Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267343873060331154, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8862595905676375008, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3435,6 +3475,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 36.53
       objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
+      objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 87.04189
@@ -3983,6 +4027,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 9009901904509844892, guid: 58ed049072f3550418a7262e554640fc, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1068904667626299194, guid: 58ed049072f3550418a7262e554640fc, type: 3}
     - {fileID: 8516802958820072032, guid: 58ed049072f3550418a7262e554640fc, type: 3}
@@ -4288,13 +4336,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024006790856890375, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4883804991121731025, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457585817865894556, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5499333367482633041, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361765143594612093, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_Name
       value: WeaponCrate
       objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_TagString
       value: Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267343873060331154, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8862595905676375008, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5981,13 +6057,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024006790856890375, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4883804991121731025, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457585817865894556, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5499333367482633041, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361765143594612093, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_Name
       value: WeaponCrate (3)
       objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_TagString
       value: Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267343873060331154, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8862595905676375008, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9623,13 +9727,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024006790856890375, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4883804991121731025, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457585817865894556, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5499333367482633041, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361765143594612093, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_Name
       value: WeaponCrate (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193618553645803866, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_TagString
       value: Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267343873060331154, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8862595905676375008, guid: def03214e9a59bd4c9dc2fce3ca7ab38, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10292,6 +10424,10 @@ PrefabInstance:
     - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_Radius
       value: 36.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
       objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11084,6 +11220,10 @@ PrefabInstance:
     - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_Radius
       value: 36.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
       objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11940,6 +12080,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 36.53
       objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
+      objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 87.04189
@@ -12122,6 +12266,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4325807839142527086, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 5767553670577531118, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.6
@@ -13310,6 +13458,10 @@ PrefabInstance:
     - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_Radius
       value: 36.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
       objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14508,6 +14660,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 36.53
       objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
+      objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 87.04189
@@ -15592,6 +15748,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4325807839142527086, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 5767553670577531118, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 93.3
@@ -18134,6 +18294,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 9009901904509844892, guid: 58ed049072f3550418a7262e554640fc, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1068904667626299194, guid: 58ed049072f3550418a7262e554640fc, type: 3}
     - {fileID: 8516802958820072032, guid: 58ed049072f3550418a7262e554640fc, type: 3}
@@ -19785,6 +19949,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4325807839142527086, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 5767553670577531118, guid: a99ba5fa3db0c004b82f3f486b373fa4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 86.3
@@ -21246,6 +21414,10 @@ PrefabInstance:
     - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_Radius
       value: 36.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7108803734864269999, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2176
       objectReference: {fileID: 0}
     - target: {fileID: 7272896902806443335, guid: e0f035deab3cf9d4a8c5b372f7fa4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
