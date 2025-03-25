@@ -42,23 +42,28 @@ public class Shot : MonoBehaviour
 
      void OnTriggerEnter(Collider other)
      {
-        // Check if the object hit takes damage
-        IDamage dmg = other.GetComponent<IDamage>();
-        if (dmg != null)
-        {
-            dmg.TakeDamage(damage, freezetime, O2Level);
-        }
-
-        if (hitEffect != null)
+        if(other.CompareTag("Enemy") || other.CompareTag("Level") || other.CompareTag("Crate"))
         {
 
-           GameObject hit = Instantiate(hitEffect.gameObject, transform.position, Quaternion.identity);
+            // Check if the object hit takes damage
+            IDamage dmg = other.GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                dmg.TakeDamage(damage, freezetime, O2Level);
+            }
 
-            Destroy(hit.gameObject, 0.5f);
+            if (hitEffect != null)
+            {
+
+                GameObject hit = Instantiate(hitEffect.gameObject, transform.position, Quaternion.identity);
+
+                Destroy(hit.gameObject, 0.5f);
+            }
+
+            // Destroy the laser and hiteffct on impact
+            Destroy(gameObject);
         }
 
-        // Destroy the laser and hiteffct on impact
-        Destroy(gameObject);
        
     }
 
