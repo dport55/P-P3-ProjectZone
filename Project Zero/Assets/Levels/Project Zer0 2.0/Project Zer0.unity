@@ -12179,7 +12179,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: 478.6}
+  m_AnchoredPosition: {x: -7, y: 461.1}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1418968001
@@ -14566,12 +14566,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Enemies/Player Inventory/Level Explosion/Parts& Door interactions\nWeapons
-    System/ game Audio/ Map/ Player\n\r\n\nCreep Horror Creature\r\nExplosive Realistic
-    VFX Texture Free\r\nGrenade Sound FX\r\nHorror Sfx\r\nMagic VFX \u2013 Ice (FREE)\r\nMangled
-    Screams (Free)\r\nMonster SFX - 111518\r\nTrue Horror - Crawler\r\nMonster Mutant
-    7\n\rDark Ambient Music - Into Insanity Vol. 1\r\nFree Horror Starter Pack\r\nFootsteps
-    - Essentials\r\nMagic Effects FREE\r\nSci-Fi Gun Light\r\nCrosshairs\r\nSpaceSkies
-    Free\r\nHit Effects FREE\n"
+    System/ game Audio/ Map/ Player\n\rPlayer/Stamina/Timer\n\n\nCreep Horror Creature\r\nExplosive
+    Realistic VFX Texture Free\r\nGrenade Sound FX\r\nHorror Sfx\r\nMagic VFX \u2013
+    Ice (FREE)\r\nMangled Screams (Free)\r\nMonster SFX - 111518\r\nTrue Horror -
+    Crawler\r\nMonster Mutant 7\n\rDark Ambient Music - Into Insanity Vol. 1\r\nFree
+    Horror Starter Pack\r\nFootsteps - Essentials\r\nMagic Effects FREE\r\nSci-Fi
+    Gun Light\r\nCrosshairs\r\nSpaceSkies Free\r\nHit Effects FREE\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -18670,28 +18670,30 @@ PrefabInstance:
 
         Hemant Rajesh Kumar
 
+        Raymond Rosario
 
 
-        Andrii Chykrii
 
-        Gustav
-        Hagerling
+        Andrii
+        Chykrii
+
+        Gustav Hagerling
 
         MGWSoundDesign
 
-        Little Robot Sound Factory
+        Little
+        Robot Sound Factory
 
-        Swift
-        Games
+        Swift Games
 
         SoundBits
 
         GWriterStudio
 
-        Witch-A-Twin Studios
+        Witch-A-Twin
+        Studios
 
-        Panchenko
-        Lyudmila
+        Panchenko Lyudmila
 
         Juanjo_sound
 
