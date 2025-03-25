@@ -77,26 +77,44 @@ public class GameManager : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
         {
-            TutorialStartMenu.SetActive(true);
+            isPaused = true;
+            Time.timeScale = 0;
+
+            // Make cursor visible and unlocked so player can click Start
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+
+            // Activate Start Menu
+            if (TutorialStartMenu != null)
+            {
+
+                TutorialStartMenu.SetActive(true);
+                menuActive = TutorialStartMenu;
+
+            }
         }
-
-        // Delvin's Changes
-
-        isPaused = true;
-        Time.timeScale = 0;
-
-        // Make cursor visible and unlocked so player can click Start
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
-
-        // Activate Start Menu
-        if (startMenu != null)
+        else
         {
-           
-            startMenu.SetActive(true);
-            menuActive = startMenu;
 
+            // Delvin's Changes
+
+            isPaused = true;
+            Time.timeScale = 0;
+
+            // Make cursor visible and unlocked so player can click Start
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+
+            // Activate Start Menu
+            if (startMenu != null)
+            {
+
+                startMenu.SetActive(true);
+                menuActive = startMenu;
+
+            }
         }
         //End of Delvin's Changes
     }
