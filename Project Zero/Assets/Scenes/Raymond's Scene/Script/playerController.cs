@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] private TextMeshProUGUI partsCounterTMP;
     [SerializeField] private TextMeshProUGUI remainingPartsTMP;
 
-    private int requiredParts = 5;
+    //private int requiredParts = 5;
 
 
     bool isPlayerSteps;
@@ -74,21 +74,21 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Range(15, 45)][SerializeField] float gravity = 20f;
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpeedMod = 0.5f;
-    [SerializeField] float interactRange = 2f;
+    //[SerializeField] float interactRange = 2f;
 
     [Header("---- Slide Settings ----")]
     [SerializeField] private float slideSpeed = 0f;
     [SerializeField] private float slideDuration = 0f;
-    [SerializeField] private float slideFriction = 0f;
+    //[SerializeField] private float slideFriction = 0f;
     [SerializeField] private float slideCooldownTime = 2f;
 
     private bool canSlide = true;
-    private bool isSliding = false;
+    public bool isSliding = false;
 
     [Header("---- Stamina Settings ----")]
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float staminaRegenRate = 10f;
-    [SerializeField] private float slideStaminaDrain = 25f;
+    //[SerializeField] private float slideStaminaDrain = 25f;
     [SerializeField] private float staminaDrainRate = 15f;
     [SerializeField] private float fatigueRecoveryTime = 3f;
 
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [SerializeField] Transform playerCamera;
     [SerializeField] Transform playerModel;
-    [SerializeField] float crouchCameraOffset = 0.5f;
+    //[SerializeField] float crouchCameraOffset = 0.5f;
     //[SerializeField] float crouchScale = 0.7f;
 
     float HPOrig;
@@ -489,28 +489,45 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void shoot()
     {
-            shootTimer = 0;
-            gunList[gunListPos].AmmoCur--;
-            // Play gun sound
-            gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
+        shootTimer = 0;
+        gunList[gunListPos].AmmoCur--;
+        // Play gun sound
+        gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
-            // Spawn the laser projectile prefab from the current gun's data
-            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+        RaycastHit hit;
+
+        // Spawn the laser projectile prefab from the current gun's data
+        // Spawn the laser projectile prefab from the current gun's data
+        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
+
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunList[gunListPos].shootDist))
+        {
+            Vector3 direction = (hit.point - Muzzlepos.position).normalized;
+
+
+            laser.transform.rotation = Quaternion.LookRotation(direction);
+            laser.transform.rotation = laser.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
+
+        }
+        else
+        {
             laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
+        }
 
-            // Pass damage and distance data to the Shot script
-            Shot shotScript = laser.GetComponent<Shot>();
-            if (shotScript != null)
-            {
-                shotScript.freezetime = gunList[gunListPos].freezeTime;
-                shotScript.damage = gunList[gunListPos].shootDamage;
-                shotScript.maxDistance = gunList[gunListPos].shootDist;
-                shotScript.speed = 50f;
-                shotScript.hitEffect = gunList[gunListPos].HitEffect;
-            }
+        // Pass damage and distance data to the Shot script
+        Shot shotScript = laser.GetComponent<Shot>();
+        if (shotScript != null)
+        {
+            shotScript.freezetime = gunList[gunListPos].freezeTime;
+            shotScript.damage = gunList[gunListPos].shootDamage;
+            shotScript.maxDistance = gunList[gunListPos].shootDist;
+            shotScript.speed = 50f;
+            shotScript.hitEffect = gunList[gunListPos].HitEffect;
+        }
 
-            // Muzzle flash effect
-            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
+        // Muzzle flash effect
+        StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
     }
 
     public IEnumerator Reload()
@@ -601,6 +618,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void changeGun()
     {
+        isReloading = false;
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         shootRate = gunList[gunListPos].shootRate;

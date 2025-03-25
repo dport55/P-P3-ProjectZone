@@ -26,6 +26,7 @@ TagManager:
   - WinTrigger
   - WinDoor
   - Enemy
+  - Crate
   layers:
   - Default
   - TransparentFX
@@ -38,8 +39,8 @@ TagManager:
   - 
   - Map Icon
   - Player
-  - 
-  - 
+  - Laser
+  - Crate
   - 
   - 
   - 

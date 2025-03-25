@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 8310668600499684528}
   m_Layer: 0
   m_Name: WeaponCrate
-  m_TagString: Untagged
+  m_TagString: Crate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -431,11 +431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  spawnMaterials:
-  - {fileID: 3812396838839596914, guid: 20fa8b2ad4d3490488e7bf13f64ea846, type: 3}
-  spawnAmount: 1
-  spawnHeightOffset: 1.5
-  spawnRadius: 2
+  spawnMaterial: {fileID: 0}
   aud: {fileID: 0}
   crateBreak:
   - {fileID: 8300000, guid: 8b3f676fe7b41044495a2964396b8ba3, type: 3}
