@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Amata's Scene/Scenes/MainMenu.unity
+    guid: 9298e020eabdc1748ab7a4a882b3c33e
+  - enabled: 1
     path: Assets/Scenes/Amata's Scene/Scenes/Tutorial.unity
     guid: 83ef3cec07eb56042b58e6ade48caecf
   - enabled: 1

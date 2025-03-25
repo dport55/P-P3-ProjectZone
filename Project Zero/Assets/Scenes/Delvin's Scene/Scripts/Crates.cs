@@ -6,10 +6,8 @@ public class Crates : MonoBehaviour, IDamage
     public float health;
 
     [Header("Spawn Settings")]
-    public GameObject[] spawnMaterials;
-    public int spawnAmount;
-    public float spawnHeightOffset = 1.5f;
-    public float spawnRadius = 2f;
+    public GameObject spawnMaterial;
+    //public int spawnAmount;
     public AudioSource aud;
     public AudioClip[] crateBreak;
 
@@ -36,39 +34,28 @@ public class Crates : MonoBehaviour, IDamage
             Instantiate(destroyedEffect, transform.position, Quaternion.identity);
         }
 
-        SpawnItemsOnGround(); // Ensure items are spawned before destroying the object
+        SpawnItemsInCrate();
 
         Destroy(gameObject);
     }
 
-    private void SpawnItemsOnGround()
+    private void SpawnItemsInCrate()
     {
-        if (spawnMaterials == null || spawnMaterials.Length == 0)
+        if (spawnMaterial == null)
         {
             Debug.LogWarning("No spawn materials assigned.");
             return;
         }
 
-        for (int i = 0; i < spawnAmount; i++)
-        {
-            Vector3 randomPosition = transform.position + new Vector3(
-                Random.Range(-spawnRadius, spawnRadius),
-                spawnHeightOffset,
-                Random.Range(-spawnRadius, spawnRadius)
-            );
+      
+            GameObject spawnedObject = Instantiate(spawnMaterial, transform.position, Quaternion.identity);
 
-            // Ensure valid object selection
-            GameObject prefab = spawnMaterials[Random.Range(0, spawnMaterials.Length)];
-            if (prefab == null) continue; // Skip null objects
-
-            GameObject spawnedObject = Instantiate(prefab, randomPosition, Quaternion.identity);
-
-            Collider col = spawnedObject.GetComponent<Collider>();
-            if (col == null)
+          
+            if (spawnedObject.GetComponent<Collider>() == null)
             {
-                spawnedObject.AddComponent<BoxCollider>(); // Add a collider if it's missing
+                spawnedObject.AddComponent<BoxCollider>();
             }
-        }
+        
     }
 }
 

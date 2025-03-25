@@ -22,6 +22,11 @@ TagManager:
   - Level
   - VentDoor
   - JumpObj
+  - JumpPrompt
+  - WinTrigger
+  - WinDoor
+  - Enemy
+  - Crate
   layers:
   - Default
   - TransparentFX
@@ -34,8 +39,8 @@ TagManager:
   - 
   - Map Icon
   - Player
-  - 
-  - 
+  - Laser
+  - Crate
   - 
   - 
   - 

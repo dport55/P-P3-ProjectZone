@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using UnityEngine.Windows.WebCam;
 public class PlayerInventory : MonoBehaviour
 {
     private Dictionary<string, Sprite> collectedKeys = new Dictionary<string, Sprite>();
@@ -15,7 +17,9 @@ public class PlayerInventory : MonoBehaviour
     private bool isInventoryOpen = false;
     public GameObject partsContainer;
     public GameObject partImagePrefab;
-
+    [SerializeField] TMP_Text partsPicked;
+    public AudioSource aud;
+    public AudioClip pickup;
 
     void Update()
     {
@@ -38,41 +42,37 @@ public class PlayerInventory : MonoBehaviour
 
     void UpdateInventoryUI()
     {
-        // Clear previous keys from UI
+     
         foreach (Transform child in keyContainer.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // Add collected keys to UI
+
         foreach (var key in collectedKeys)
         {
             GameObject keyImage = Instantiate(keyImagePrefab, keyContainer.transform);
             keyImage.GetComponent<Image>().sprite = key.Value;
         }
 
-        // Clear previous parts from UI
+      
         foreach (Transform child in partsContainer.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // Add collected parts to UI
+       
         foreach (var part in parts)
         {
             GameObject partImage = Instantiate(partImagePrefab, partsContainer.transform);
             partImage.GetComponent<Image>().sprite = part.Value.sprite;
 
-            // Find the Text component inside the prefab
-            TMP_Text countText = partImage.GetComponentInChildren<TMP_Text>();// Assumes a Text component exists as a child
+            TMP_Text countText = partImage.GetComponentInChildren<TMP_Text>();
             if (countText != null)
             {
-                countText.text = part.Value.count > 1 ? $"x{part.Value.count}" : ""; // Show count only if more than 1
+                countText.text = part.Value.count > 1 ? $"x{part.Value.count}" : "";
             }
-            else
-            {
-                Debug.LogWarning("Part prefab is missing a Text component to show count.");
-            }
+         
         }
     }
 
@@ -81,11 +81,11 @@ public class PlayerInventory : MonoBehaviour
         if (!collectedKeys.ContainsKey(keyID))
         {
             collectedKeys[keyID] = keySprite;
-            Debug.Log("Collected Key: " + keyID);
+            partsPicked.text = ("Collected Key: " + keyID);
             UpdateInventoryUI();
         }
     }
-
+  
     public bool HasKey(string keyID)
     {
         return collectedKeys.ContainsKey(keyID);
@@ -104,9 +104,20 @@ public class PlayerInventory : MonoBehaviour
             parts[partID] = (partSprite, 1); // First time collecting this part
         }
 
-        GameManager.instance.updateGameGoal(collectedParts); // Now updates with total collected parts
-        Debug.Log($"Collected Part: {partID}, Total: {collectedParts}, Unique Count: {parts.Count}");
-        UpdateInventoryUI(); // Update UI instantly
+        GameManager.instance.updateGameGoal(collectedParts);
+        aud.PlayOneShot(pickup);
+       
+        partsPicked.text = ($"Collected Part: {partID}");
+
+        UpdateInventoryUI(); 
+       StartCoroutine(PlayerHud());
     }
 
+    private IEnumerator PlayerHud()
+    {
+       
+        yield return new WaitForSeconds(1f);
+        partsPicked.text = "";
+
+    }
 }

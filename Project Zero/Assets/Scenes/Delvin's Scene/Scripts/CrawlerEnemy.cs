@@ -74,13 +74,17 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     }
     void CheckRoam()
     {
-        if (roamTimer > roamPauseTime && (agent.remainingDistance <= agent.stoppingDistance || GameManager.instance.playerScript.HP <= 0))
+        if (CanSeePlayer())
         {
-          
+            EngagePlayer(); // Keep chasing if the player is still visible
+            return;
+        }
+
+        if (roamTimer > roamPauseTime && (agent.remainingDistance <= agent.stoppingDistance || GameManager.instance.playerScript.HP <= 0) && !isEngaged)
+        {
             Roam();
         }
     }
-
     void Roam()
     {
         roamTimer = 0;
@@ -108,21 +112,18 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         {
             if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                // Prevent growl spam
-                if (growlTimer >= 2f) // 2-second cooldown
+                if (growlTimer >= 2f) // Prevent growl spam
                 {
                     aud.PlayOneShot(growl[Random.Range(0, growl.Length)]);
                     growlTimer = 0;
                 }
-                if (agent.remainingDistance <= agent.stoppingDistance)
-                {
-                    FaceTarget();
-                }
+
                 agent.stoppingDistance = stoppingDisOrig;
+                isEngaged = true; // Keep engaged as long as the player is visible
                 return true;
             }
         }
-        agent.stoppingDistance = 0;
+
         return false;
     }
 
@@ -130,13 +131,13 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     {
         if (GameManager.instance.playerScript == null) return;
 
-        isEngaged = true; // Set engaged flag
+        isEngaged = true;
         roamTimer = 0;
 
         agent.SetDestination(GameManager.instance.playerScript.transform.position);
-        FaceTarget(); // Ensures enemy faces player when engaging
+        FaceTarget();
 
-        float distanceToPlayer = agent.remainingDistance;
+        float distanceToPlayer = Vector3.Distance(transform.position, GameManager.instance.playerScript.transform.position);
 
         if (distanceToPlayer > 10)
         {
@@ -148,7 +149,11 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         }
         else if (distanceToPlayer <= 3)
         {
-            anim.Play("attack");
+            if (attackTimer >= attackRate) // Ensure the attack is based on cooldown
+            {
+                anim.Play("attack");
+                attackTimer = 0;
+            }
         }
         else
         {
@@ -162,6 +167,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            EngagePlayer();
           
         }
     }
@@ -200,7 +206,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
         StartCoroutine(FlashRed());
 
 
-        if (GameManager.instance.playerScript != null)
+        if (GameManager.instance.playerScript != null && HP > 0)
         {
             agent.SetDestination(GameManager.instance.playerScript.transform.position);
         }
@@ -214,12 +220,12 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     IEnumerator FlashRed()
     {
         
-        agent.isStopped = true;
+        //agent.isStopped = true;
         model.material.color = Color.red;
         aud.PlayOneShot(hurtGrowl[Random.Range(0, hurtGrowl.Length)]);
-        yield return new WaitForSeconds(0.6f); 
+        yield return new WaitForSeconds(0.1f); 
         model.material.color = colorOrig;
-        agent.isStopped = false;
+        //agent.isStopped = false;
         
     }
 

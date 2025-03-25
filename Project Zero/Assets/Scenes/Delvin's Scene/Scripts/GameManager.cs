@@ -5,13 +5,10 @@ using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu;
-    [SerializeField] public GameObject startMenu;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -25,7 +22,10 @@ public class GameManager : MonoBehaviour
     public GameObject WinCam;
     public Image playerHPBar;
     public Image playerO2Bar;
+    public Image playerStaminaBar;
     public Animator creditsAnimator;
+
+
 
     [SerializeField] TMP_Text goalCountText;
 
@@ -36,7 +36,11 @@ public class GameManager : MonoBehaviour
     public GameObject Explosion5;
     public GameObject Explosion6;
     public GameObject Credits;
-
+    public GameObject ship;
+    public GameObject playerMarker;
+    public GameObject[] displayClose;
+    public GameObject PartsList;
+    [SerializeField] GameObject startMenu;
     //End of Delvin's Changes
     public bool isPaused;
 
@@ -68,6 +72,51 @@ public class GameManager : MonoBehaviour
         //Hemant's Addition
         PlayBackgroundMusic();
         //End
+
+        //Amata's changes
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (SceneManager.GetActiveScene().name == "Tutorial" || SceneManager.GetActiveScene().name == "Tutorial_A")
+        {
+            isPaused = true;
+            Time.timeScale = 0;
+
+            // Make cursor visible and unlocked so player can click Start
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+
+            // Activate Start Menu
+            if (TutorialStartMenu != null)
+            {
+
+                TutorialStartMenu.SetActive(true);
+                menuActive = TutorialStartMenu;
+
+            }
+        }
+        else
+        {
+
+            // Delvin's Changes
+
+            isPaused = true;
+            Time.timeScale = 0;
+
+            // Make cursor visible and unlocked so player can click Start
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+
+            // Activate Start Menu
+            if (startMenu != null)
+            {
+
+                startMenu.SetActive(true);
+                menuActive = startMenu;
+
+            }
+        }
+        //End of Delvin's Changes
     }
 
     //Hemant's Addition
@@ -90,9 +139,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //TutorialShow();
-
-        // Dylan's Add
-        ShowStartMenu();
     }
 
     void Update()
@@ -111,22 +157,30 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    //Amata's changes
+    public void StartGame()
+    {
+        if (TutorialStartMenu != null)
+        {
+            TutorialStartMenu.SetActive(false);
+        }
+    }
 //Delvin's Changes
     public void ShowWinMenu()
     {
-        //MainCamera.enabled = false; // Disable camera switcher
+        foreach (GameObject close in displayClose)
+        {
+            close.SetActive(false);
+        }
+        retical.SetActive(false);
+        playerMarker.SetActive(false);
         WinCam.SetActive(true); // Enable the WinCam
         menuActive = menuWin;
         menuActive.SetActive(true);
-  
-      
-        Explosion1.SetActive(true);
-        Explosion2.SetActive(true);
-        Explosion3.SetActive(true);
-        Explosion4.SetActive(true);
-        Explosion5.SetActive(true);
-        Explosion6.SetActive(true);
-StartCoroutine(DelayPauseAndCredits(3f));
+        StartCoroutine(ShipTakeoff());
+
+       StartCoroutine(DelayPauseAndCredits(6f));
        
 
         if (creditsAnimator != null)
@@ -145,9 +199,47 @@ StartCoroutine(DelayPauseAndCredits(3f));
       
         Credits.SetActive(true); // Show credits  statePause(); // Pause the game
     }
+    private IEnumerator ShipTakeoff()
+    {
+        ship.SetActive(true); // Activate ship, animation should play automatically
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds before triggering explosions
+
+        // Activate explosions after delay
+        Explosion1.SetActive(true);
+        Explosion2.SetActive(true);
+        Explosion3.SetActive(true);
+        Explosion4.SetActive(true);
+        Explosion5.SetActive(true);
+        Explosion6.SetActive(true);
+
+        StartCoroutine(CameraShake(WinCam, 0.5f, 0.3f)); // Shake camera when explosions start
+    }
+
+    // Camera Shake Effect
+    private IEnumerator CameraShake(GameObject targetCam, float duration, float magnitude)
+    {
+        if (targetCam == null) yield break; // Prevent errors if WinCam is not assigned
+
+        Transform camTransform = targetCam.transform;
+        Vector3 originalPosition = camTransform.localPosition;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float offsetX = Random.Range(-1f, 1f) * magnitude;
+            float offsetY = Random.Range(-1f, 1f) * magnitude;
+            camTransform.localPosition = originalPosition + new Vector3(offsetX, offsetY, 0);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        camTransform.localPosition = originalPosition; // Reset camera position
+    }
+
     private IEnumerator DelayPause()
     {
-        yield return new WaitForSeconds(7f); // Wait for specified time
+        yield return new WaitForSeconds(11f); // Wait for specified time
 
 
         statePause(); // Show credits  statePause(); // Pause the game
@@ -161,6 +253,9 @@ StartCoroutine(DelayPauseAndCredits(3f));
         menuActive.SetActive(true);
         menuPause.SetActive(false);
     }
+
+    
+
     //End of Delvin's Changes
     public void statePause()
     {
@@ -169,7 +264,7 @@ StartCoroutine(DelayPauseAndCredits(3f));
         retical.SetActive(false);
         Time.timeScale = 0;
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void TutorialShow()
@@ -201,50 +296,6 @@ StartCoroutine(DelayPauseAndCredits(3f));
         }
     }
 
-    //public void showO2Warning()
-    //{
-    //    if (O2Count < 100)
-    //    {
-    //        PlayButton.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        PlayButton.SetActive(false);
-    //    }
-    //}
-
-
-
-    //private IEnumerator OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        O2WarningScreen1.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen1.SetActive(false);
-
-    //        O2WarningScreen2.SetActive(true);
-    //        yield return new WaitForSeconds(2f);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("LowO2"))
-    //    {
-    //        StopAllCoroutines();
-    //        O2WarningScreen1.SetActive(false);
-    //        O2WarningScreen2.SetActive(false);
-    //    }
-
-
-    //}
     public void stateUnpause()
     {
         isPaused = !isPaused;
@@ -265,7 +316,7 @@ StartCoroutine(DelayPauseAndCredits(3f));
     //Delvin's Changes
     public void updateGameGoal(int parts)
     {
-        goalCountText.text = parts.ToString("F0") + "/10";
+        goalCountText.text = parts.ToString("F0") + " / 13";
 
     }
 
@@ -278,22 +329,26 @@ StartCoroutine(DelayPauseAndCredits(3f));
 
     }
 
+    public void ShowParts()
+    {
+        statePause();
+        menuPause.SetActive(false);
+        menuActive = PartsList;
+        menuActive.SetActive(true);
+        menuPause.SetActive(false);
+        PartsList.SetActive(true);
+    }
+
+    public void GameStart()
+    {
+        Debug.Log("Game Started!"); // Check if this logs in the Console
+
+        // Hide the start menu
+        if (startMenu != null)
+        {
+            startMenu.SetActive(false);
+
+        }
+    }
     //End of Delvin's Changes
-
-    // Dylan's Additions
-    public void ShowStartMenu()
-    {
-        startMenu.SetActive(true);  
-        Time.timeScale = 0;         
-    }
-
-    public void StartGame()
-    {
-        startMenu.SetActive(false); 
-        retical.SetActive(true);    
-        player.SetActive(true);     
-        Time.timeScale = 1;         
-    }
-
-    // End of DYl
 }
