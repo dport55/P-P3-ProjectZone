@@ -83,7 +83,7 @@ public class DoorTrigger : MonoBehaviour
     public float openHeight = 3f;
     public float openSpeed = 2f;
     public string requiredKeyID;
-    private int partsRequired = 13;
+    private int partsRequired = 1;
 
     public float closeHeight = 0f;
     public float closeSpeed = 2f;

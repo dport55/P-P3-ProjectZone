@@ -11,6 +11,7 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] public GameObject MainMenuPanel, CreditsPanel;
     public static MainMenuManager instance;
+    public GameObject[] thingsToClose;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +22,12 @@ public class MainMenuManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        
+        Time.timeScale = 0;
+
+        // Make cursor visible and unlocked so player can click Start
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
@@ -31,7 +38,10 @@ public class MainMenuManager : MonoBehaviour
 
     public void MainMenuCreditsPanelShow()
     {
-        MainMenuPanel.SetActive(false);
+        foreach (GameObject thing in thingsToClose)
+        {
+            thing.SetActive(false);
+        }
         CreditsPanel.SetActive(true);
     }
 
