@@ -23,6 +23,9 @@ TagManager:
   - VentDoor
   - JumpObj
   - JumpPrompt
+  - WinTrigger
+  - WinDoor
+  - Enemy
   layers:
   - Default
   - TransparentFX
