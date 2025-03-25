@@ -26,6 +26,7 @@ TagManager:
   - WinTrigger
   - WinDoor
   - Enemy
+  - Crate
   layers:
   - Default
   - TransparentFX
