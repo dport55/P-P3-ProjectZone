@@ -23,7 +23,7 @@ public class MainMenuManager : MonoBehaviour
     {
         instance = this;
         
-        Time.timeScale = 0;
+      
 
         // Make cursor visible and unlocked so player can click Start
         Cursor.visible = true;

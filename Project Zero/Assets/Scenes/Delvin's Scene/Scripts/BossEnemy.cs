@@ -9,7 +9,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] Animator anim;
 
     [SerializeField] Transform[] spawnPoints; // Array of spawn points
-    [SerializeField] float HP;
+    [SerializeField] public float HP;
     [SerializeField] int faceTargetSpeed;
     //[SerializeField] float stunDuration = 2f;
     [SerializeField] int roamPauseTime;
