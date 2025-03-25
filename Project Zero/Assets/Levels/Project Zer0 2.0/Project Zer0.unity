@@ -4164,7 +4164,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.271
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -14608,9 +14608,17 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 790250395849308839, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Value
+      value: 0.271
+      objectReference: {fileID: 0}
     - target: {fileID: 1010231167327824081, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548347909266321525, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Value
+      value: 0.271
       objectReference: {fileID: 0}
     - target: {fileID: 1548347909266321525, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -14651,6 +14659,10 @@ PrefabInstance:
     - target: {fileID: 3594082223735677967, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3830373512480217898, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Value
+      value: 0.411
       objectReference: {fileID: 0}
     - target: {fileID: 4073476469359118471, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_Pivot.x
@@ -14736,12 +14748,32 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5425375298365573966, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Name
+      value: Enemy VolumeSllder
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944658940282694199, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Name
+      value: Weapon VolumeSllder
+      objectReference: {fileID: 0}
     - target: {fileID: 6244149233015999594, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454410109091231104, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247594868404216886, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Name
+      value: Music VolumeSllder
+      objectReference: {fileID: 0}
+    - target: {fileID: 9031034199112527545, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Value
+      value: 0.256
+      objectReference: {fileID: 0}
+    - target: {fileID: 9031034199112527545, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -16004,6 +16036,10 @@ PrefabInstance:
       propertyPath: Cam
       value: 
       objectReference: {fileID: 852525745}
+    - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
       propertyPath: exitPrompt
       value: 
@@ -17944,6 +17980,10 @@ PrefabInstance:
     - target: {fileID: 3686860664853159449, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_text
       value: This key will be found near a hiding spot!
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025861662062002218, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
+      propertyPath: m_text
+      value: 000
       objectReference: {fileID: 0}
     - target: {fileID: 4525669336117791619, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_IsActive
