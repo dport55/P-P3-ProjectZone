@@ -298,7 +298,7 @@ public class GameManager : MonoBehaviour
     //Delvin's Changes
     public void updateGameGoal(int parts)
     {
-        goalCountText.text = parts.ToString("F0") + "/13";
+        goalCountText.text = parts.ToString("F0") + " / 13";
 
     }
 
