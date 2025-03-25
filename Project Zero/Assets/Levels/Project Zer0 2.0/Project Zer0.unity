@@ -11900,7 +11900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: 485.7}
+  m_AnchoredPosition: {x: -7, y: 478.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1418968001
@@ -14170,7 +14170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 462, y: 502.3}
+  m_AnchoredPosition: {x: 462, y: 504.2}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1622643251
@@ -14193,10 +14193,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Enemies/Player Inventory/Level Explosion/Parts& Door interactions\n\n\r\nCreep
-    Horror Creature\r\nExplosive Realistic VFX Texture Free\r\nGrenade Sound FX\r\nHorror
-    Sfx\r\nMagic VFX \u2013 Ice (FREE)\r\nMangled Screams (Free)\r\nMonster SFX -
-    111518\r\nTrue Horror - Crawler\r\nMonster Mutant 7\r\n"
+  m_text: "Enemies/Player Inventory/Level Explosion/Parts& Door interactions\nWeapons
+    System/ game Audio/ Map/ Player\n\r\n\nCreep Horror Creature\r\nExplosive Realistic
+    VFX Texture Free\r\nGrenade Sound FX\r\nHorror Sfx\r\nMagic VFX \u2013 Ice (FREE)\r\nMangled
+    Screams (Free)\r\nMonster SFX - 111518\r\nTrue Horror - Crawler\r\nMonster Mutant
+    7\n\rDark Ambient Music - Into Insanity Vol. 1\r\nFree Horror Starter Pack\r\nFootsteps
+    - Essentials\r\nMagic Effects FREE\r\nSci-Fi Gun Light\r\nCrosshairs\r\nSpaceSkies
+    Free\r\nHit Effects FREE\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -18059,7 +18062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4925486265965967968, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 500.9
+      value: 502.8
       objectReference: {fileID: 0}
     - target: {fileID: 5558244797273344447, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_IsActive
@@ -18237,27 +18240,51 @@ PrefabInstance:
       propertyPath: m_text
       value: 'Delvin Porterfield
 
+        Hemant Rajesh Kumar
+
 
 
         Andrii Chykrii
 
-        Gustav Hagerling
+        Gustav
+        Hagerling
 
         MGWSoundDesign
 
-        Little
-        Robot Sound Factory
+        Little Robot Sound Factory
 
-        Swift Games
+        Swift
+        Games
 
         SoundBits
 
         GWriterStudio
 
-        Witch-A-Twin
-        Studios
+        Witch-A-Twin Studios
 
-        Panchenko Lyudmila
+        Panchenko
+        Lyudmila
+
+        Juanjo_sound
+
+        N91music
+
+        Nox_Sound
+
+        Hovi
+        Sound
+
+        HYPERION Studio
+
+        OccaSoftware
+
+        PULSAR BYTES
+
+        Matthew
+        Guz
+
+
+
 
 '
       objectReference: {fileID: 0}
@@ -18339,6 +18366,7 @@ PrefabInstance:
     - {fileID: 4525669336117791619, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
     - {fileID: 6440809279248391649, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
     - {fileID: 4049319323838496631, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
+    - {fileID: 6003725348276726455, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 379017422507061865, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       insertIndex: 3
