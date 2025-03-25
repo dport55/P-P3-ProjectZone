@@ -93,7 +93,10 @@ public class GameManager : MonoBehaviour
         // Activate Start Menu
         if (startMenu != null)
         {
+           
             startMenu.SetActive(true);
+            menuActive = startMenu;
+
         }
         //End of Delvin's Changes
     }
