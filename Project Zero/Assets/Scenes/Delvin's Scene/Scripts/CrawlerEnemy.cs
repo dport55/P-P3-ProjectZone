@@ -9,7 +9,7 @@ public class CrawlerEnemy : MonoBehaviour, IDamage
     [SerializeField] Animator anim;
 
     [SerializeField] Transform headPos;
-    [SerializeField] float HP;
+    [SerializeField] public float HP;
     [SerializeField] int animTransSpeed;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
