@@ -11,7 +11,7 @@ public class BossEnemy : MonoBehaviour, IDamage
     [SerializeField] Transform[] spawnPoints; // Array of spawn points
     [SerializeField] float HP;
     [SerializeField] int faceTargetSpeed;
-    [SerializeField] float stunDuration = 2f;
+    //[SerializeField] float stunDuration = 2f;
     [SerializeField] int roamPauseTime;
     [SerializeField] float roamTimer = 0f;
     [SerializeField] ParticleSystem Frozeen;
