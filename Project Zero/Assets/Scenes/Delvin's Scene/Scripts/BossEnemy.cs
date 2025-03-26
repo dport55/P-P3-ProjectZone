@@ -46,7 +46,7 @@ public class BossEnemy : MonoBehaviour, IDamage
 
         if (GameManager.instance.playerScript.isHiding)
         {
-            if (!isWaiting) MoveToRandomSpawnPoint();
+             MoveToRandomSpawnPoint();
             return;
         }
 

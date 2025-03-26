@@ -741,6 +741,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
+            isHiding = true;
             hideSpotInside = other.transform.Find("InsideSpot"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot"); // Get outside position
             hidePrompt.SetActive(true);
@@ -750,6 +751,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
+            isHiding = true;
             hideSpotInside = other.transform.Find("InsideSpot2"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
             hidePrompt.SetActive(true);
@@ -758,6 +760,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
+            isHiding = true;
             hideSpotInside = other.transform.Find("InsideSpot3"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
             hidePrompt.SetActive(true);
@@ -766,6 +769,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
+            isHiding = true;
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
             hidePrompt.SetActive(true);
@@ -795,6 +799,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
+            isHiding = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -802,6 +807,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
+            isHiding = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -809,6 +815,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
+            isHiding = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -816,6 +823,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
+            isHiding = false;
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
