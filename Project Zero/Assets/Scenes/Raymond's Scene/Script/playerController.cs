@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     // Hemant's Adittion
     [Header("---- Shooting Settings ----")]
-    [SerializeField] float shootDamage;
+    [SerializeField] public float shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
     [SerializeField] public float freezeTime;

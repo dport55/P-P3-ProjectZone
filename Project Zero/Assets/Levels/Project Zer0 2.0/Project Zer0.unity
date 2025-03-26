@@ -15994,6 +15994,14 @@ PrefabInstance:
       value: 0.411
       objectReference: {fileID: 0}
     - target: {fileID: 6446967705872405293, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: gun
+      value: 
+      objectReference: {fileID: 11400000, guid: 220ebf660833371418e6ad289a195dd0, type: 2}
+    - target: {fileID: 6446967705872405293, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2028811953}
+    - target: {fileID: 6446967705872405293, guid: d437d97aeac1f9b47864ad9077c2e69b, type: 3}
       propertyPath: bossEnemy
       value: 
       objectReference: {fileID: 2887822775750774807}
@@ -17380,6 +17388,10 @@ PrefabInstance:
     - target: {fileID: 2949328508999242173, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
+      propertyPath: HP
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
       propertyPath: Cam
