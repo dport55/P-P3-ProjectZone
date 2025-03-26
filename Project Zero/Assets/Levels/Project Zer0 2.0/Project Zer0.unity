@@ -20627,7 +20627,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7742377006136522445, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_text
-      value: You can this Key behind the Red Door!
+      value: You can this Key behind the Purple Door!
       objectReference: {fileID: 0}
     - target: {fileID: 8200174476261743353, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       propertyPath: m_IsActive
