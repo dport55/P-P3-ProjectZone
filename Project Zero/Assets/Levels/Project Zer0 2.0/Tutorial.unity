@@ -2660,6 +2660,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1899498774}
     - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
+      propertyPath: gunAudio
+      value: 
+      objectReference: {fileID: 2096649287}
+    - target: {fileID: 4800665719538179358, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
       propertyPath: exitPrompt
       value: 
       objectReference: {fileID: 18941457}
@@ -2691,7 +2695,8 @@ PrefabInstance:
       propertyPath: m_Volume
       value: 0.13
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3944967910488469886, guid: 0b58503709ee5c5419e76b6885a2446b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
