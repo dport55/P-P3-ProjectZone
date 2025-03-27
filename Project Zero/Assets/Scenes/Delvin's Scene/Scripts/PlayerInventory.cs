@@ -83,6 +83,7 @@ public class PlayerInventory : MonoBehaviour
             collectedKeys[keyID] = keySprite;
             partsPicked.text = ("Collected Key: " + keyID);
             UpdateInventoryUI();
+            StartCoroutine(PlayerHud());
         }
     }
   

@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RedFlash: 1
   model: {fileID: 8599503992940980889, guid: 23e48266be76af14e9926eb9b757ae12, type: 3}
-  shootDamage: 1
+  shootDamage: 3
   shootDist: 25
   shootRate: 0.5
   ReloadTimer: 5
-  AmmoCur: 12
+  AmmoCur: 14
   AmmoMax: 15
   muzzlePos: {fileID: 3180301181971360258, guid: 39742e2aa142f32419e22c85911d9c5e, type: 3}
   freezeTime: 0
