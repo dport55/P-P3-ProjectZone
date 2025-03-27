@@ -770,7 +770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &888338497
 RectTransform:
   m_ObjectHideFlags: 0
@@ -778,17 +778,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888338496}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 3.3748527, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1708266751}
-  m_Father: {fileID: 1881254192}
+  m_Father: {fileID: 1577790837}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 788, y: -661}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 172, y: -149}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &888338498
@@ -835,10 +835,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 401080013}
-        m_TargetAssemblyTypeName: ButtonFunctions, Assembly-CSharp
-        m_MethodName: loadLevel
-        m_Mode: 3
+      - m_Target: {fileID: 1549593590}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+        m_MethodName: MainMenuBack
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1040,6 +1040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainMenuPanel: {fileID: 950366298}
   CreditsPanel: {fileID: 1881254188}
+  BackButton: {fileID: 888338496}
   thingsToClose:
   - {fileID: 1848262274}
   - {fileID: 1848262274}
@@ -1085,6 +1086,7 @@ RectTransform:
   - {fileID: 1762781206}
   - {fileID: 874056310}
   - {fileID: 1881254192}
+  - {fileID: 888338497}
   m_Father: {fileID: 950366299}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1389,8 +1391,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3899711192411181311, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.8433256
+      objectReference: {fileID: 0}
+    - target: {fileID: 3899711192411181311, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -555
+      value: -547
       objectReference: {fileID: 0}
     - target: {fileID: 4796324013917181851, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1418,27 +1424,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1920
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -1080
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1510,10 +1516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6663917386590330577, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 888338497}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 605abe967d241c24ab2948c1e5ed8051, type: 3}
 --- !u!1 &1708266750

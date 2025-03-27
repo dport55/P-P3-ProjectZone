@@ -9,7 +9,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] public GameObject MainMenuPanel, CreditsPanel;
+    [SerializeField] public GameObject MainMenuPanel, CreditsPanel, BackButton;
     public static MainMenuManager instance;
     public GameObject[] thingsToClose;
 
@@ -42,17 +42,30 @@ public class MainMenuManager : MonoBehaviour
         {
             thing.SetActive(false);
         }
+        BackButton.SetActive(true);
+       
         CreditsPanel.SetActive(true);
     }
 
     public void MainMenuPanelShow()
     {
-        MainMenuPanel.SetActive(true);
+     
         CreditsPanel.SetActive(false);
+        BackButton.SetActive(false);
     }
 
     public void MainMenuStart()
     {
         SceneManager.LoadScene(1);
+    }
+    public void MainMenuBack()
+    {
+        foreach (GameObject thing in thingsToClose)
+        {
+            thing.SetActive(true);
+        }
+        BackButton.SetActive(false);
+        
+        CreditsPanel.SetActive(false);
     }
 }

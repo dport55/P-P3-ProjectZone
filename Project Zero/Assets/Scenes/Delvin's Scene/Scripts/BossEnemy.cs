@@ -50,7 +50,7 @@ public class BossEnemy : MonoBehaviour, IDamage
             return;
         }
 
-        if (!isWaiting && agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending && !isStunned)
+        if (!isWaiting && agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending && !isStunned && !playerInRange)
         {
             StartCoroutine(WaitBeforeNextMove());
         }
@@ -252,7 +252,10 @@ public class BossEnemy : MonoBehaviour, IDamage
         isStunned = true;
 
         model.material.color = Color.red;
-        anim.CrossFade("gethit3", 0.1f); // Ensures immediate override
+        if (HP > 0)
+        {
+            anim.CrossFade("gethit3", 0.1f);
+        }// Ensures immediate override
         yield return new WaitForSeconds(0.5f); // Wait for animation to finish
 
         model.material.color = colorOrig;
@@ -270,7 +273,7 @@ public class BossEnemy : MonoBehaviour, IDamage
         takingDamage = true;
 
         anim.CrossFade("death3", 0.1f);
-        yield return new WaitForSeconds(3f); // Wait for animation to complete
+        yield return new WaitForSeconds(2f); // Wait for animation to complete
 
         Destroy(gameObject);
     }
