@@ -281,6 +281,7 @@ MonoBehaviour:
   O2WarningScreen1: {fileID: 0}
   O2WarningScreen2: {fileID: 0}
   SettingsMenu: {fileID: 0}
+  TutorialStartMenu: {fileID: 0}
   player: {fileID: 0}
   playerScript: {fileID: 0}
   bossEnemy: {fileID: 0}
@@ -291,6 +292,7 @@ MonoBehaviour:
   WinCam: {fileID: 0}
   playerHPBar: {fileID: 0}
   playerO2Bar: {fileID: 0}
+  playerStaminaBar: {fileID: 0}
   creditsAnimator: {fileID: 0}
   goalCountText: {fileID: 0}
   Explosion1: {fileID: 0}
@@ -300,6 +302,11 @@ MonoBehaviour:
   Explosion5: {fileID: 0}
   Explosion6: {fileID: 0}
   Credits: {fileID: 0}
+  ship: {fileID: 0}
+  playerMarker: {fileID: 0}
+  displayClose: []
+  PartsList: {fileID: 0}
+  startMenu: {fileID: 0}
   isPaused: 0
   WeaponsDisplay: {fileID: 0}
   RedDisplay: {fileID: 0}
@@ -1086,7 +1093,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Timer 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4923499125714834925, guid: fb435e4115e472541a1bfc94fd0281a3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -387,7 +387,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void slide()
     {
-        if (!isFatigued && canSlide && Input.GetButtonDown("Slide"))
+        if (!isFatigued && !isCrouching && canSlide && Input.GetButtonDown("Slide"))
         {
             StartCoroutine(SlideRoutine());
         }
