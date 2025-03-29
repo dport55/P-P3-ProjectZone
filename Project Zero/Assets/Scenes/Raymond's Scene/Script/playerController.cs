@@ -372,17 +372,28 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
             else
             {
-                Controller.height = 2f;
 
-                //Restore original speed 
-                speed = (int)originalSpeed;
+                if (CanStandUp())
+                {
+                    Controller.height = originalHeight;
 
-                isCrouching = false;
-                Debug.Log(originalHeight);
+                    //Restore original speed 
+                    speed = (int)originalSpeed;
 
-
+                    isCrouching = false;
+                    Debug.Log(originalHeight);
+                }
             }
         }
+    }
+
+    bool CanStandUp()
+    {
+        float checkDistance = originalHeight - crouchHeight;
+        Vector3 origin = transform.position + Vector3.up * crouchHeight;
+
+        // Check straight up from current crouched height
+        return !Physics.Raycast(origin, Vector3.up, checkDistance, LayerMask.GetMask("Default"));
     }
 
     void slide()
