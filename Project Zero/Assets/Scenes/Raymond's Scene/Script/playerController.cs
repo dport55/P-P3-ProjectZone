@@ -268,11 +268,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         else
         {
-            if (Input.GetButton("Sprint") && moveDir.magnitude > 0)
+            if (Input.GetButton("Sprint") && moveDir.magnitude > 0 && !isCrouching && !isSliding)
             {
                 currentStamina -= staminaDrainRate * Time.deltaTime;
             }
-            else
+            else if (!isSliding)
             {
                 // Regenerate stamina over time if not fatigued
                 currentStamina = Mathf.Min(maxStamina, currentStamina + staminaRegenRate * Time.deltaTime);
