@@ -2341,7 +2341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &383457548
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3514,7 +3514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 259.2, y: -85}
+  m_AnchoredPosition: {x: 259.2, y: -88}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &561117237
@@ -8532,7 +8532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.2866058, y: -23.708862}
+  m_AnchoredPosition: {x: 1.2866058, y: -8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1103278879
@@ -13571,6 +13571,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 823047706}
     - target: {fileID: 2698516934425437189, guid: 2e716788d43a697458b28134583f9a95, type: 3}
+      propertyPath: JumpPrompt
+      value: 
+      objectReference: {fileID: 925980131}
+    - target: {fileID: 2698516934425437189, guid: 2e716788d43a697458b28134583f9a95, type: 3}
       propertyPath: MainCamera
       value: 
       objectReference: {fileID: 157985947}
@@ -13669,6 +13673,10 @@ PrefabInstance:
     - target: {fileID: 3913317847954022070, guid: 2e716788d43a697458b28134583f9a95, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: set_volume
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580880596439037806, guid: 2e716788d43a697458b28134583f9a95, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4606286083244196599, guid: 2e716788d43a697458b28134583f9a95, type: 3}
       propertyPath: m_Color.a
@@ -13884,11 +13892,11 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 823047709}
     - targetCorrespondingSourceObject: {fileID: 850228102774601477, guid: 2e716788d43a697458b28134583f9a95, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 383457548}
+      insertIndex: 10
+      addedObject: {fileID: 1615145383}
     - targetCorrespondingSourceObject: {fileID: 850228102774601477, guid: 2e716788d43a697458b28134583f9a95, type: 3}
       insertIndex: 13
-      addedObject: {fileID: 1615145383}
+      addedObject: {fileID: 383457548}
     - targetCorrespondingSourceObject: {fileID: 5199386250827401018, guid: 2e716788d43a697458b28134583f9a95, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1661846400}
