@@ -47,8 +47,8 @@ public class Crates : MonoBehaviour, IDamage
             return;
         }
 
-      
-            GameObject spawnedObject = Instantiate(spawnMaterial, transform.position, Quaternion.identity);
+            Vector3 itemSpawnPosition = transform.position + new Vector3(0, 0.25f, 0);
+            GameObject spawnedObject = Instantiate(spawnMaterial, itemSpawnPosition, Quaternion.identity);
 
           
             if (spawnedObject.GetComponent<Collider>() == null)
