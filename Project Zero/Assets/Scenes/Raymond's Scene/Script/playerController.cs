@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         // Hemant's Adittion
 
         shootTimer += Time.deltaTime;
-        if (gunList.Count != 0)
+        if (gunList.Count != 0 && GameManager.instance.menuActive == null)
         {
             needReload = CheckAmmo();
 
@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
             if (isReloading)
             {
-                if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+                if (Input.GetButtonDown("Fire1") && shootTimer >= shootRate)
                 {
                     gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
                 }
@@ -502,43 +502,36 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         shootTimer = 0;
         gunList[gunListPos].AmmoCur--;
+
         // Play gun sound
         gunAudio.PlayOneShot(gunList[gunListPos].shootSound, gunList[gunListPos].shootVol);
 
         RaycastHit hit;
-
-        // Spawn the laser projectile prefab from the current gun's data
-        // Spawn the laser projectile prefab from the current gun's data
-        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
-
-
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunList[gunListPos].shootDist))
-        {
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        {        
             Vector3 direction = (hit.point - Muzzlepos.position).normalized;
 
-
-            laser.transform.rotation = Quaternion.LookRotation(direction);
+            GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Quaternion.LookRotation(direction));
             laser.transform.rotation = laser.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
 
-        }
-        else
-        {
-            laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
-        }
+            // Pass damage and distance data to the Shot script
+            Shot shotScript = laser.GetComponent<Shot>();
+            if (shotScript != null)
+            {
+                shotScript.freezetime = gunList[gunListPos].freezeTime;
+                shotScript.damage = gunList[gunListPos].shootDamage;
+                shotScript.maxDistance = gunList[gunListPos].shootDist;
+                shotScript.speed = 50f;
+                shotScript.hitEffect = gunList[gunListPos].HitEffect;
+            }
+            // Muzzle flash effect
+            StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
 
-        // Pass damage and distance data to the Shot script
-        Shot shotScript = laser.GetComponent<Shot>();
-        if (shotScript != null)
-        {
-            shotScript.freezetime = gunList[gunListPos].freezeTime;
-            shotScript.damage = gunList[gunListPos].shootDamage;
-            shotScript.maxDistance = gunList[gunListPos].shootDist;
-            shotScript.speed = 50f;
-            shotScript.hitEffect = gunList[gunListPos].HitEffect;
-        }
+            if (gunList[gunListPos].AmmoCur == 0)
+                gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
 
-        // Muzzle flash effect
-        StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
+        }
+       
     }
 
     public IEnumerator Reload()
