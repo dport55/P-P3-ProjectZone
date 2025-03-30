@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu, JumpPrompt;
+    [SerializeField] public GameObject menuActive, menuPause, menuWin, menuLose, menuTutorial, retical, PlayButton, O2WarningScreen1, O2WarningScreen2, SettingsMenu, TutorialStartMenu;
 
     //Delvin's Changes
     public static GameManager instance;
@@ -174,7 +174,6 @@ public class GameManager : MonoBehaviour
             close.SetActive(false);
         }
         retical.SetActive(false);
-        JumpPrompt.SetActive(false);
         playerMarker.SetActive(false);
         WinCam.SetActive(true); // Enable the WinCam
         menuActive = menuWin;
@@ -249,7 +248,6 @@ public class GameManager : MonoBehaviour
     public void ShowSettings()
     {
         statePause();
-        JumpPrompt.SetActive(false);
         menuPause.SetActive(false);
         menuActive = SettingsMenu;
         menuActive.SetActive(true);
@@ -280,7 +278,6 @@ public class GameManager : MonoBehaviour
     public void pauseShow()
     {
         statePause();
-        JumpPrompt.SetActive(false);
         menuActive.SetActive(false);
         menuActive = menuPause;
         menuActive.SetActive(true);
