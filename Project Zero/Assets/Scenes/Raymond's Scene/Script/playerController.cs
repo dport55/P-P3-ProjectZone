@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
             if (isReloading)
             {
-                if (Input.GetButton("Fire1") && shootTimer >= shootRate)
+                if (Input.GetButtonDown("Fire1") && shootTimer >= shootRate)
                 {
                     gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
                 }
@@ -519,6 +519,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 GameObject hiteffect = Instantiate(gunList[gunListPos].HitEffect.gameObject, hit.point, Quaternion.identity);
 
                 Destroy(hiteffect.gameObject, 0.5f);
+
+            if (gunList[gunListPos].AmmoCur == 0)
+            {
+                gunAudio.PlayOneShot(gunList[gunListPos].gunClick);
+            }
             
         }
     }
