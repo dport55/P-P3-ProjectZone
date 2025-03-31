@@ -9834,6 +9834,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5762115016238125621, guid: 7b495255b19cb7e489fe5f279261adcd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5762115016238125621, guid: 7b495255b19cb7e489fe5f279261adcd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5845779885311732109, guid: 7b495255b19cb7e489fe5f279261adcd, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -20033,10 +20041,10 @@ PrefabInstance:
       addedObject: {fileID: 1286334773}
     - targetCorrespondingSourceObject: {fileID: 379017422507061865, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2006776506}
+      addedObject: {fileID: 1575348977}
     - targetCorrespondingSourceObject: {fileID: 379017422507061865, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1575348977}
+      addedObject: {fileID: 2006776506}
     - targetCorrespondingSourceObject: {fileID: 379017422507061865, guid: 957b4b5766fcf2b4bb072e0a5945c8cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2072546564}

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
-using UnityEngine.Windows.WebCam;
+//using UnityEngine.Windows.WebCam;
 public class PlayerInventory : MonoBehaviour
 {
     private Dictionary<string, Sprite> collectedKeys = new Dictionary<string, Sprite>();
