@@ -2801,6 +2801,7 @@ MonoBehaviour:
   O2WarningScreen2: {fileID: 0}
   SettingsMenu: {fileID: 8861666406739006464}
   TutorialStartMenu: {fileID: 5827042538538098849}
+  JumpPrompt: {fileID: 0}
   player: {fileID: 0}
   playerScript: {fileID: 0}
   bossEnemy: {fileID: 0}
@@ -3389,11 +3390,12 @@ RectTransform:
   - {fileID: 4853378269170515232}
   - {fileID: 4251991743171700887}
   - {fileID: 9193799587619053585}
+  - {fileID: 475837039056042130}
+  - {fileID: 3810224439951735377}
+  - {fileID: 1328436466042849890}
   - {fileID: 6534160036383419708}
   - {fileID: 8897593002082011181}
   - {fileID: 1986528824772995014}
-  - {fileID: 3810224439951735377}
-  - {fileID: 1328436466042849890}
   - {fileID: 3672406576372049762}
   - {fileID: 1872712575338625143}
   - {fileID: 833402965287659461}
@@ -3406,7 +3408,6 @@ RectTransform:
   - {fileID: 3892418002512063630}
   - {fileID: 1819371073590156130}
   - {fileID: 8331005498131183752}
-  - {fileID: 475837039056042130}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private bool canHide = false; // Player is near a hiding spot
 
     private bool isRefillingOxygen = false;
-    private  bool isTakingOxygenDamage = false;
+    private bool isTakingOxygenDamage = false;
 
     [SerializeField] GameObject hidePrompt; // UI Prompt for hiding
     [SerializeField] GameObject exitPrompt;
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         BlueFlash.gameObject.SetActive(false);
         isHiding = false;
 
-        
+
 
         hidePrompt.SetActive(false);
         exitPrompt.SetActive(false);
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         crouch();
         ToggleFlashlight();
         //Delvin's Additions
-          HandleStamina();
+        HandleStamina();
         if (!isTakingOxygenDamage)
         {
             TryRefillOxygen();
@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             ExitHidingSpot();
         }
-       
+
     }
 
     void movement()
@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
 
         }
-        
+
         SelectGun();
 
 
@@ -477,7 +477,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (parts.CompareTag("Parts"))
             collectedParts++;
 
-       //GameManager.instance.updateGameGoal(collectedParts);
+        //GameManager.instance.updateGameGoal(collectedParts);
 
         //Destroy(part);
         //Debug.Log($"Parts collected: {collectedParts}");
@@ -546,13 +546,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         isReloading = true;
         Debug.Log("Reloading...");
 
-        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);        
+        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
         gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
 
         Debug.Log("Reload Complete!");
         StartCoroutine(RechargeFlash(gunList[gunListPos].RedFlash));
         gunAudio.PlayOneShot(gunList[gunListPos].gunReload, gunList[gunListPos].shootVol);
-        isReloading = false; 
+        isReloading = false;
 
 
     }
@@ -640,8 +640,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
 
-      
-        
+
+
 
         //if(gunModel.name == "Freeze Gun")
         //{
@@ -752,7 +752,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-           
+
             hideSpotInside = other.transform.Find("InsideSpot"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot"); // Get outside position
             hidePrompt.SetActive(true);
@@ -762,7 +762,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-            
+
             hideSpotInside = other.transform.Find("InsideSpot2"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot2"); // Get outside position
             hidePrompt.SetActive(true);
@@ -771,7 +771,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-           
+
             hideSpotInside = other.transform.Find("InsideSpot3"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot3"); // Get outside position
             hidePrompt.SetActive(true);
@@ -780,7 +780,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(false);
             canHide = true;
-            
+
             hideSpotInside = other.transform.Find("InsideSpot1"); // Get inside position
             hideSpotOutside = other.transform.Find("OutsideSpot1"); // Get outside position
             hidePrompt.SetActive(true);
@@ -810,7 +810,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
-          
+
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -818,7 +818,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
-          
+
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -826,7 +826,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
-            
+
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -834,7 +834,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.retical.SetActive(true);
             canHide = false;
-           
+
             hidePrompt.SetActive(false);
             exitPrompt.SetActive(false);
         }
@@ -851,7 +851,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             Oxygen -= O2;
             StartCoroutine(flashO2Screen());
-            StartCoroutine(PlayBreathing());
+            if (Oxygen < 20)
+            {
+                StartCoroutine(PlayBreathing());
+            }
             isTakingOxygenDamage = true; // player taking O2 damage
             isRefillingOxygen = false;   // Stop refilling
             StartCoroutine(ResetOxygenDamage()); // Allow refill 
@@ -868,7 +871,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     private IEnumerator ResetOxygenDamage()
     {
         yield return new WaitForSeconds(2f);
-        isTakingOxygenDamage = false; 
+        isTakingOxygenDamage = false;
     }
     IEnumerator PlayBreathing()
     {
@@ -891,16 +894,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         isRefillingOxygen = true;
 
-        while (Oxygen < 100f && !isTakingOxygenDamage) 
+        while (Oxygen < 100f && !isTakingOxygenDamage)
         {
-            StartCoroutine(PlayBreathing());
-            Oxygen += 10f * Time.deltaTime; 
+            //StartCoroutine(PlayBreathing());
+            Oxygen += 10f * Time.deltaTime;
             Oxygen = Mathf.Min(Oxygen, 100f);
             UpdatePlayerUI(); // Update UI to reflect oxygen change
-            yield return null; 
+            yield return null;
         }
 
-        isRefillingOxygen = false; 
+        isRefillingOxygen = false;
     }
 
     private void TryRefillOxygen()
