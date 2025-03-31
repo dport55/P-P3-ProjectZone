@@ -500,6 +500,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void shoot()
     {
+
         shootTimer = 0;
         gunList[gunListPos].AmmoCur--;
         // Play gun sound
@@ -507,47 +508,28 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         RaycastHit hit;
 
-        // Spawn the laser projectile prefab from the current gun's data
-        // Spawn the laser projectile prefab from the current gun's data
-        GameObject laser = Instantiate(gunList[gunListPos].ShootEffect, Muzzlepos.position, Muzzlepos.rotation);
-
-
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunList[gunListPos].shootDist))
         {
-            Vector3 direction = (hit.point - Muzzlepos.position).normalized;
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                dmg.TakeDamage(gunList[gunListPos].shootDamage, gunList[gunListPos].freezeTime, 0f);
+            }
+           
+                GameObject hiteffect = Instantiate(gunList[gunListPos].HitEffect.gameObject, hit.point, Quaternion.identity);
 
-
-            laser.transform.rotation = Quaternion.LookRotation(direction);
-            laser.transform.rotation = laser.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
-
+                Destroy(hiteffect.gameObject, 0.5f);
+            
         }
-        else
-        {
-            laser.transform.rotation = Muzzlepos.rotation * Quaternion.Euler(90f, 0f, 0f);
-        }
-
-        // Pass damage and distance data to the Shot script
-        Shot shotScript = laser.GetComponent<Shot>();
-        if (shotScript != null)
-        {
-            shotScript.freezetime = gunList[gunListPos].freezeTime;
-            shotScript.damage = gunList[gunListPos].shootDamage;
-            shotScript.maxDistance = gunList[gunListPos].shootDist;
-            shotScript.speed = 50f;
-            shotScript.hitEffect = gunList[gunListPos].HitEffect;
-        }
-
-        // Muzzle flash effect
-        StartCoroutine(DisableMuzzleFlash(gunList[gunListPos].RedFlash));
     }
 
     public IEnumerator Reload()
     {
         isReloading = true;
         Debug.Log("Reloading...");
-
-        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
         gunList[gunListPos].AmmoCur = gunList[gunListPos].AmmoMax;
+        yield return new WaitForSeconds(gunList[gunListPos].ReloadTimer);
+        
 
         Debug.Log("Reload Complete!");
         StartCoroutine(RechargeFlash(gunList[gunListPos].RedFlash));

@@ -37,7 +37,7 @@ public class Shot : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
+     }
 
 
      void OnTriggerEnter(Collider other)
